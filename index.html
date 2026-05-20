@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jarvis HQ — Izzy's Command Center</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0f;
+      --surface: #111118;
+      --surface2: #16161f;
+      --border: rgba(255,255,255,0.07);
+      --border-hover: rgba(255,255,255,0.15);
+      --text: #f0f0f5;
+      --muted: #888899;
+      --accent: #7c6af8;
+      --green: #22c55e;
+      --yellow: #eab308;
+      --red: #ef4444;
+      --blue: #3b82f6;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 0 0 80px;
+    }
+
+    /* ─── HEADER ─── */
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 24px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      background: rgba(10,10,15,0.92);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .logo-icon {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, #7c6af8, #a78bfa);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    .logo-text { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; }
+    .logo-sub { font-size: 12px; color: var(--muted); font-weight: 400; margin-top: 1px; }
+    .header-time { font-size: 13px; color: var(--muted); }
+
+    /* ─── HERO ─── */
+    .hero {
+      padding: 60px 40px 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .hero h1 {
+      font-size: 42px;
+      font-weight: 900;
+      letter-spacing: -1.5px;
+      line-height: 1.1;
+      background: linear-gradient(135deg, #fff 30%, #888);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero p {
+      font-size: 16px;
+      color: var(--muted);
+      margin-top: 12px;
+    }
+
+    /* ─── STATS BAR ─── */
+    .stats {
+      max-width: 1200px;
+      margin: 0 auto 48px;
+      padding: 0 40px;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .stat {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .stat-num { font-size: 22px; font-weight: 800; }
+    .stat-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+
+    /* ─── SECTIONS ─── */
+    .section {
+      max-width: 1200px;
+      margin: 0 auto 48px;
+      padding: 0 40px;
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .section-title {
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+    }
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ─── CARDS ─── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 16px;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.02), transparent);
+      pointer-events: none;
+    }
+    .card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+    }
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+    .card-icon {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+    .badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .badge-live { background: rgba(34,197,94,0.15); color: #22c55e; }
+    .badge-building { background: rgba(234,179,8,0.15); color: #eab308; }
+    .badge-planning { background: rgba(59,130,246,0.15); color: #60a5fa; }
+    .badge-filed { background: rgba(168,85,247,0.15); color: #c084fc; }
+    .badge-doc { background: rgba(255,255,255,0.08); color: var(--muted); }
+
+    .card-name {
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+    .card-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .card-meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+    .tag {
+      font-size: 11px;
+      color: var(--muted);
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+    .card-url {
+      font-size: 12px;
+      color: var(--accent);
+      margin-top: auto;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      opacity: 0.8;
+    }
+    .card-url::after { content: '↗'; font-size: 11px; }
+    .card:not([href]) { cursor: default; }
+    .card:not([href]):hover { transform: none; }
+
+    /* ─── VENTURE COLORS ─── */
+    .flywheel .card-icon { background: rgba(204,26,26,0.15); }
+    .domo .card-icon { background: rgba(139,69,19,0.15); }
+    .sps .card-icon { background: rgba(124,106,248,0.15); }
+    .bh .card-icon { background: rgba(59,130,246,0.15); }
+    .golf .card-icon { background: rgba(0,200,83,0.12); }
+    .personal .card-icon { background: rgba(255,255,255,0.06); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      max-width: 1200px;
+      margin: 60px auto 0;
+      padding: 0 40px;
+      border-top: 1px solid var(--border);
+      padding-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    footer p { font-size: 12px; color: var(--muted); }
+
+    @media (max-width: 768px) {
+      header { padding: 16px 20px; }
+      .hero { padding: 40px 20px 32px; }
+      .hero h1 { font-size: 28px; }
+      .stats, .section { padding: 0 20px; }
+      footer { padding: 0 20px; padding-top: 24px; flex-direction: column; gap: 8px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">⚙️</div>
+    <div>
+      <div class="logo-text">Jarvis HQ</div>
+      <div class="logo-sub">Izzy Aala · Command Center</div>
+    </div>
+  </div>
+  <div class="header-time" id="clock"></div>
+</header>
+
+<div class="hero">
+  <h1>Everything<br>I've built for you.</h1>
+  <p>All your live apps, platforms, docs, and patents — one place.</p>
+</div>
+
+<div class="stats">
+  <div class="stat">
+    <div>
+      <div class="stat-num" style="color:#22c55e">6</div>
+      <div class="stat-label">Live Apps</div>
+    </div>
+  </div>
+  <div class="stat">
+    <div>
+      <div class="stat-num" style="color:#eab308">3</div>
+      <div class="stat-label">In Progress</div>
+    </div>
+  </div>
+  <div class="stat">
+    <div>
+      <div class="stat-num" style="color:#a78bfa">2</div>
+      <div class="stat-label">Patents Filed</div>
+    </div>
+  </div>
+  <div class="stat">
+    <div>
+      <div class="stat-num" style="color:#fff">5</div>
+      <div class="stat-label">Ventures</div>
+    </div>
+  </div>
+</div>
+
+<!-- LIVE APPS -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-title">🟢 Live Apps</div>
+    <div class="section-line"></div>
+  </div>
+  <div class="grid">
+
+    <a class="card domo" href="https://tranquil-magic-production-4aee.up.railway.app" target="_blank">
+      <div class="card-top">
+        <div class="card-icon">🍵</div>
+        <span class="badge badge-live">Live v1.4.0</span>
+      </div>
+      <div class="card-name">Domo Cafe Ops</div>
+      <div class="card-desc">Restaurant ops platform — launch readiness, tasks, shifts, merch, analytics. Client #1 of Striker Ops.</div>
+      <div class="card-meta">
+        <span class="tag">Next.js 16</span>
+        <span class="tag">PostgreSQL</span>
+        <span class="tag">Railway</span>
+        <span class="tag">GFC BP LLC</span>
+      </div>
+      <div class="card-url">tranquil-magic-production-4aee.up.railway.app</div>
+    </a>
+
+    <a class="card flywheel" href="https://flywheel-ops-production.up.railway.app" target="_blank">
+      <div class="card-top">
+        <div class="card-icon">🚖</div>
+        <span class="badge badge-live">Live</span>
+      </div>
+      <div class="card-name">Flywheel Ops</div>
+      <div class="card-desc">AI-driven ops management for Flywheel Mexico expansion — Tulum, Cancún, Playa del Carmen markets.</div>
+      <div class="card-meta">
+        <span class="tag">Next.js 16</span>
+        <span class="tag">PostgreSQL</span>
+        <span class="tag">Railway</span>
+        <span class="tag">Flywheel</span>
+      </div>
+      <div class="card-url">flywheel-ops-production.up.railway.app</div>
+    </a>
+
+    <a class="card sps" href="https://cloud-closet-app-production.up.railway.app" target="_blank">
+      <div class="card-top">
+        <div class="card-icon">📦</div>
+        <span class="badge badge-live">Live</span>
+      </div>
+      <div class="card-name">Cloud Closet</div>
+      <div class="card-desc">Full-service home storage platform — store items offsite, retrieve any single item on demand via app.</div>
+      <div class="card-meta">
+        <span class="tag">Next.js 16</span>
+        <span class="tag">Stripe</span>
+        <span class="tag">AI Vision</span>
+        <span class="tag">SPS</span>
+      </div>
+      <div class="card-url">cloud-closet-app-production.up.railway.app</div>
+    </a>
+
+    <a class="card golf" href="https://24hourgolf-web-production.up.railway.app" target="_blank">
+      <div class="card-top">
+        <div class="card-icon">⛳</div>
+        <span class="badge badge-live">Live</span>
+      </div>
+      <div class="card-name">24 Hour Golf</div>
+      <div class="card-desc">World's first fully automated AI-powered indoor golf performance network. Coming soon site + waitlist.</div>
+      <div class="card-meta">
+        <span class="tag">Node.js</span>
+        <span class="tag">Express</span>
+        <span class="tag">Railway</span>
+        <span class="tag">SPS</span>
+      </div>
+      <div class="card-url">24hourgolf-web-production.up.railway.app</div>
+    </a>
+
+    <a class="card personal" href="https://izzy-spsi.github.io/japan-trip-2026/" target="_blank">
+      <div class="card-top">
+        <div class="card-icon">🇯🇵</div>
+        <span class="badge badge-live">Live</span>
+      </div>
+      <div class="card-name">Japan Trip 2026</div>
+      <div class="card-desc">Family itinerary site for Aala family Japan trip Aug 2–20. Travelers: Izzy, Amy, Nathan, Chloe, Brayden.</div>
+      <div class="card-meta">
+        <span class="tag">GitHub Pages</span>
+        <span class="tag">Password: Japan2026</span>
+      </div>
+      <div class="card-url">izzy-spsi.github.io/japan-trip-2026</div>
+    </a>
+
+    <div class="card personal">
+      <div class="card-top">
+        <div class="card-icon">🎙️</div>
+        <span class="badge badge-live">Live (Local)</span>
+      </div>
+      <div class="card-name">Jarvis Voice Server</div>
+      <div class="card-desc">Twilio-powered voice call handler — Jarvis answers calls, routes to Izzy, handles guests. ElevenLabs TTS.</div>
+      <div class="card-meta">
+        <span class="tag">Node.js</span>
+        <span class="tag">Twilio</span>
+        <span class="tag">ElevenLabs</span>
+        <span class="tag">Port 3335</span>
+      </div>
+      <div class="card-url" style="-webkit-text-fill-color: var(--accent)">localhost:3335 / ngrok tunnel</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- IN PROGRESS -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-title">🟡 Building / In Progress</div>
+    <div class="section-line"></div>
+  </div>
+  <div class="grid">
+
+    <div class="card sps">
+      <div class="card-top">
+        <div class="card-icon">💪</div>
+        <span class="badge badge-planning">Planning</span>
+      </div>
+      <div class="card-name">SPS Membership Site</div>
+      <div class="card-desc">Super Power Studios marketing site + $2 VIP Pass funnel. Flagship: SPS New York Foundry, Brooklyn.</div>
+      <div class="card-meta">
+        <span class="tag">Spark $179</span>
+        <span class="tag">Ignite $329</span>
+        <span class="tag">Surge $549</span>
+        <span class="tag">Superpower $999</span>
+      </div>
+    </div>
+
+    <div class="card sps">
+      <div class="card-top">
+        <div class="card-icon">👁️</div>
+        <span class="badge badge-building">Approved</span>
+      </div>
+      <div class="card-name">SPS Cobrowse (Specter)</div>
+      <div class="card-desc">Reusable cobrowsing component — 6-digit code → live DOM replica → agent ghost cursor. No video call, no install.</div>
+      <div class="card-meta">
+        <span class="tag">rrweb</span>
+        <span class="tag">WebSockets</span>
+        <span class="tag">@sps/cobrowse</span>
+      </div>
+    </div>
+
+    <div class="card sps">
+      <div class="card-top">
+        <div class="card-icon">🏌️</div>
+        <span class="badge badge-building">PRD Done</span>
+      </div>
+      <div class="card-name">24 Hour Golf Platform</div>
+      <div class="card-desc">Full ops + booking + AI coaching + access control platform for attendant-less golf simulator facilities.</div>
+      <div class="card-meta">
+        <span class="tag">TrackMan API</span>
+        <span class="tag">Smart Locks</span>
+        <span class="tag">AI Coaching</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- DOCS, DECKS & PATENTS -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-title">📄 Docs, Decks & Patents</div>
+    <div class="section-line"></div>
+  </div>
+  <div class="grid">
+
+    <a class="card flywheel" href="https://drive.google.com/file/d/1TFdjwaBNXHyO7Wl_WIMKJ4mBDDonaLcm/view" target="_blank">
+      <div class="card-top">
+        <div class="card-icon">📊</div>
+        <span class="badge badge-doc">Google Drive</span>
+      </div>
+      <div class="card-name">Flywheel Investment Teaser</div>
+      <div class="card-desc">One-page teaser PDF. $431M+ 2026 GMV | 35K+ Taxis | 55+ Cities. NDA required for full deck.</div>
+      <div class="card-meta">
+        <span class="tag">izzy@flywheel.com</span>
+        <span class="tag">Drive PDF</span>
+      </div>
+      <div class="card-url">drive.google.com</div>
+    </a>
+
+    <a class="card bh" href="https://docs.google.com/document/d/19vCTFHX4Q3AeoP381Dz7wxquThPogzu3b8Isuj3WNQ8/edit" target="_blank">
+      <div class="card-top">
+        <div class="card-icon">🚢</div>
+        <span class="badge badge-filed">Filed</span>
+      </div>
+      <div class="card-name">Blue Highway Patent</div>
+      <div class="card-desc">Intermodal Smart Modular Cargo Capsule. Provisional filed — priority deadline April 13, 2027.</div>
+      <div class="card-meta">
+        <span class="tag">Blue Highway LLC</span>
+        <span class="tag">USPTO Provisional</span>
+        <span class="tag">6 figures</span>
+      </div>
+      <div class="card-url">docs.google.com</div>
+    </a>
+
+    <div class="card golf">
+      <div class="card-top">
+        <div class="card-icon">⛳</div>
+        <span class="badge badge-filed">Filed May 7</span>
+      </div>
+      <div class="card-name">24 Hour Golf Patent</div>
+      <div class="card-desc">Automated Attendant-Less Golf Simulator Facility Management System with AI-Driven Access Control. Attorney: Josh Broitman.</div>
+      <div class="card-meta">
+        <span class="tag">24 Hour Golf LLC</span>
+        <span class="tag">Ostrager Chong</span>
+        <span class="tag">Provisional</span>
+      </div>
+    </div>
+
+    <a class="card sps" href="https://docs.google.com/document/d/19d7QAkFkJDYTCnVNPFCFaXBEZg3ybbq-fnJB2E-VnOM/edit" target="_blank">
+      <div class="card-top">
+        <div class="card-icon">💎</div>
+        <span class="badge badge-building">In Progress</span>
+      </div>
+      <div class="card-name">SPS Pitch Deck + SAFE</div>
+      <div class="card-desc">$5M SAFE raise at $25M cap, 20% discount. Three-layer model: Digital + Physical Studios + Venture Studio.</div>
+      <div class="card-meta">
+        <span class="tag">$5M SAFE</span>
+        <span class="tag">$25M cap</span>
+        <span class="tag">Pro-rata</span>
+      </div>
+      <div class="card-url">docs.google.com</div>
+    </a>
+
+    <a class="card flywheel" href="https://drive.google.com/file/d/1kNaioPGK_VD9WBgBuOMUZZQOzGzGolxH/view" target="_blank">
+      <div class="card-top">
+        <div class="card-icon">🤝</div>
+        <span class="badge badge-doc">PRD</span>
+      </div>
+      <div class="card-name">SPS Cobrowse PRD</div>
+      <div class="card-desc">Product requirements doc for Specter/Clairvoyance cobrowsing component. Embeds into all SPS platforms.</div>
+      <div class="card-meta">
+        <span class="tag">v1.0</span>
+        <span class="tag">Drive PDF</span>
+      </div>
+      <div class="card-url">drive.google.com</div>
+    </a>
+
+    <a class="card flywheel" href="https://drive.google.com/file/d/1ud4FtOff1IX5Tu8gqnEfbe3iKqY8zDeA/view" target="_blank">
+      <div class="card-top">
+        <div class="card-icon">🚕</div>
+        <span class="badge badge-doc">Proposal PDF</span>
+      </div>
+      <div class="card-name">CardONE Paratransit Deck</div>
+      <div class="card-desc">New Trier Township proposal for CardONE ride credit program replacing paper coupon system. 1,500 riders.</div>
+      <div class="card-meta">
+        <span class="tag">CabConnect</span>
+        <span class="tag">Cook County IL</span>
+      </div>
+      <div class="card-url">drive.google.com</div>
+    </a>
+
+  </div>
+</div>
+
+<!-- NOTION COMMAND CENTER -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-title">🧠 Notion — Command Center</div>
+    <div class="section-line"></div>
+  </div>
+  <div class="grid">
+
+    <a class="card personal" href="https://www.notion.so/a0734dcce0ba43d99516 3c7bc8bb09db" target="_blank">
+      <div class="card-top">
+        <div class="card-icon">📋</div>
+        <span class="badge badge-doc">Notion DB</span>
+      </div>
+      <div class="card-name">Projects DB</div>
+      <div class="card-desc">All active projects, statuses, and links. Source of truth alongside PROJECTS.md.</div>
+      <div class="card-meta"><span class="tag">a0734dcc-e0ba...</span></div>
+      <div class="card-url">notion.so</div>
+    </a>
+
+    <a class="card personal" href="https://app.notion.so/33fd8f4e0acd457a86877b6e1ed73798" target="_blank">
+      <div class="card-top">
+        <div class="card-icon">✅</div>
+        <span class="badge badge-doc">Notion DB</span>
+      </div>
+      <div class="card-name">Tasks DB</div>
+      <div class="card-desc">All Jarvis tasks — Queued, In Progress, Done, Waiting. Linked to projects.</div>
+      <div class="card-meta"><span class="tag">33fd8f4e-0acd...</span></div>
+      <div class="card-url">notion.so</div>
+    </a>
+
+    <a class="card personal" href="https://www.notion.so/24-Hour-Golf-36356f432b4d810598e8c0742e2e26d4" target="_blank">
+      <div class="card-top">
+        <div class="card-icon">⛳</div>
+        <span class="badge badge-doc">Notion</span>
+      </div>
+      <div class="card-name">24 Hour Golf — Notion</div>
+      <div class="card-desc">Full project notes, business model, meeting notes (TrackMan, Frank, Tim).</div>
+      <div class="card-url">notion.so</div>
+    </a>
+
+  </div>
+</div>
+
+<footer>
+  <p>⚙️ Jarvis HQ — Built by Jarvis for Izzy Aala</p>
+  <p id="build-date"></p>
+</footer>
+
+<script>
+  // Live clock
+  function updateClock() {
+    const now = new Date();
+    document.getElementById('clock').textContent = now.toLocaleString('en-US', {
+      weekday: 'short', month: 'short', day: 'numeric',
+      hour: 'numeric', minute: '2-digit', timeZoneName: 'short',
+      timeZone: 'America/Los_Angeles'
+    });
+  }
+  updateClock();
+  setInterval(updateClock, 60000);
+
+  document.getElementById('build-date').textContent = 'Last updated: May 19, 2026';
+</script>
+
+</body>
+</html>
