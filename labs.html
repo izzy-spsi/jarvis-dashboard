@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SPS Labs — AI Integration Tracker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0f;
+      --surface: #111118;
+      --surface2: #16161f;
+      --border: rgba(255,255,255,0.07);
+      --border-hover: rgba(255,255,255,0.15);
+      --text: #f0f0f5;
+      --muted: #888899;
+      --accent: #7c6af8;
+      --green: #22c55e;
+      --yellow: #eab308;
+      --red: #ef4444;
+      --blue: #3b82f6;
+      --teal: #14b8a6;
+      --orange: #f97316;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 0 0 80px;
+    }
+
+    /* HEADER */
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 24px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      background: rgba(10,10,15,0.92);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+    }
+    .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--text); }
+    .logo-icon {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, #7c6af8, #a78bfa);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    .logo-text { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; }
+    .logo-sub { font-size: 12px; color: var(--muted); font-weight: 400; margin-top: 1px; }
+    .nav-links { display: flex; gap: 24px; align-items: center; }
+    .nav-links a {
+      color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500;
+      transition: color 0.15s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--text); }
+    .nav-badge {
+      background: linear-gradient(135deg, #7c6af8, #a78bfa);
+      color: white; font-size: 10px; font-weight: 700;
+      padding: 2px 7px; border-radius: 20px; margin-left: 4px;
+    }
+
+    /* HERO */
+    .hero {
+      padding: 48px 40px 32px;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-eyebrow {
+      font-size: 11px; font-weight: 700; letter-spacing: 2px;
+      color: var(--accent); text-transform: uppercase; margin-bottom: 12px;
+    }
+    .hero-title {
+      font-size: 36px; font-weight: 800; letter-spacing: -1px;
+      line-height: 1.1; margin-bottom: 12px;
+    }
+    .hero-title span { color: var(--accent); }
+    .hero-sub { font-size: 16px; color: var(--muted); max-width: 600px; line-height: 1.6; }
+    .hero-stats {
+      display: flex; gap: 32px; margin-top: 32px; flex-wrap: wrap;
+    }
+    .stat { display: flex; flex-direction: column; gap: 4px; }
+    .stat-num { font-size: 28px; font-weight: 800; letter-spacing: -1px; }
+    .stat-label { font-size: 12px; color: var(--muted); font-weight: 500; }
+
+    /* FILTERS */
+    .filters {
+      padding: 20px 40px;
+      display: flex; gap: 12px; flex-wrap: wrap; align-items: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .filter-label { font-size: 12px; color: var(--muted); font-weight: 600; margin-right: 4px; }
+    .filter-btn {
+      padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 500;
+      border: 1px solid var(--border); background: transparent; color: var(--muted);
+      cursor: pointer; transition: all 0.15s;
+    }
+    .filter-btn:hover { border-color: var(--border-hover); color: var(--text); }
+    .filter-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
+    .filter-divider { width: 1px; height: 24px; background: var(--border); margin: 0 4px; }
+
+    /* MAIN LAYOUT */
+    .main { padding: 32px 40px; }
+    .section-header {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 24px;
+    }
+    .section-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center; font-size: 16px;
+    }
+    .section-title { font-size: 20px; font-weight: 700; }
+    .section-count {
+      background: var(--surface2); color: var(--muted);
+      font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 12px;
+    }
+
+    /* FEATURE GRID */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .feature-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-1px);
+    }
+    .feature-card.priority-high::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--red), var(--orange));
+    }
+    .feature-card.priority-medium::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--yellow), var(--orange));
+    }
+    .feature-card.priority-low::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--green), var(--teal));
+    }
+
+    .card-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 12px; gap: 8px; }
+    .card-title { font-size: 15px; font-weight: 700; line-height: 1.3; }
+    .card-source {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
+      text-transform: uppercase; color: var(--muted);
+      background: var(--surface2); padding: 3px 8px; border-radius: 6px;
+      white-space: nowrap;
+    }
+    .card-desc { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 14px; }
+    .card-relevance {
+      display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px;
+    }
+    .tag {
+      font-size: 11px; font-weight: 600; padding: 3px 8px;
+      border-radius: 6px; background: var(--surface2);
+    }
+    .tag-sps { color: #a78bfa; }
+    .tag-flywheel { color: #3b82f6; }
+    .tag-domo { color: #f59e0b; }
+    .tag-blue { color: #14b8a6; }
+    .tag-geo { color: #22c55e; }
+
+    .card-footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .status-badge {
+      font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 20px;
+      display: flex; align-items: center; gap: 5px;
+    }
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; }
+    .status-monitor { background: rgba(136,136,153,0.15); color: var(--muted); }
+    .status-monitor .status-dot { background: var(--muted); }
+    .status-evaluate { background: rgba(234,179,8,0.12); color: var(--yellow); }
+    .status-evaluate .status-dot { background: var(--yellow); }
+    .status-planned { background: rgba(124,106,248,0.15); color: var(--accent); }
+    .status-planned .status-dot { background: var(--accent); }
+    .status-building { background: rgba(59,130,246,0.15); color: var(--blue); }
+    .status-building .status-dot { background: var(--blue); animation: pulse 1.5s infinite; }
+    .status-live { background: rgba(34,197,94,0.12); color: var(--green); }
+    .status-live .status-dot { background: var(--green); }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .watch-link {
+      font-size: 11px; font-weight: 600; color: var(--muted);
+      text-decoration: none; padding: 4px 10px; border-radius: 8px;
+      border: 1px solid var(--border); transition: all 0.15s;
+      display: flex; align-items: center; gap: 4px;
+    }
+    .watch-link:hover { color: var(--text); border-color: var(--border-hover); }
+
+    /* LABS PIPELINE */
+    .labs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 16px;
+    }
+    .lab-card {
+      background: var(--surface);
+      border: 1px solid rgba(124,106,248,0.2);
+      border-radius: 14px;
+      padding: 20px;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .lab-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, #7c6af8, #a78bfa);
+    }
+    .lab-card:hover { border-color: rgba(124,106,248,0.4); transform: translateY(-1px); }
+
+    .lab-num {
+      font-size: 11px; font-weight: 700; color: var(--accent);
+      letter-spacing: 1px; margin-bottom: 8px;
+    }
+    .lab-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+    .lab-desc { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 14px; }
+    .lab-meta {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .lab-venture {
+      font-size: 11px; font-weight: 600; color: var(--muted);
+      display: flex; align-items: center; gap: 5px;
+    }
+
+    /* SOURCE SECTION */
+    .source-header {
+      padding: 8px 14px; background: var(--surface2);
+      border-radius: 10px; margin-bottom: 20px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .source-badge {
+      font-size: 11px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--accent);
+    }
+    .source-date { font-size: 12px; color: var(--muted); }
+
+    /* UPDATED */
+    .updated-bar {
+      text-align: center; font-size: 12px; color: var(--muted);
+      padding: 16px; border-top: 1px solid var(--border); margin-top: 48px;
+    }
+
+    /* HIDDEN */
+    .feature-card.hidden, .lab-card.hidden { display: none; }
+
+    @media (max-width: 768px) {
+      header { padding: 16px 20px; }
+      .hero { padding: 32px 20px 24px; }
+      .hero-title { font-size: 26px; }
+      .filters { padding: 16px 20px; }
+      .main { padding: 24px 20px; }
+      .feature-grid, .labs-grid { grid-template-columns: 1fr; }
+      .hero-stats { gap: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="logo">
+    <div class="logo-icon">⚙️</div>
+    <div>
+      <div class="logo-text">Jarvis HQ</div>
+      <div class="logo-sub">Super Power Studios</div>
+    </div>
+  </a>
+  <nav class="nav-links">
+    <a href="index.html">Dashboard</a>
+    <a href="labs.html" class="active">Labs <span class="nav-badge">NEW</span></a>
+  </nav>
+</header>
+
+<div class="hero">
+  <div class="hero-eyebrow">⚗️ Super Power Studios</div>
+  <h1 class="hero-title">SPS <span>Labs</span> — AI Integration Tracker</h1>
+  <p class="hero-sub">Tracking emerging AI capabilities, their relevance to our ventures, and our integration pipeline. Updated after every major AI event.</p>
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-num" id="total-count">16</div>
+      <div class="stat-label">Features Tracked</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" style="color: var(--red);" id="high-count">6</div>
+      <div class="stat-label">High Priority</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" style="color: var(--accent);" id="labs-count">6</div>
+      <div class="stat-label">In Labs Pipeline</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" style="color: var(--green);" id="live-count">1</div>
+      <div class="stat-label">Live / Integrated</div>
+    </div>
+  </div>
+</div>
+
+<div class="filters">
+  <span class="filter-label">Filter:</span>
+  <button class="filter-btn active" data-filter="all">All</button>
+  <button class="filter-btn" data-filter="sps">SPS</button>
+  <button class="filter-btn" data-filter="flywheel">Flywheel</button>
+  <button class="filter-btn" data-filter="domo">Domo</button>
+  <button class="filter-btn" data-filter="geo">GeoPulse</button>
+  <button class="filter-btn" data-filter="blue">Blue Highway</button>
+  <div class="filter-divider"></div>
+  <button class="filter-btn" data-filter="high">🔴 High Priority</button>
+  <button class="filter-btn" data-filter="planned">Planned</button>
+  <button class="filter-btn" data-filter="building">Building</button>
+</div>
+
+<div class="main">
+
+  <!-- GOOGLE I/O 2026 FEATURES -->
+  <div class="section-header">
+    <div class="section-icon" style="background: rgba(66,133,244,0.15);">🔵</div>
+    <div class="section-title">Google I/O 2026</div>
+    <div class="section-count" id="io-count">16 features</div>
+  </div>
+
+  <div class="source-header">
+    <span class="source-badge">Google I/O 2026</span>
+    <span class="source-date">May 20, 2026 · Mountain View, CA</span>
+  </div>
+
+  <div class="feature-grid" id="feature-grid">
+
+    <!-- 1. Gemini Spark -->
+    <div class="feature-card priority-high" data-ventures="sps flywheel" data-status="evaluate" data-priority="high">
+      <div class="card-header">
+        <div class="card-title">Gemini Spark — Personal AI Agent</div>
+        <div class="card-source">Google I/O 2026</div>
+      </div>
+      <div class="card-desc">24/7 autonomous agent running on dedicated Google Cloud VMs. Takes action on your behalf across Google + third-party tools. Even works when your laptop is closed. $100/mo Ultra plan.</div>
+      <div class="card-relevance">
+        <span class="tag tag-sps">SPS — ACP Platform</span>
+        <span class="tag tag-flywheel">Flywheel — Driver Agent</span>
+      </div>
+      <div class="card-footer">
+        <div class="status-badge status-evaluate"><div class="status-dot"></div>Evaluating</div>
+        <a class="watch-link" href="https://youtu.be/OMhKgQmeMhI?t=625" target="_blank">▶ 10:25</a>
+      </div>
+    </div>
+
+    <!-- 2. Antigravity 2.0 -->
+    <div class="feature-card priority-high" data-ventures="sps" data-status="planned" data-priority="high">
+      <div class="card-header">
+        <div class="card-title">Antigravity 2.0 — Agent Framework</div>
+        <div class="card-source">Google I/O 2026</div>
+      </div>
+      <div class="card-desc">Google's open agent framework. Full CLI, SDK, native voice, sub-agents, async task management. Co-optimized with Gemini 3.5 Flash. Built a working OS from scratch in a demo.</div>
+      <div class="card-relevance">
+        <span class="tag tag-sps">SPS — Agent Infrastructure</span>
+      </div>
+      <div class="card-footer">
+        <div class="status-badge status-planned"><div class="status-dot"></div>Planned</div>
+        <a class="watch-link" href="https://youtu.be/OMhKgQmeMhI?t=475" target="_blank">▶ 07:55</a>
+      </div>
+    </div>
+
+    <!-- 3. Gemini 3.5 Flash -->
+    <div class="feature-card priority-high" data-ventures="sps geo" data-status="building" data-priority="high">
+      <div class="card-header">
+        <div class="card-title">Gemini 3.5 Flash — Model Upgrade</div>
+        <div class="card-source">Google I/O 2026</div>
+      </div>
+      <div class="card-desc">Better than 3.1 Pro on almost all benchmarks. 4× faster than other frontier models. Huge jump on "economically valuable tasks" (GDPval). Available today.</div>
+      <div class="card-relevance">
+        <span class="tag tag-sps">SPS — All AI Pipelines</span>
+        <span class="tag tag-geo">GeoPulse — Narratives</span>
+      </div>
+      <div class="card-footer">
+        <div class="status-badge status-building"><div class="status-dot"></div>Integrating</div>
+        <a class="watch-link" href="https://youtu.be/OMhKgQmeMhI?t=415" target="_blank">▶ 06:55</a>
+      </div>
+    </div>
+
+    <!-- 4. Information Agents in Search -->
+    <div class="feature-card priority-high" data-ventures="sps geo" data-status="planned" data-priority="high">
+      <div class="card-header">
+        <div class="card-title">Information Agents — Background Web Monitors</div>
+        <div class="card-source">Google I/O 2026</div>
+      </div>
+      <div class="card-desc">Agents that run 24/7 in the background, scanning the web for apartments, sneaker drops, price changes. Finds and acts on information on your behalf. Rolling out summer 2026.</div>
+      <div class="card-relevance">
+        <span class="tag tag-sps">SPS — Research Agent</span>
+        <span class="tag tag-geo">GeoPulse — Market Monitor</span>
+      </div>
+      <div class="card-footer">
+        <div class="status-badge status-planned"><div class="status-dot"></div>Planned</div>
+        <a class="watch-link" href="https://youtu.be/OMhKgQmeMhI?t=865" target="_blank">▶ 14:25</a>
+      </div>
+    </div>
+
+    <!-- 5. AlphaEarth -->
+    <div class="feature-card priority-high" data-ventures="geo blue" data-status="evaluate" data-priority="high">
+      <div class="card-header">
+        <div class="card-title">AlphaEarth Foundations — Planetary Digital Twin</div>
+        <div class="card-source">Google I/O 2026</div>
+      </div>
+      <div class="card-desc">AI digital twin of the planet. Addresses deforestation, food security, urban planning. Closest thing to a real-world geospatial simulation engine. Direct competitive signal for GeoPulse AI.</div>
+      <div class="card-relevance">
+        <span class="tag tag-geo">GeoPulse — Competitive Signal</span>
+        <span class="tag tag-blue">Blue Highway — Route Planning</span>
+      </div>
+      <div class="card-footer">
+        <div class="status-badge status-evaluate"><div class="status-dot"></div>Evaluating</div>
+        <a class="watch-link" href="https://youtu.be/OMhKgQmeMhI?t=1998" target="_blank">▶ 33:18</a>
+      </div>
+    </div>
+
+    <!-- 6. Audio Glasses -->
+    <div class="feature-card priority-high" data-ventures="flywheel blue" data-status="evaluate" data-priority="high">
+      <div class="card-header">
+        <div class="card-title">Google Audio Glasses</div>
+        <div class="card-source">Google I/O 2026</div>
+      </div>
+      <div class="card-desc">All-day Gemini in your ear, hands-free. Navigation, app control, voice ordering (DoorDash demo), messaging, calendar. Pairs with Android + iOS. Arriving fall 2026.</div>
+      <div class="card-relevance">
+        <span class="tag tag-flywheel">Flywheel — Driver Tools</span>
+        <span class="tag tag-blue">Blue Highway — Crew Ops</span>
+      </div>
+      <div class="card-footer">
+        <div class="status-badge status-evaluate"><div class="status-dot"></div>Evaluating</div>
+        <a class="watch-link" href="https://youtu.be/OMhKgQmeMhI?t=1713" target="_blank">▶ 28:33</a>
+      </div>
+    </div>
+
+    <!-- 7. Universal Cart -->
+    <div class="feature-card priority-medium" data-ventures="domo flywheel" data-status="monitor" data-priority="medium">
+      <div class="card-header">
+        <div class="card-title">Universal Cart — Cross-Merchant Shopping</div>
+        <div class="card-source">Google I/O 2026</div>
+      </div>
+      <div class="card-desc">One cart across all merchants, works in Search, Gemini, YouTube, Gmail. Auto-finds deals, tracks price drops, alerts on restocks. Rolling out US this summer.</div>
+      <div class="card-relevance">
+        <span class="tag tag-domo">Domo — Retail Channel</span>
+        <span class="tag tag-flywheel">Flywheel — Marketplace</span>
+      </div>
+      <div class="card-footer">
+        <div class="status-badge status-monitor"><div class="status-dot"></div>Monitor</div>
+        <a class="watch-link" href="https://youtu.be/OMhKgQmeMhI?t=1006" target="_blank">▶ 16:46</a>
+      </div>
+    </div>
+
+    <!-- 8. Daily Brief -->
+    <div class="feature-card priority-medium" data-ventures="sps" data-status="monitor" data-priority="medium">
+      <div class="card-header">
+        <div class="card-title">Daily Brief Agent</div>
+        <div class="card-source">Google I/O 2026</div>
+      </div>
+      <div class="card-desc">Personalized morning digest agent. Reads inbox, calendar, tasks. Organizes by topic, suggests next steps. Live today for Google AI Pro/Ultra subscribers.</div>
+      <div class="card-relevance">
+        <span class="tag tag-sps">SPS — Product Design Signal</span>
+      </div>
+      <div class="card-footer">
+        <div class="status-badge status-monitor"><div class="status-dot"></div>Monitor</div>
+        <a class="watch-link" href="https://youtu.be/OMhKgQmeMhI?t=1212" target="_blank">▶ 20:12</a>
+      </div>
+    </div>
+
+    <!-- 9. Gemini Omni -->
+    <div class="feature-card priority-medium" data-ventures="sps domo" data-status="evaluate" data-priority="medium">
+      <div class="card-header">
+        <div class="card-title">Gemini Omni — Any Input → Any Output</div>
+        <div class="card-source">Google I/O 2026</div>
+      </div>
+      <div class="card-desc">Multimodal model combining Gemini intelligence with VO, Nano Banana, and Genie. Text + image + video in, any creative output. Edit your own videos with conversational language.</div>
+      <div class="card-relevance">
+        <span class="tag tag-sps">SPS — Content Studio</span>
+        <span class="tag tag-domo">Domo — Marketing Content</span>
+      </div>
+      <div class="card-footer">
+        <div class="status-badge status-evaluate"><div class="status-dot"></div>Evaluating</div>
+        <a class="watch-link" href="https://youtu.be/OMhKgQmeMhI?t=214" target="_blank">▶ 03:34</a>
+      </div>
+    </div>
+
+    <!-- 10. Agentic Search -->
+    <div class="feature-card priority-medium" data-ventures="sps geo" data-status="monitor" data-priority="medium">
+      <div class="card-header">
+        <div class="card-title">Agentic Coding in Search</div>
+        <div class="card-source">Google I/O 2026</div>
+      </div>
+      <div class="card-desc">Search builds custom interactive widgets, dynamic layouts, and entire experiences on the fly. Ask about black holes → get a live interactive simulation built in real-time. Free, rolling out summer 2026.</div>
+      <div class="card-relevance">
+        <span class="tag tag-sps">SPS — Platform Inspiration</span>
+        <span class="tag tag-geo">GeoPulse — Map Widgets</span>
+      </div>
+      <div class="card-footer">
+        <div class="status-badge status-monitor"><div class="status-dot"></div>Monitor</div>
+        <a class="watch-link" href="https://youtu.be/OMhKgQmeMhI?t=926" target="_blank">▶ 15:26</a>
+      </div>
+    </div>
+
+    <!-- 11. Ask YouTube -->
+    <div class="feature-card priority-medium" data-ventures="sps domo" data-status="monitor" data-priority="medium">
+      <div class="card-header">
+        <div class="card-title">Ask YouTube</div>
+        <div class="card-source">Google I/O 2026</div>
+      </div>
+      <div class="card-desc">Conversational video search. Asks contextual questions, jumps to relevant video moments, compares in tables, remembers follow-ups. Broad US rollout summer 2026.</div>
+      <div class="card-relevance">
+        <span class="tag tag-sps">SPS — Content Distribution</span>
+        <span class="tag tag-domo">Domo — Brand Discovery</span>
+      </div>
+      <div class="card-footer">
+        <div class="status-badge status-monitor"><div class="status-dot"></div>Monitor</div>
+        <a class="watch-link" href="https://youtu.be/OMhKgQmeMhI?t=22" target="_blank">▶ 00:22</a>
+      </div>
+    </div>
+
+    <!-- 12. Google Flow -->
+    <div class="feature-card priority-medium" data-ventures="sps domo" data-status="evaluate" data-priority="medium">
+      <div class="card-header">
+        <div class="card-title">Google Flow + Flow Music</div>
+        <div class="card-source">Google I/O 2026</div>
+      </div>
+      <div class="card-desc">Multi-action video agents — one image → 16 unique videos. Large-scale scene edits with contextual precision. Flow Tools lets you "vibe code" custom video effects. Flow Music turns recordings into full tracks.</div>
+      <div class="card-relevance">
+        <span class="tag tag-sps">SPS — Content Studio</span>
+        <span class="tag tag-domo">Domo — Campaign Creatives</span>
+      </div>
+      <div class="card-footer">
+        <div class="status-badge status-evaluate"><div class="status-dot"></div>Evaluating</div>
+        <a class="watch-link" href="https://youtu.be/OMhKgQmeMhI?t=1508" target="_blank">▶ 25:08</a>
+      </div>
+    </div>
+
+    <!-- 13. Google Pics -->
+    <div class="feature-card priority-low" data-ventures="domo sps" data-status="monitor" data-priority="low">
+      <div class="card-header">
+        <div class="card-title">Google Pics — AI Image Editor</div>
+        <div class="card-source">Google I/O 2026</div>
+      </div>
+      <div class="card-desc">Workspace image creation + editing. Object-aware editing, text translation, layout control. All outputs watermarked with SynthID. Party flyers to infographics. Rolling out summer 2026.</div>
+      <div class="card-relevance">
+        <span class="tag tag-domo">Domo — Marketing Assets</span>
+        <span class="tag tag-sps">SPS — Design Tools</span>
+      </div>
+      <div class="card-footer">
+        <div class="status-badge status-monitor"><div class="status-dot"></div>Monitor</div>
+        <a class="watch-link" href="https://youtu.be/OMhKgQmeMhI?t=1446" target="_blank">▶ 24:06</a>
+      </div>
+    </div>
+
+    <!-- 14. SynthID / Content Credentials -->
+    <div class="feature-card priority-low" data-ventures="sps" data-status="monitor" data-priority="low">
+      <div class="card-header">
+        <div class="card-title">SynthID + Content Credentials</div>
+        <div class="card-source">Google I/O 2026</div>
+      </div>
+      <div class="card-desc">AI vs camera origin verification expanding to Search and Chrome. OpenAI, Kakao, ElevenLabs adopting SynthID. Right-click in Chrome → "Was this generated by AI?" Relevance: SPS content authenticity.</div>
+      <div class="card-relevance">
+        <span class="tag tag-sps">SPS — Content Trust</span>
+      </div>
+      <div class="card-footer">
+        <div class="status-badge status-monitor"><div class="status-dot"></div>Monitor</div>
+        <a class="watch-link" href="https://youtu.be/OMhKgQmeMhI?t=325" target="_blank">▶ 05:25</a>
+      </div>
+    </div>
+
+    <!-- 15. Docs Live -->
+    <div class="feature-card priority-low" data-ventures="sps" data-status="monitor" data-priority="low">
+      <div class="card-header">
+        <div class="card-title">Docs Live — Voice-First Document Creation</div>
+        <div class="card-source">Google I/O 2026</div>
+      </div>
+      <div class="card-desc">Brain dump verbally, Gemini drafts and edits in real-time. Pulls from Drive and emails, formats content, adds notes. Rolling out to Pro/Ultra subscribers summer 2026.</div>
+      <div class="card-relevance">
+        <span class="tag tag-sps">SPS — Ops Efficiency</span>
+      </div>
+      <div class="card-footer">
+        <div class="status-badge status-monitor"><div class="status-dot"></div>Monitor</div>
+        <a class="watch-link" href="https://youtu.be/OMhKgQmeMhI?t=102" target="_blank">▶ 01:42</a>
+      </div>
+    </div>
+
+    <!-- 16. CodeMender -->
+    <div class="feature-card priority-low" data-ventures="sps" data-status="monitor" data-priority="low">
+      <div class="card-header">
+        <div class="card-title">CodeMender — Autonomous Security Agent</div>
+        <div class="card-source">Google I/O 2026</div>
+      </div>
+      <div class="card-desc">Auto-finds and fixes critical software vulnerabilities in codebases. API launching broadly soon. Relevant for SPS platform security + all Railway-deployed apps.</div>
+      <div class="card-relevance">
+        <span class="tag tag-sps">SPS — Platform Security</span>
+      </div>
+      <div class="card-footer">
+        <div class="status-badge status-monitor"><div class="status-dot"></div>Monitor</div>
+        <a class="watch-link" href="https://youtu.be/OMhKgQmeMhI?t=1940" target="_blank">▶ 32:20</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- LABS PIPELINE -->
+  <div class="section-header" style="margin-top: 8px;">
+    <div class="section-icon" style="background: rgba(124,106,248,0.15);">⚗️</div>
+    <div class="section-title">Labs Pipeline — Planned Integrations</div>
+    <div class="section-count">6 experiments</div>
+  </div>
+
+  <div class="labs-grid">
+
+    <div class="lab-card">
+      <div class="lab-num">LAB-001</div>
+      <div class="lab-title">Antigravity 2.0 → SPS Agent Platform</div>
+      <div class="lab-desc">Build the SPS 6-agent ecosystem (Ideation → Business Plan → Financial Sim → GTM → Pitch → Ops) on top of Google's Antigravity harness + Gemini 3.5 Flash. Replace custom agent infrastructure with battle-tested framework.</div>
+      <div class="lab-meta">
+        <div class="lab-venture"><span class="tag tag-sps">SPS</span></div>
+        <div class="status-badge status-planned"><div class="status-dot"></div>Planned</div>
+      </div>
+    </div>
+
+    <div class="lab-card">
+      <div class="lab-num">LAB-002</div>
+      <div class="lab-title">Gemini 3.5 Flash → All AI Pipelines</div>
+      <div class="lab-desc">Upgrade GeoPulse AI narratives, SPS agent responses, and all Gemini API calls from 1.5-flash to 3.5-flash. 4× speed improvement + better benchmark scores = better user experience across every product.</div>
+      <div class="lab-meta">
+        <div class="lab-venture"><span class="tag tag-sps">SPS</span> <span class="tag tag-geo">GeoPulse</span></div>
+        <div class="status-badge status-building"><div class="status-dot"></div>In Progress</div>
+      </div>
+    </div>
+
+    <div class="lab-card">
+      <div class="lab-num">LAB-003</div>
+      <div class="lab-title">Audio Glasses → Flywheel Driver Interface</div>
+      <div class="lab-desc">When Google Audio Glasses API opens (fall 2026), position Flywheel as an early integration partner. Voice-first dispatch, navigation, trip status, earnings updates — all hands-free in-ear for professional drivers.</div>
+      <div class="lab-meta">
+        <div class="lab-venture"><span class="tag tag-flywheel">Flywheel</span> <span class="tag tag-blue">Blue Highway</span></div>
+        <div class="status-badge status-evaluate"><div class="status-dot"></div>Evaluating</div>
+      </div>
+    </div>
+
+    <div class="lab-card">
+      <div class="lab-num">LAB-004</div>
+      <div class="lab-title">Information Agents → SPS Market Intelligence</div>
+      <div class="lab-desc">Embed Google's background information agent pattern into SPS's Financial Modeling + GTM agents. Continuously scan competitor pricing, market trends, investor activity — surface to founders automatically inside the platform.</div>
+      <div class="lab-meta">
+        <div class="lab-venture"><span class="tag tag-sps">SPS</span></div>
+        <div class="status-badge status-planned"><div class="status-dot"></div>Planned</div>
+      </div>
+    </div>
+
+    <div class="lab-card">
+      <div class="lab-num">LAB-005</div>
+      <div class="lab-title">Universal Cart → Domo Cafe Retail</div>
+      <div class="lab-desc">Get Domo Cafe merchandise and packaged goods listed in Google's Universal Cart network when API opens. Tap into the AI-powered shopping graph that works across Search, YouTube, and Gmail.</div>
+      <div class="lab-meta">
+        <div class="lab-venture"><span class="tag tag-domo">Domo Cafe</span></div>
+        <div class="status-badge status-monitor"><div class="status-dot"></div>Monitor</div>
+      </div>
+    </div>
+
+    <div class="lab-card">
+      <div class="lab-num">LAB-006</div>
+      <div class="lab-title">AlphaEarth → GeoPulse Phase 2</div>
+      <div class="lab-desc">Evaluate AlphaEarth API access (when available) to add planetary-scale simulation to GeoPulse AI's investment scoring. Climate risk, urban growth prediction, flood modeling — institutional-grade data layer for investor reports.</div>
+      <div class="lab-meta">
+        <div class="lab-venture"><span class="tag tag-geo">GeoPulse</span></div>
+        <div class="status-badge status-evaluate"><div class="status-dot"></div>Evaluating</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="updated-bar">
+    Last updated: May 23, 2026 · Source: Google I/O 2026 Keynote · Managed by Jarvis / Super Power Studios
+  </div>
+
+</div>
+
+<script>
+  // Filter logic
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const featureCards = document.querySelectorAll('.feature-card');
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const filter = btn.dataset.filter;
+
+      featureCards.forEach(card => {
+        if (filter === 'all') {
+          card.classList.remove('hidden');
+        } else if (['high', 'medium', 'low'].includes(filter)) {
+          card.classList.toggle('hidden', card.dataset.priority !== filter);
+        } else if (['planned', 'building', 'monitor', 'evaluate'].includes(filter)) {
+          card.classList.toggle('hidden', card.dataset.status !== filter);
+        } else {
+          card.classList.toggle('hidden', !card.dataset.ventures.includes(filter));
+        }
+      });
+
+      // Update count
+      const visible = document.querySelectorAll('.feature-card:not(.hidden)').length;
+      document.getElementById('io-count').textContent = visible + ' features';
+    });
+  });
+</script>
+
+</body>
+</html>
