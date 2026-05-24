@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Domo Cafe — Culture & Values</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --domo-brown: #8B5A3C;
+    --domo-red: #D62828;
+    --domo-dark: #1c1008;
+    --domo-cream: #FDF6EF;
+    --domo-tan: #E8D5C0;
+    --white: #ffffff;
+  }
+
+  body {
+    background: #111;
+    font-family: 'Georgia', serif;
+    overflow: hidden;
+  }
+
+  /* ── STAGE ── */
+  .stage {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .slide-wrapper {
+    width: 1280px;
+    height: 720px;
+    transform-origin: center center;
+    position: relative;
+  }
+
+  .slide {
+    width: 1280px;
+    height: 720px;
+    position: absolute;
+    top: 0; left: 0;
+    display: none;
+    overflow: hidden;
+  }
+  .slide.active { display: flex; }
+
+  /* ── NAV ── */
+  .nav {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    z-index: 200;
+    background: rgba(0,0,0,0.6);
+    padding: 10px 22px;
+    border-radius: 40px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .nav button {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #fff;
+    padding: 7px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    transition: all 0.2s;
+    font-family: Arial, sans-serif;
+  }
+  .nav button:hover { background: rgba(255,255,255,0.25); }
+  .nav .counter {
+    color: rgba(255,255,255,0.55);
+    font-size: 12px;
+    min-width: 50px;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    letter-spacing: 1px;
+  }
+
+  /* ════════════════════════════
+     SLIDE 1 — TITLE
+  ════════════════════════════ */
+  .s1 {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--domo-dark);
+    position: relative;
+  }
+  .s1 .bg-photo {
+    position: absolute;
+    inset: 0;
+    background-image: url('domo-entrance.jpg');
+    background-size: cover;
+    background-position: center 30%;
+    opacity: 0.25;
+  }
+  .s1 .content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    text-align: center;
+  }
+  .s1 img.logo {
+    width: 280px;
+    filter: drop-shadow(0 4px 24px rgba(0,0,0,0.5));
+  }
+  .s1 .divider {
+    width: 60px;
+    height: 3px;
+    background: var(--domo-red);
+    border-radius: 2px;
+  }
+  .s1 .sub {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+  }
+  .s1 .tagline {
+    font-family: Georgia, serif;
+    font-size: 26px;
+    color: rgba(255,255,255,0.85);
+    font-style: italic;
+    max-width: 600px;
+    line-height: 1.5;
+  }
+  .s1 .tagline em {
+    color: #fff;
+    font-weight: bold;
+    font-style: normal;
+  }
+
+  /* ════════════════════════════
+     SLIDE 2 — WHAT WE ARE
+  ════════════════════════════ */
+  .s2 {
+    background: var(--domo-cream);
+    flex-direction: row;
+  }
+  .s2 .photo-col {
+    width: 480px;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .s2 .photo-col img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+  .s2 .photo-col .overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, transparent 60%, var(--domo-cream));
+  }
+  .s2 .photo-col .badge {
+    position: absolute;
+    bottom: 40px;
+    left: 40px;
+    background: var(--domo-red);
+    color: #fff;
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    padding: 8px 18px;
+    border-radius: 3px;
+  }
+  .s2 .text-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 64px 60px 64px 40px;
+  }
+  .s2 .eyebrow {
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--domo-red);
+    margin-bottom: 16px;
+  }
+  .s2 h2 {
+    font-size: 42px;
+    color: var(--domo-dark);
+    line-height: 1.15;
+    margin-bottom: 8px;
+  }
+  .s2 .intro-quote {
+    font-style: italic;
+    color: var(--domo-brown);
+    font-size: 17px;
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--domo-tan);
+  }
+  .s2 .items {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .s2 .item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .s2 .dot {
+    width: 8px;
+    height: 8px;
+    background: var(--domo-red);
+    border-radius: 50%;
+    margin-top: 9px;
+    flex-shrink: 0;
+  }
+  .s2 .item-main {
+    font-size: 19px;
+    color: var(--domo-dark);
+    font-weight: 600;
+  }
+  .s2 .item-sub {
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    color: #888;
+    margin-top: 2px;
+  }
+
+  /* ════════════════════════════
+     SLIDE 3 — PILLARS OVERVIEW
+  ════════════════════════════ */
+  .s3 {
+    background: var(--domo-brown);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 80px;
+    position: relative;
+    overflow: hidden;
+  }
+  .s3::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 6px;
+    background: var(--domo-red);
+  }
+  .s3 .watermark {
+    position: absolute;
+    bottom: -40px;
+    right: -40px;
+    font-size: 320px;
+    line-height: 1;
+    color: rgba(0,0,0,0.12);
+    font-family: Georgia, serif;
+    font-weight: 700;
+    pointer-events: none;
+  }
+  .s3 .eyebrow {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 20px;
+  }
+  .s3 h2 {
+    font-size: 56px;
+    color: #fff;
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+  .s3 h2 em {
+    color: #FFCFA0;
+    font-style: normal;
+  }
+  .s3 p {
+    font-size: 20px;
+    color: rgba(255,255,255,0.75);
+    max-width: 700px;
+    line-height: 1.7;
+    margin-bottom: 52px;
+  }
+  .s3 .grid {
+    display: flex;
+    gap: 20px;
+    position: relative;
+    z-index: 1;
+  }
+  .s3 .card {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    padding: 24px 32px;
+    text-align: center;
+    backdrop-filter: blur(4px);
+    min-width: 160px;
+  }
+  .s3 .card .n {
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .s3 .card .t {
+    font-size: 20px;
+    color: #fff;
+    font-weight: 700;
+  }
+  .s3 .card .ico {
+    font-size: 30px;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  /* ════════════════════════════
+     PILLAR SLIDES (4–7)
+  ════════════════════════════ */
+  .pillar {
+    flex-direction: row;
+  }
+  /* Left accent panel */
+  .pillar .left-panel {
+    width: 380px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 56px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .pillar .left-panel .big-num {
+    position: absolute;
+    top: -20px;
+    left: -10px;
+    font-size: 240px;
+    font-weight: 900;
+    color: rgba(255,255,255,0.08);
+    line-height: 1;
+    font-family: Arial, sans-serif;
+    pointer-events: none;
+  }
+  .pillar .left-panel .pillar-label {
+    font-family: Arial, sans-serif;
+    font-size: 10px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 14px;
+  }
+  .pillar .left-panel .icon { font-size: 52px; margin-bottom: 16px; }
+  .pillar .left-panel h3 {
+    font-size: 44px;
+    color: #fff;
+    line-height: 1.1;
+    font-weight: 700;
+  }
+  /* Right content panel */
+  .pillar .right-panel {
+    flex: 1;
+    background: var(--domo-cream);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 64px 68px;
+  }
+  .pillar .saying-block {
+    border-left: 5px solid var(--domo-red);
+    padding: 4px 0 4px 28px;
+    margin-bottom: 40px;
+  }
+  .pillar .saying-text {
+    font-family: Georgia, serif;
+    font-size: 28px;
+    color: var(--domo-dark);
+    font-style: italic;
+    line-height: 1.55;
+  }
+  .pillar .saying-text strong {
+    color: var(--domo-red);
+    font-style: normal;
+  }
+  .pillar .body-text {
+    font-family: Arial, sans-serif;
+    font-size: 17px;
+    color: #666;
+    line-height: 1.85;
+    max-width: 500px;
+  }
+  .pillar .body-text strong { color: var(--domo-dark); }
+
+  /* Panel colors */
+  .p-showup   .left-panel { background: #1c1008; }
+  .p-hosp     .left-panel { background: var(--domo-brown); }
+  .p-team     .left-panel { background: var(--domo-red); }
+  .p-comm     .left-panel { background: #1e2d40; }
+
+  /* ════════════════════════════
+     SLIDE 8 — CLOSING
+  ════════════════════════════ */
+  .s8 {
+    flex-direction: row;
+    background: var(--domo-dark);
+    position: relative;
+    overflow: hidden;
+  }
+  .s8 .photo-side {
+    width: 520px;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .s8 .photo-side img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 20%;
+    opacity: 0.7;
+  }
+  .s8 .photo-side::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, transparent 50%, var(--domo-dark));
+  }
+  .s8 .text-side {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 72px 80px 72px 60px;
+  }
+  .s8 .eyebrow {
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--domo-red);
+    margin-bottom: 20px;
+  }
+  .s8 h2 {
+    font-size: 50px;
+    color: #fff;
+    line-height: 1.15;
+    margin-bottom: 28px;
+  }
+  .s8 .quote {
+    font-style: italic;
+    font-size: 20px;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.7;
+    max-width: 440px;
+    margin-bottom: 40px;
+    border-left: 3px solid var(--domo-red);
+    padding-left: 20px;
+  }
+  .s8 .quote em { color: #fff; font-style: normal; }
+  .s8 .sig {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    color: rgba(255,255,255,0.4);
+    line-height: 1.8;
+    letter-spacing: 0.5px;
+  }
+  .s8 .sig strong { color: rgba(255,255,255,0.7); }
+  .s8 img.logo-small {
+    width: 140px;
+    margin-top: 32px;
+    opacity: 0.9;
+  }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <div class="slide-wrapper" id="wrapper">
+
+    <!-- ── SLIDE 1: TITLE ── -->
+    <div class="slide s1 active">
+      <div class="bg-photo"></div>
+      <div class="content">
+        <img class="logo" src="domo-cafe-logo-transparent.png" alt="Domo Cafe">
+        <div class="divider"></div>
+        <div class="sub">Culture &amp; Values</div>
+        <div class="tagline">
+          "We are not just a cafe.<br>
+          We are <em>an experience worth remembering.</em>"
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SLIDE 2: WHAT WE ARE ── -->
+    <div class="slide s2">
+      <div class="photo-col">
+        <img src="domo-entrance.jpg" alt="Domo Cafe Entrance">
+        <div class="overlay"></div>
+        <div class="badge">Buena Park, CA · 2026</div>
+      </div>
+      <div class="text-col">
+        <div class="eyebrow">What We Are</div>
+        <h2>More than<br>a cafe.</h2>
+        <div class="intro-quote">"Not just serving food — creating moments."</div>
+        <div class="items">
+          <div class="item">
+            <div class="dot"></div>
+            <div>
+              <div class="item-main">An Immersive Experience</div>
+              <div class="item-sub">You stepped into another world</div>
+            </div>
+          </div>
+          <div class="item">
+            <div class="dot"></div>
+            <div>
+              <div class="item-main">A Hospitality Brand</div>
+              <div class="item-sub">How people feel IS the product</div>
+            </div>
+          </div>
+          <div class="item">
+            <div class="dot"></div>
+            <div>
+              <div class="item-main">A Place That Creates Moments</div>
+              <div class="item-sub">The kind people never forget</div>
+            </div>
+          </div>
+          <div class="item">
+            <div class="dot"></div>
+            <div>
+              <div class="item-main">A Training Ground</div>
+              <div class="item-sub">You will leave here better than you arrived — that's our promise</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SLIDE 3: OVERVIEW ── -->
+    <div class="slide s3">
+      <div class="watermark">DC</div>
+      <div class="eyebrow">Our Foundation</div>
+      <h2>Four Pillars.<br><em>One Culture.</em></h2>
+      <p>These are not just rules. They are the standards we hold ourselves — and each other — to every single shift.</p>
+      <div class="grid">
+        <div class="card">
+          <span class="ico">⏰</span>
+          <div class="n">01</div>
+          <div class="t">Show Up</div>
+        </div>
+        <div class="card">
+          <span class="ico">🤝</span>
+          <div class="n">02</div>
+          <div class="t">Hospitality</div>
+        </div>
+        <div class="card">
+          <span class="ico">🙌</span>
+          <div class="n">03</div>
+          <div class="t">Teamwork</div>
+        </div>
+        <div class="card">
+          <span class="ico">💬</span>
+          <div class="n">04</div>
+          <div class="t">Communication</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SLIDE 4: SHOW UP ── -->
+    <div class="slide pillar p-showup">
+      <div class="left-panel">
+        <div class="big-num">01</div>
+        <div class="icon">⏰</div>
+        <div class="pillar-label">Pillar One</div>
+        <h3>Show<br>Up.</h3>
+      </div>
+      <div class="right-panel">
+        <div class="saying-block">
+          <div class="saying-text">
+            "Early is on time.<br>
+            On time is late.<br>
+            <strong>Late is unacceptable.</strong>"
+          </div>
+        </div>
+        <div class="body-text">
+          Showing up means two things.<br><br>
+          <strong>Be here physically</strong> — on time, every time, no excuses.<br><br>
+          <strong>Be here mentally</strong> — present, focused, and locked in from the moment you walk through that door.<br><br>
+          Your team and your guests are counting on you before you even say a word.
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SLIDE 5: HOSPITALITY ── -->
+    <div class="slide pillar p-hosp">
+      <div class="left-panel">
+        <div class="big-num">02</div>
+        <div class="icon">🤝</div>
+        <div class="pillar-label">Pillar Two</div>
+        <h3>Hospital-<br>ity.</h3>
+      </div>
+      <div class="right-panel">
+        <div class="saying-block">
+          <div class="saying-text">
+            "It's not about what you do<br>
+            for the guest — it's about<br>
+            <strong>how you make them feel.</strong>"
+          </div>
+        </div>
+        <div class="body-text">
+          Notice the word <em>hospital</em> inside hospitality.<br>
+          That's not a coincidence.<br><br>
+          A hospital exists for one reason — <strong>to take care of you.</strong><br><br>
+          That is exactly what we do here. Every guest who walks through that door is in our care.<br><br>
+          They may forget your name. They may forget what they ordered.<br>
+          <strong>But they will never forget how you made them feel.</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SLIDE 6: TEAMWORK ── -->
+    <div class="slide pillar p-team">
+      <div class="left-panel">
+        <div class="big-num">03</div>
+        <div class="icon">🙌</div>
+        <div class="pillar-label">Pillar Three</div>
+        <h3>Team-<br>work.</h3>
+      </div>
+      <div class="right-panel">
+        <div class="saying-block">
+          <div class="saying-text">
+            "Show up for your team<br>
+            the way you want them to<br>
+            <strong>show up for you.</strong>"
+          </div>
+        </div>
+        <div class="body-text">
+          <strong>When one person is in the weeds, we all grab plates.</strong><br><br>
+          <em>"In the weeds" means slammed — when the rush hits and everything is falling apart at once. Great teams don't point fingers. They grab plates.</em><br><br>
+          When a teammate is struggling, you don't wait to be asked. <strong>You step in.</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SLIDE 7: COMMUNICATION ── -->
+    <div class="slide pillar p-comm">
+      <div class="left-panel">
+        <div class="big-num">04</div>
+        <div class="icon">💬</div>
+        <div class="pillar-label">Pillar Four</div>
+        <h3>Commu-<br>nication.</h3>
+      </div>
+      <div class="right-panel">
+        <div class="saying-block">
+          <div class="saying-text">
+            "No communication becomes misinformation.<br>
+            Misinformation becomes misunderstanding.<br>
+            <strong>Master it.</strong>"
+          </div>
+        </div>
+        <div class="body-text">
+          Communication is the <strong>greatest superpower</strong> in this building — when mastered.<br><br>
+          Mastering communication can be the one superpower that will help you <strong>achieve greatness</strong> — in this cafe, in your career, and in your life.<br><br>
+          Say what you need. Ask for help. Speak up early.<br><br>
+          Silence doesn't solve problems. <strong>It creates them.</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SLIDE 8: CLOSING ── -->
+    <div class="slide s8">
+      <div class="photo-side">
+        <img src="domo-elevation-panorama.jpg" alt="Domo Cafe">
+      </div>
+      <div class="text-side">
+        <div class="eyebrow">Let's Build Together</div>
+        <h2>Something Worth<br>Remembering.</h2>
+        <div class="quote">
+          "We're not here to be perfect.<br>
+          We're here to be <em>present, purposeful,<br>and proud of what we build together.</em>"
+        </div>
+        <div class="sig">
+          <strong>Izzy Aala</strong> — Founder<br>
+          Domo Cafe · Buena Park, CA · 2026
+        </div>
+        <img class="logo-small" src="domo-cafe-logo-transparent.png" alt="Domo Cafe">
+      </div>
+    </div>
+
+  </div><!-- /slide-wrapper -->
+</div><!-- /stage -->
+
+<!-- NAV -->
+<div class="nav">
+  <button onclick="prev()">← Prev</button>
+  <span class="counter" id="counter">1 / 8</span>
+  <button onclick="next()">Next →</button>
+</div>
+
+<script>
+  let current = 0;
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+
+  function scale() {
+    const sw = window.innerWidth  / 1280;
+    const sh = window.innerHeight / 720;
+    const s  = Math.min(sw, sh);
+    document.getElementById('wrapper').style.transform = `scale(${s})`;
+  }
+
+  function show(n) {
+    slides.forEach(s => s.classList.remove('active'));
+    slides[n].classList.add('active');
+    document.getElementById('counter').textContent = (n + 1) + ' / ' + total;
+  }
+
+  function next() { current = (current + 1) % total; show(current); }
+  function prev() { current = (current - 1 + total) % total; show(current); }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+  });
+
+  window.addEventListener('resize', scale);
+  scale();
+  show(0);
+</script>
+</body>
+</html>
