@@ -222,6 +222,15 @@
     .card-url::after { content: '↗'; font-size: 11px; }
     .card:not([href]) { cursor: default; }
     .card:not([href]):hover { transform: none; }
+    .stack-link {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
+      color: rgba(255,255,255,0.35); text-decoration: none;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 6px; padding: 3px 8px; margin-top: 10px;
+      transition: color 0.15s, background 0.15s;
+    }
+    .stack-link:hover { color: rgba(255,255,255,0.75); background: rgba(255,255,255,0.09); }
 
     /* ─── VENTURE COLORS ─── */
     .flywheel .card-icon { background: rgba(204,26,26,0.15); }
@@ -323,6 +332,7 @@
         <span class="tag">GFC BP LLC</span>
       </div>
       <div class="card-url">tranquil-magic-production-4aee.up.railway.app</div>
+      <a class="stack-link" href="stack.html#domocafe-ops" onclick="event.stopPropagation()">⚙️ Tech Stack</a>
     </a>
 
     <a class="card domo" href="domo-employee-presentation.html" target="_blank">
@@ -340,20 +350,21 @@
       <div class="card-url">domo-employee-presentation.html</div>
     </a>
 
-    <a class="card domo" href="http://100.77.96.68:3700" target="_blank">
+    <a class="card domo" href="https://www.domokuncafe.com" target="_blank">
       <div class="card-top">
         <div class="card-icon">🍢</div>
-        <span class="badge badge-dev">Dev v0.2.1</span>
+        <span class="badge badge-live">Live v1.0.0</span>
       </div>
-      <div class="card-name">Domo Cafe Landing Page</div>
-      <div class="card-desc">Coming soon page with daily Chef Domo reveal (21 days), ambient silhouettes, countdown, eVite CTA. Grand Opening June 13, 2026.</div>
+      <div class="card-name">Domo Cafe Website</div>
+      <div class="card-desc">Coming soon teaser — daily Chef Domo reveal, countdown to June 13 Grand Opening. Full 11-page site flips live June 13 at 10am.</div>
       <div class="card-meta">
         <span class="tag">HTML/CSS/JS</span>
-        <span class="tag">Progressive Reveal</span>
+        <span class="tag">GitHub Pages</span>
         <span class="tag">domokuncafe.com</span>
         <span class="tag">GFC BP LLC</span>
       </div>
-      <div class="card-url">100.77.96.68:3700 — deploy pending</div>
+      <div class="card-url">www.domokuncafe.com</div>
+      <a class="stack-link" href="stack.html#domocafe-web" onclick="event.stopPropagation()">⚙️ Tech Stack</a>
     </a>
 
     <a class="card flywheel" href="https://flywheel-ops-production.up.railway.app" target="_blank">
@@ -370,6 +381,7 @@
         <span class="tag">Flywheel</span>
       </div>
       <div class="card-url">flywheel-ops-production.up.railway.app</div>
+      <a class="stack-link" href="stack.html#flywheel-ops" onclick="event.stopPropagation()">⚙️ Tech Stack</a>
     </a>
 
     <a class="card sps" href="https://cloud-closet-app-production.up.railway.app" target="_blank">
@@ -386,6 +398,7 @@
         <span class="tag">SPS</span>
       </div>
       <div class="card-url">cloud-closet-app-production.up.railway.app</div>
+      <a class="stack-link" href="stack.html#cloud-closet" onclick="event.stopPropagation()">⚙️ Tech Stack</a>
     </a>
 
     <a class="card golf" href="https://24hourgolf-web-production.up.railway.app" target="_blank">
@@ -402,6 +415,7 @@
         <span class="tag">SPS</span>
       </div>
       <div class="card-url">24hourgolf-web-production.up.railway.app</div>
+      <a class="stack-link" href="stack.html#24hourgolf" onclick="event.stopPropagation()">⚙️ Tech Stack</a>
     </a>
 
     <a class="card sps" href="https://proforma-builder-production.up.railway.app" target="_blank">
@@ -418,6 +432,7 @@
         <span class="tag">SPS Tool</span>
       </div>
       <div class="card-url">proforma-builder-production.up.railway.app</div>
+      <a class="stack-link" href="stack.html#proforma" onclick="event.stopPropagation()">⚙️ Tech Stack</a>
     </a>
 
     <a class="card sps" href="https://www.notion.so/EZLiving-GeoPulse-AI-Location-Intelligence-36856f432b4d81d89270c62b9530c5d4" target="_blank">
@@ -434,6 +449,7 @@
         <span class="tag">SPS × EZLiving</span>
       </div>
       <div class="card-url">notion.so — GeoPulse PRD — deploy pending</div>
+      <a class="stack-link" href="stack.html#geopulse" onclick="event.stopPropagation()">⚙️ Tech Stack</a>
     </a>
 
     <a class="card personal" href="https://izzy-spsi.github.io/japan-trip-2026/" target="_blank">

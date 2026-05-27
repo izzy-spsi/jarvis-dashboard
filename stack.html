@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tech Stack — Jarvis HQ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #080a0f;
+      --surface: #0e1117;
+      --card: #13181f;
+      --border: rgba(255,255,255,0.07);
+      --text: #e8eaf0;
+      --muted: #8891a4;
+      --accent: #7c6af8;
+      --green: #22c55e;
+      --yellow: #eab308;
+      --red: #ef4444;
+      --blue: #3b82f6;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; min-height: 100vh; }
+
+    /* NAV */
+    .nav { padding: 20px 40px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 16px; }
+    .nav a { color: var(--muted); text-decoration: none; font-size: 13px; font-weight: 500; }
+    .nav a:hover { color: var(--text); }
+    .nav-sep { color: var(--border); }
+    .nav-title { color: var(--text); font-weight: 700; }
+
+    /* HEADER */
+    .header { padding: 48px 40px 32px; max-width: 1200px; margin: 0 auto; }
+    .header h1 { font-size: 32px; font-weight: 800; letter-spacing: -0.5px; }
+    .header p { color: var(--muted); font-size: 15px; margin-top: 8px; }
+
+    /* CONTENT */
+    .content { max-width: 1200px; margin: 0 auto; padding: 0 40px 80px; }
+
+    /* SECTION */
+    .section { margin-bottom: 48px; }
+    .section-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--muted);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px; margin-bottom: 24px;
+    }
+
+    /* PROJECT CARD */
+    .project {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 32px;
+      margin-bottom: 16px;
+    }
+    .project-header {
+      display: flex; align-items: flex-start;
+      justify-content: space-between; gap: 16px;
+      margin-bottom: 24px;
+    }
+    .project-title-row { display: flex; align-items: center; gap: 12px; }
+    .project-icon { font-size: 24px; }
+    .project-name { font-size: 18px; font-weight: 700; }
+    .project-desc { color: var(--muted); font-size: 13px; margin-top: 3px; }
+    .badge {
+      font-size: 11px; font-weight: 700; padding: 3px 10px;
+      border-radius: 20px; white-space: nowrap;
+    }
+    .badge-live { background: rgba(34,197,94,0.15); color: var(--green); }
+    .badge-dev  { background: rgba(234,179,8,0.15);  color: var(--yellow); }
+    .badge-build{ background: rgba(124,106,248,0.15); color: var(--accent); }
+
+    /* GRID */
+    .stack-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    .stack-item { }
+    .stack-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 6px;
+    }
+    .stack-val {
+      font-size: 14px; font-weight: 500; color: var(--text);
+      line-height: 1.5;
+    }
+    .stack-val a { color: var(--accent); text-decoration: none; }
+    .stack-val a:hover { text-decoration: underline; }
+    .stack-val .chip {
+      display: inline-block; font-size: 11px; font-weight: 600;
+      background: rgba(255,255,255,0.06); border: 1px solid var(--border);
+      border-radius: 6px; padding: 2px 8px; margin: 2px 2px 2px 0;
+    }
+    .stack-val .chip.green { background: rgba(34,197,94,0.1); border-color: rgba(34,197,94,0.2); color: var(--green); }
+    .stack-val .chip.yellow { background: rgba(234,179,8,0.1); border-color: rgba(234,179,8,0.2); color: var(--yellow); }
+    .stack-val .chip.blue { background: rgba(59,130,246,0.1); border-color: rgba(59,130,246,0.2); color: #60a5fa; }
+    .stack-val .chip.purple { background: rgba(124,106,248,0.1); border-color: rgba(124,106,248,0.2); color: var(--accent); }
+
+    /* DEPLOY NOTE */
+    .deploy-note {
+      margin-top: 20px; padding: 14px 18px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 12px; color: var(--muted);
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      line-height: 1.7;
+    }
+    .deploy-note strong { color: var(--text); }
+
+    /* NOTE BOX */
+    .note {
+      margin-top: 16px; padding: 12px 16px;
+      background: rgba(124,106,248,0.06);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      font-size: 12px; color: var(--muted); line-height: 1.6;
+    }
+
+    /* BACK LINK */
+    .back { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-size: 13px; text-decoration: none; font-weight: 500; }
+    .back:hover { color: var(--text); }
+
+    @media (max-width: 600px) {
+      .nav { padding: 16px 20px; }
+      .header { padding: 32px 20px 20px; }
+      .content { padding: 0 20px 60px; }
+      .project { padding: 20px; }
+      .stack-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="nav">
+  <a href="index.html">← Jarvis HQ</a>
+  <span class="nav-sep">/</span>
+  <span class="nav-title">Tech Stack</span>
+</div>
+
+<!-- HEADER -->
+<div class="header">
+  <h1>⚙️ Tech Stack Reference</h1>
+  <p>Production environments, staging, databases, hosting, and deploy processes for every project.</p>
+</div>
+
+<div class="content">
+
+  <!-- DOMO CAFE -->
+  <div class="section">
+    <div class="section-label">🍢 Domo Cafe</div>
+
+    <!-- domokuncafe.com -->
+    <div class="project" id="domocafe-web">
+      <div class="project-header">
+        <div>
+          <div class="project-title-row">
+            <span class="project-icon">🌐</span>
+            <div>
+              <div class="project-name">Domo Cafe Website</div>
+              <div class="project-desc">Public-facing teaser site → full 11-page site on June 13</div>
+            </div>
+          </div>
+        </div>
+        <span class="badge badge-live">Live v1.0.0</span>
+      </div>
+      <div class="stack-grid">
+        <div class="stack-item">
+          <div class="stack-label">Frontend</div>
+          <div class="stack-val">
+            <span class="chip">HTML5</span>
+            <span class="chip">CSS3</span>
+            <span class="chip">Vanilla JS</span>
+          </div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Backend</div>
+          <div class="stack-val">None (static site)</div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Database</div>
+          <div class="stack-val"><span class="chip yellow">None (v1)</span><br><small style="color:var(--muted);font-size:11px">v2.0 → PostgreSQL (email capture, reservations)</small></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Hosting — Production</div>
+          <div class="stack-val"><span class="chip green">GitHub Pages</span><br><a href="https://www.domokuncafe.com" target="_blank">www.domokuncafe.com</a></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Staging</div>
+          <div class="stack-val"><a href="https://izzy-spsi.github.io/domokuncafe-website/" target="_blank">izzy-spsi.github.io/domokuncafe-website</a><br><small style="color:var(--muted);font-size:11px">Auto-deploys on every push to main</small></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">DNS</div>
+          <div class="stack-val">GoDaddy<br><span class="chip">www CNAME → izzy-spsi.github.io</span><br><span class="chip">@ → 301 → www</span></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">SSL</div>
+          <div class="stack-val"><span class="chip green">Let's Encrypt</span><br>Auto via GitHub Pages</div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">GitHub Repo</div>
+          <div class="stack-val"><a href="https://github.com/izzy-spsi/domokuncafe-website" target="_blank">izzy-spsi/domokuncafe-website</a></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Local Copy</div>
+          <div class="stack-val"><code style="font-size:11px">~/Documents/domokuncafe-website</code></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Entity</div>
+          <div class="stack-val">GFC BP LLC (DBA Domo Cafe)</div>
+        </div>
+      </div>
+      <div class="deploy-note">
+        <strong>Deploy:</strong> cd ~/Documents/domokuncafe-website → edit index.html → git add -A && git commit -m "..." && git push origin main<br>
+        <strong>Live in:</strong> ~60 seconds after push
+      </div>
+      <div class="note">
+        📅 <strong>June 13, 2026 10:00 AM:</strong> Full 11-page site replaces teaser. v2.0 will add Node.js backend + PostgreSQL for reservations, email capture, menu CMS, and events. Hosting will move to Railway or Vercel at that point.
+      </div>
+    </div>
+
+    <!-- Domo Cafe Ops -->
+    <div class="project" id="domocafe-ops">
+      <div class="project-header">
+        <div>
+          <div class="project-title-row">
+            <span class="project-icon">🍵</span>
+            <div>
+              <div class="project-name">Domo Cafe Ops</div>
+              <div class="project-desc">Restaurant ops platform — tasks, shifts, launch readiness, analytics</div>
+            </div>
+          </div>
+        </div>
+        <span class="badge badge-live">Live v1.4.0</span>
+      </div>
+      <div class="stack-grid">
+        <div class="stack-item">
+          <div class="stack-label">Frontend</div>
+          <div class="stack-val"><span class="chip">Next.js 14</span><span class="chip">Tailwind CSS</span></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Backend</div>
+          <div class="stack-val"><span class="chip">Next.js API Routes</span><span class="chip">Node.js</span></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Database</div>
+          <div class="stack-val"><span class="chip green">PostgreSQL</span><br>Railway managed</div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Auth</div>
+          <div class="stack-val"><span class="chip">JWT (jose)</span><span class="chip">x-api-key</span></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Hosting — Production</div>
+          <div class="stack-val"><span class="chip green">Railway</span><br><a href="https://tranquil-magic-production-4aee.up.railway.app" target="_blank">tranquil-magic-production-4aee</a></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Staging</div>
+          <div class="stack-val"><span class="chip yellow">None</span><br>Dev on Mac Studio :3500</div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Jarvis API</div>
+          <div class="stack-val"><a href="https://tranquil-magic-production-4aee.up.railway.app/api/jarvis/status" target="_blank">/api/jarvis/status</a></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">GitHub Repo</div>
+          <div class="stack-val"><a href="https://github.com/izzy-spsi/domocafe-ops" target="_blank">izzy-spsi/domocafe-ops</a></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Local Copy</div>
+          <div class="stack-val"><code style="font-size:11px">~/Documents/domo-ops-simulator</code></div>
+        </div>
+      </div>
+      <div class="deploy-note">
+        <strong>Deploy:</strong> cd ~/Documents/domo-ops-simulator → railway up --detach<br>
+        <strong>Jarvis API Key:</strong> Set as JARVIS_API_KEY in Railway env
+      </div>
+    </div>
+  </div>
+
+  <!-- FLYWHEEL -->
+  <div class="section">
+    <div class="section-label">🚖 Flywheel</div>
+
+    <div class="project" id="flywheel-ops">
+      <div class="project-header">
+        <div>
+          <div class="project-title-row">
+            <span class="project-icon">🚖</span>
+            <div>
+              <div class="project-name">Flywheel Ops</div>
+              <div class="project-desc">AI-driven ops management for Flywheel Mexico expansion</div>
+            </div>
+          </div>
+        </div>
+        <span class="badge badge-live">Live v1.4.0</span>
+      </div>
+      <div class="stack-grid">
+        <div class="stack-item">
+          <div class="stack-label">Frontend</div>
+          <div class="stack-val"><span class="chip">Next.js 14</span><span class="chip">Tailwind CSS</span></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Backend</div>
+          <div class="stack-val"><span class="chip">Next.js API Routes</span></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Database</div>
+          <div class="stack-val"><span class="chip green">PostgreSQL</span><br>Railway managed</div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Hosting — Production</div>
+          <div class="stack-val"><span class="chip green">Railway</span><br><a href="https://flywheel-ops-production.up.railway.app" target="_blank">flywheel-ops-production</a></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Staging</div>
+          <div class="stack-val"><span class="chip yellow">None</span><br>Dev on Mac Studio</div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Jarvis API</div>
+          <div class="stack-val"><a href="https://flywheel-ops-production.up.railway.app/api/jarvis/status" target="_blank">/api/jarvis/status</a><br>Key: fw-jarvis-flywheel-2026</div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">GitHub Repo</div>
+          <div class="stack-val"><a href="https://github.com/izzy-spsi/flywheel-ops" target="_blank">izzy-spsi/flywheel-ops</a></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Railway IDs</div>
+          <div class="stack-val" style="font-size:11px">Project: ec5b237a<br>Service: 3a462689<br>Env: 695dc213</div>
+        </div>
+      </div>
+      <div class="deploy-note">
+        <strong>Deploy:</strong> cd ~/Documents/flywheel-ops → git push origin main (auto-deploy via GitHub)<br>
+        <strong>Force redeploy:</strong> Railway API → serviceInstanceRedeploy mutation
+      </div>
+    </div>
+  </div>
+
+  <!-- SPS -->
+  <div class="section">
+    <div class="section-label">💪 Super Power Studios (SPS)</div>
+
+    <div class="project" id="geopulse">
+      <div class="project-header">
+        <div>
+          <div class="project-title-row">
+            <span class="project-icon">🌍</span>
+            <div>
+              <div class="project-name">GeoPulse AI</div>
+              <div class="project-desc">AI-powered geographic intelligence — EZLiving × SPS</div>
+            </div>
+          </div>
+        </div>
+        <span class="badge badge-dev">Dev v0.1.0</span>
+      </div>
+      <div class="stack-grid">
+        <div class="stack-item">
+          <div class="stack-label">Frontend</div>
+          <div class="stack-val"><span class="chip">Next.js</span><span class="chip">Mapbox GL</span></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Backend</div>
+          <div class="stack-val"><span class="chip">Python FastAPI</span><span class="chip">Node.js</span></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Database</div>
+          <div class="stack-val"><span class="chip blue">PostgreSQL + PostGIS</span></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">AI / ML</div>
+          <div class="stack-val"><span class="chip purple">OpenAI</span><span class="chip">Airflow</span><span class="chip">BigQuery</span></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Hosting — Production</div>
+          <div class="stack-val"><span class="chip yellow">Pending</span><br>Target: Railway</div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Staging / Local</div>
+          <div class="stack-val">Mac Studio :3600</div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">GitHub Repo</div>
+          <div class="stack-val"><span class="chip yellow">Pending</span></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Local Copy</div>
+          <div class="stack-val"><code style="font-size:11px">~/Documents/geopulse-ai</code></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Jarvis API Key</div>
+          <div class="stack-val">geopulse-jarvis-2026</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="project" id="cloud-closet">
+      <div class="project-header">
+        <div>
+          <div class="project-title-row">
+            <span class="project-icon">📦</span>
+            <div>
+              <div class="project-name">Cloud Closet</div>
+              <div class="project-desc">Full-service home storage platform — store offsite, retrieve on demand</div>
+            </div>
+          </div>
+        </div>
+        <span class="badge badge-live">Live v0.1.4</span>
+      </div>
+      <div class="stack-grid">
+        <div class="stack-item">
+          <div class="stack-label">Frontend</div>
+          <div class="stack-val"><span class="chip">Next.js 14</span><span class="chip">Tailwind CSS</span></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Payments</div>
+          <div class="stack-val"><span class="chip green">Stripe</span></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">AI</div>
+          <div class="stack-val"><span class="chip purple">Computer Vision</span></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Hosting — Production</div>
+          <div class="stack-val"><span class="chip green">Railway</span><br><a href="https://cloud-closet-app-production.up.railway.app" target="_blank">cloud-closet-app-production</a></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">GitHub Repo</div>
+          <div class="stack-val"><a href="https://github.com/izzy-spsi/cloud-closet" target="_blank">izzy-spsi/cloud-closet</a></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Local Copy</div>
+          <div class="stack-val"><code style="font-size:11px">~/Documents/cloud-closet</code></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="project" id="proforma">
+      <div class="project-header">
+        <div>
+          <div class="project-title-row">
+            <span class="project-icon">📊</span>
+            <div>
+              <div class="project-name">Pro Forma Builder</div>
+              <div class="project-desc">Reusable financial model builder — any SPS venture</div>
+            </div>
+          </div>
+        </div>
+        <span class="badge badge-live">Live v1.0.0</span>
+      </div>
+      <div class="stack-grid">
+        <div class="stack-item">
+          <div class="stack-label">Frontend</div>
+          <div class="stack-val"><span class="chip">HTML/CSS/JS</span><span class="chip">Chart.js</span><span class="chip">Tailwind CDN</span></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Backend</div>
+          <div class="stack-val"><span class="chip">Node.js</span><span class="chip">Express</span></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Database</div>
+          <div class="stack-val"><span class="chip yellow">None</span><br>JSON config export/import</div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Hosting — Production</div>
+          <div class="stack-val"><span class="chip green">Railway</span><br><a href="https://proforma-builder-production.up.railway.app" target="_blank">proforma-builder-production</a></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Railway IDs</div>
+          <div class="stack-val" style="font-size:11px">Project: 383d4421<br>Service: b663e5f0</div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">GitHub Repo</div>
+          <div class="stack-val"><a href="https://github.com/izzy-spsi/proforma-builder" target="_blank">izzy-spsi/proforma-builder</a></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="project" id="sps-cobrowse">
+      <div class="project-header">
+        <div>
+          <div class="project-title-row">
+            <span class="project-icon">👁️</span>
+            <div>
+              <div class="project-name">SPS Cobrowse (Specter)</div>
+              <div class="project-desc">Reusable cobrowsing — ghost cursor, no video, no install</div>
+            </div>
+          </div>
+        </div>
+        <span class="badge badge-build">Building</span>
+      </div>
+      <div class="stack-grid">
+        <div class="stack-item">
+          <div class="stack-label">Frontend</div>
+          <div class="stack-val"><span class="chip">React</span><span class="chip">rrweb</span></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Backend</div>
+          <div class="stack-val"><span class="chip">Node.js</span><span class="chip">WebSockets</span></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Package</div>
+          <div class="stack-val"><span class="chip purple">@sps/cobrowse</span></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">GitHub Repo</div>
+          <div class="stack-val"><a href="https://github.com/izzy-spsi/sps-cobrowse" target="_blank">izzy-spsi/sps-cobrowse</a></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Hosting</div>
+          <div class="stack-val">Railway (pending)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="project" id="24hourgolf">
+      <div class="project-header">
+        <div>
+          <div class="project-title-row">
+            <span class="project-icon">⛳</span>
+            <div>
+              <div class="project-name">24 Hour Golf</div>
+              <div class="project-desc">Autonomous indoor golf performance network — coming soon site + full platform</div>
+            </div>
+          </div>
+        </div>
+        <span class="badge badge-live">Site Live v1.0.0</span>
+      </div>
+      <div class="stack-grid">
+        <div class="stack-item">
+          <div class="stack-label">Coming Soon Site</div>
+          <div class="stack-val"><span class="chip">Node.js</span><span class="chip">Express</span><span class="chip green">Railway</span></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Full Platform (planned)</div>
+          <div class="stack-val"><span class="chip">Next.js</span><span class="chip">PostgreSQL</span><span class="chip">TrackMan API</span><span class="chip">Smart Locks</span><span class="chip purple">AI Coaching</span></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Hosting — Production</div>
+          <div class="stack-val"><span class="chip green">Railway</span><br><a href="https://24hourgolf-web-production.up.railway.app" target="_blank">24hourgolf-web-production</a></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Local Copy</div>
+          <div class="stack-val"><code style="font-size:11px">~/Documents/24hourgolf-web</code></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLUE HIGHWAY -->
+  <div class="section">
+    <div class="section-label">🌊 Blue Highway</div>
+
+    <div class="project" id="blue-highway">
+      <div class="project-header">
+        <div>
+          <div class="project-title-row">
+            <span class="project-icon">⛵</span>
+            <div>
+              <div class="project-name">Blue Highway Platform</div>
+              <div class="project-desc">Hydrofoil + EV transit — modular cargo/passenger capsules</div>
+            </div>
+          </div>
+        </div>
+        <span class="badge badge-build">Planning</span>
+      </div>
+      <div class="stack-grid">
+        <div class="stack-item">
+          <div class="stack-label">Status</div>
+          <div class="stack-val">Provisional patent filed Apr 13, 2026</div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Planned Stack</div>
+          <div class="stack-val"><span class="chip">Next.js</span><span class="chip">PostgreSQL</span><span class="chip">IoT / 5G</span></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Entity</div>
+          <div class="stack-val">Blue Highway, LLC (izzy@bluehighway.ai)</div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Patent Deadline</div>
+          <div class="stack-val" style="color: var(--yellow)">April 13, 2027</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INFRASTRUCTURE -->
+  <div class="section">
+    <div class="section-label">🔧 Infrastructure & Tools</div>
+
+    <div class="project" id="jarvis-dashboard">
+      <div class="project-header">
+        <div>
+          <div class="project-title-row">
+            <span class="project-icon">🧠</span>
+            <div>
+              <div class="project-name">Jarvis HQ Dashboard</div>
+              <div class="project-desc">This dashboard — live project registry for all ventures</div>
+            </div>
+          </div>
+        </div>
+        <span class="badge badge-live">Live v1.0.0</span>
+      </div>
+      <div class="stack-grid">
+        <div class="stack-item">
+          <div class="stack-label">Frontend</div>
+          <div class="stack-val"><span class="chip">HTML/CSS/JS</span></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Hosting</div>
+          <div class="stack-val"><span class="chip green">GitHub Pages</span><br><a href="https://izzy-spsi.github.io/jarvis-dashboard/" target="_blank">izzy-spsi.github.io/jarvis-dashboard</a></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">GitHub Repo</div>
+          <div class="stack-val"><a href="https://github.com/izzy-spsi/jarvis-dashboard" target="_blank">izzy-spsi/jarvis-dashboard</a></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Local Copy</div>
+          <div class="stack-val"><code style="font-size:11px">~/Documents/jarvis-dashboard</code></div>
+        </div>
+      </div>
+      <div class="deploy-note">
+        <strong>Deploy:</strong> cd ~/Documents/jarvis-dashboard → git add -A && git commit -m "..." && git push origin main
+      </div>
+    </div>
+
+    <div class="project" id="voice-server">
+      <div class="project-header">
+        <div>
+          <div class="project-title-row">
+            <span class="project-icon">🎙️</span>
+            <div>
+              <div class="project-name">Jarvis Voice Server</div>
+              <div class="project-desc">Twilio voice handler — Jarvis answers calls, routes to Izzy</div>
+            </div>
+          </div>
+        </div>
+        <span class="badge badge-live">Live (Local)</span>
+      </div>
+      <div class="stack-grid">
+        <div class="stack-item">
+          <div class="stack-label">Stack</div>
+          <div class="stack-val"><span class="chip">Node.js</span><span class="chip">Twilio</span><span class="chip">ElevenLabs TTS</span></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Hosting</div>
+          <div class="stack-val">Mac Studio :3335 (Tailscale)<br>ngrok for Twilio webhook</div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Phone Number</div>
+          <div class="stack-val">+1 (740) 527-8471</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOSTING LEGEND -->
+  <div class="section">
+    <div class="section-label">📋 Hosting & Services Legend</div>
+    <div class="project">
+      <div class="stack-grid">
+        <div class="stack-item">
+          <div class="stack-label">Railway</div>
+          <div class="stack-val">API Token: stored in openclaw.json<br><small style="color:var(--muted);font-size:11px">Flywheel Ops, Domo Cafe Ops, Cloud Closet, 24HG, Pro Forma</small></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">GitHub</div>
+          <div class="stack-val">Org: izzy-spsi<br><small style="color:var(--muted);font-size:11px">All repos, GitHub Pages hosting</small></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">DNS Registrar</div>
+          <div class="stack-val">GoDaddy<br><small style="color:var(--muted);font-size:11px">domokuncafe.com, bluehighway.ai, spsi.ai, flywheel.com</small></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Mac Studio</div>
+          <div class="stack-val">Tailscale: 100.77.96.68<br>SSH: izzyaala@100.77.96.68</div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Twilio</div>
+          <div class="stack-val">SMS + Voice<br>From: +1 (740) 527-8471<br>SID: stored in openclaw.json</div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Notion</div>
+          <div class="stack-val">Projects DB: a0734dcc<br>Tasks DB: 33fd8f4e<br>API key in openclaw.json</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
