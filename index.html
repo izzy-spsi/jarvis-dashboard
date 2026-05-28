@@ -222,15 +222,14 @@
     .card-url::after { content: '↗'; font-size: 11px; }
     .card:not([href]) { cursor: default; }
     .card:not([href]):hover { transform: none; }
-    .stack-link {
-      display: inline-flex; align-items: center; gap: 4px;
-      font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
-      color: rgba(255,255,255,0.35); text-decoration: none;
-      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 6px; padding: 3px 8px; margin-top: 10px;
-      transition: color 0.15s, background 0.15s;
+    .stack-chip {
+      display: inline-flex; align-items: center; gap: 3px;
+      font-size: 10px; font-weight: 600; letter-spacing: 0.3px;
+      color: rgba(255,255,255,0.3); text-decoration: none;
+      cursor: pointer;
+      transition: color 0.15s;
     }
-    .stack-link:hover { color: rgba(255,255,255,0.75); background: rgba(255,255,255,0.09); }
+    .stack-chip:hover { color: rgba(255,255,255,0.7); }
 
     /* ─── VENTURE COLORS ─── */
     .flywheel .card-icon { background: rgba(204,26,26,0.15); }
@@ -347,6 +346,7 @@
       <div class="card-top">
         <div class="card-icon">🍵</div>
         <span class="badge badge-live">Live v1.4.0</span>
+        <span class="stack-chip" onclick="event.stopPropagation();window.open('stack.html#domocafe-ops','_blank')">⚙️ stack</span>
       </div>
       <div class="card-name">Domo Cafe Ops</div>
       <div class="card-desc">Restaurant ops platform — launch readiness, tasks, shifts, merch, analytics. Client #1 of Striker Ops.</div>
@@ -357,7 +357,7 @@
         <span class="tag">GFC BP LLC</span>
       </div>
       <div class="card-url">tranquil-magic-production-4aee.up.railway.app</div>
-      <a class="stack-link" href="stack.html#domocafe-ops" onclick="event.stopPropagation()">⚙️ Tech Stack</a>
+
     </a>
 
     <a class="card domo" href="domo-employee-presentation.html" target="_blank">
@@ -379,6 +379,7 @@
       <div class="card-top">
         <div class="card-icon">🍢</div>
         <span class="badge badge-live">Live v1.0.0</span>
+        <span class="stack-chip" onclick="event.stopPropagation();window.open('stack.html#domocafe-web','_blank')">⚙️ stack</span>
       </div>
       <div class="card-name">Domo Cafe Website</div>
       <div class="card-desc">v1.8.0 LIVE — Grand Opening Sign Up form + Admin Dashboard. Track guest interest. Soft opening June 6, Grand Opening June 13 at 10am.</div>
@@ -389,13 +390,14 @@
         <span class="tag">GFC BP LLC</span>
       </div>
       <div class="card-url">www.domokuncafe.com</div>
-      <a class="stack-link" href="stack.html#domocafe-web" onclick="event.stopPropagation()">⚙️ Tech Stack</a>
+
     </a>
 
     <a class="card flywheel" href="https://flywheel-ops-production.up.railway.app" target="_blank">
       <div class="card-top">
         <div class="card-icon">🚖</div>
         <span class="badge badge-live">Live</span>
+        <span class="stack-chip" onclick="event.stopPropagation();window.open('stack.html#flywheel-ops','_blank')">⚙️ stack</span>
       </div>
       <div class="card-name">Flywheel Ops</div>
       <div class="card-desc">AI-driven ops management for Flywheel Mexico expansion — Tulum, Cancún, Playa del Carmen markets.</div>
@@ -406,13 +408,14 @@
         <span class="tag">Flywheel</span>
       </div>
       <div class="card-url">flywheel-ops-production.up.railway.app</div>
-      <a class="stack-link" href="stack.html#flywheel-ops" onclick="event.stopPropagation()">⚙️ Tech Stack</a>
+
     </a>
 
     <a class="card sps" href="https://cloud-closet-app-production.up.railway.app" target="_blank">
       <div class="card-top">
         <div class="card-icon">📦</div>
         <span class="badge badge-live">Live</span>
+        <span class="stack-chip" onclick="event.stopPropagation();window.open('stack.html#cloud-closet','_blank')">⚙️ stack</span>
       </div>
       <div class="card-name">Cloud Closet</div>
       <div class="card-desc">Full-service home storage platform — store items offsite, retrieve any single item on demand via app.</div>
@@ -423,13 +426,14 @@
         <span class="tag">SPS</span>
       </div>
       <div class="card-url">cloud-closet-app-production.up.railway.app</div>
-      <a class="stack-link" href="stack.html#cloud-closet" onclick="event.stopPropagation()">⚙️ Tech Stack</a>
+
     </a>
 
     <a class="card golf" href="https://24hourgolf-web-production.up.railway.app" target="_blank">
       <div class="card-top">
         <div class="card-icon">⛳</div>
         <span class="badge badge-live">Live</span>
+        <span class="stack-chip" onclick="event.stopPropagation();window.open('stack.html#24hourgolf','_blank')">⚙️ stack</span>
       </div>
       <div class="card-name">24 Hour Golf</div>
       <div class="card-desc">World's first fully automated AI-powered indoor golf performance network. Coming soon site + waitlist.</div>
@@ -440,13 +444,14 @@
         <span class="tag">SPS</span>
       </div>
       <div class="card-url">24hourgolf-web-production.up.railway.app</div>
-      <a class="stack-link" href="stack.html#24hourgolf" onclick="event.stopPropagation()">⚙️ Tech Stack</a>
+
     </a>
 
     <a class="card sps" href="https://proforma-builder-production.up.railway.app" target="_blank">
       <div class="card-top">
         <div class="card-icon">📊</div>
         <span class="badge badge-live">Live</span>
+        <span class="stack-chip" onclick="event.stopPropagation();window.open('stack.html#proforma','_blank')">⚙️ stack</span>
       </div>
       <div class="card-name">Pro Forma Builder</div>
       <div class="card-desc">Interactive financial model builder — reusable across any SPS venture. Default config: 24 Hour Golf. Save/load JSON configs.</div>
@@ -457,13 +462,14 @@
         <span class="tag">SPS Tool</span>
       </div>
       <div class="card-url">proforma-builder-production.up.railway.app</div>
-      <a class="stack-link" href="stack.html#proforma" onclick="event.stopPropagation()">⚙️ Tech Stack</a>
+
     </a>
 
     <a class="card sps" href="https://geopulse-ai-production.up.railway.app" target="_blank">
       <div class="card-top">
         <div class="card-icon">🌍</div>
         <span class="badge badge-live">Live v1.0.0</span>
+        <span class="stack-chip" onclick="event.stopPropagation();window.open('stack.html#geopulse','_blank')">⚙️ stack</span>
       </div>
       <div class="card-name">GeoPulse AI</div>
       <div class="card-desc">AI-powered location intelligence platform — 5-dimension scoring (Family, Lifestyle, Mobility, Investment, Luxury) with real data from Census, FBI, OSM, NCES & Gemini AI summaries. SPS Super Power.</div>
@@ -474,7 +480,7 @@
         <span class="tag">SPS × EZLiving</span>
       </div>
       <div class="card-url">geopulse-ai-production.up.railway.app</div>
-      <a class="stack-link" href="stack.html#geopulse" onclick="event.stopPropagation()">⚙️ Tech Stack</a>
+
     </a>
 
     <a class="card personal" href="https://izzy-spsi.github.io/japan-trip-2026/" target="_blank">
