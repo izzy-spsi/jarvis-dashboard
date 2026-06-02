@@ -238,29 +238,6 @@
     .bh .card-icon { background: rgba(59,130,246,0.15); }
     .golf .card-icon { background: rgba(0,200,83,0.12); }
     .personal .card-icon { background: rgba(255,255,255,0.06); }
-    /* VENTURE SUB-GROUPS */
-    .venture-group {
-      grid-column: 1 / -1;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 6px 0 2px;
-    }
-    .venture-label {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 10px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: var(--muted);
-      white-space: nowrap;
-      opacity: 0.75;
-    }
-    .venture-line {
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
 
     /* ─── FOOTER ─── */
     footer {
@@ -365,8 +342,6 @@
   </div>
   <div class="grid">
 
-    <div class="venture-group"><span class="venture-label">🍵 Domo Cafe</span><div class="venture-line"></div></div>
-
     <a class="card domo" href="https://tranquil-magic-production-4aee.up.railway.app" target="_blank">
       <div class="card-top">
         <div class="card-icon">🍵</div>
@@ -415,38 +390,8 @@
         <span class="tag">GFC BP LLC</span>
       </div>
       <div class="card-url">www.domokuncafe.com</div>
-    </a>
 
-    <a class="card domo" href="https://izzy-spsi.github.io/domo-sis/" target="_blank">
-      <div class="card-top">
-        <div class="card-icon">⚙️</div>
-        <span class="badge badge-live">Live v2.0</span>
-      </div>
-      <div class="card-name">Domo Staff Intelligence System</div>
-      <div class="card-desc">Staff scheduling, floor map, availability grid, skill matrix, labor optimizer. 36 staff pre-loaded.</div>
-      <div class="card-meta">
-        <span class="tag">GitHub Pages</span>
-        <span class="tag">LocalStorage</span>
-        <span class="tag">GFC BP LLC</span>
-      </div>
-      <div class="card-url">izzy-spsi.github.io/domo-sis · pw: Domo@2026</div>
     </a>
-
-    <a class="card domo" href="https://izzy-spsi.github.io/domo-proforma/" target="_blank">
-      <div class="card-top">
-        <div class="card-icon">📊</div>
-        <span class="badge badge-live">Live v1.0</span>
-      </div>
-      <div class="card-name">Domo Pro Forma Portal</div>
-      <div class="card-desc">Interactive P&amp;L model — revenue scenarios, COGS, labor, NHK royalties, occupancy. Real-time projections.</div>
-      <div class="card-meta">
-        <span class="tag">GitHub Pages</span>
-        <span class="tag">GFC BP LLC</span>
-      </div>
-      <div class="card-url">izzy-spsi.github.io/domo-proforma · pw: Domo@2026</div>
-    </a>
-
-    <div class="venture-group"><span class="venture-label">🚖 Flywheel</span><div class="venture-line"></div></div>
 
     <a class="card flywheel" href="https://flywheel-ops-production.up.railway.app" target="_blank">
       <div class="card-top">
@@ -466,8 +411,6 @@
 
     </a>
 
-    <div class="venture-group"><span class="venture-label">💪 SPS</span><div class="venture-line"></div></div>
-
     <a class="card sps" href="https://cloud-closet-app-production.up.railway.app" target="_blank">
       <div class="card-top">
         <div class="card-icon">📦</div>
@@ -485,8 +428,6 @@
       <div class="card-url">cloud-closet-app-production.up.railway.app</div>
 
     </a>
-
-    <div class="venture-group"><span class="venture-label">⛳ 24 Hour Golf</span><div class="venture-line"></div></div>
 
     <a class="card golf" href="https://24hourgolf-web-production.up.railway.app" target="_blank">
       <div class="card-top">
@@ -558,8 +499,6 @@
 
     </a>
 
-    <div class="venture-group"><span class="venture-label">🌏 Personal</span><div class="venture-line"></div></div>
-
     <a class="card personal" href="https://izzy-spsi.github.io/japan-trip-2026/" target="_blank">
       <div class="card-top">
         <div class="card-icon">🇯🇵</div>
@@ -600,8 +539,6 @@
     <div class="section-line"></div>
   </div>
   <div class="grid">
-
-    <div class="venture-group"><span class="venture-label">💪 SPS</span><div class="venture-line"></div></div>
 
     <a class="card sps" href="https://www.notion.so/Superpower-Command-Center-33856f432b4d81f8bf89dcc04ec1802d" target="_blank">
       <div class="card-top">
@@ -649,8 +586,6 @@
       <div class="card-url">notion.so — Specter PRD</div>
     </a>
 
-    <div class="venture-group"><span class="venture-label">⛳ 24 Hour Golf</span><div class="venture-line"></div></div>
-
     <a class="card sps" href="https://www.notion.so/24-Hour-Golf-36356f432b4d810598e8c0742e2e26d4" target="_blank">
       <div class="card-top">
         <div class="card-icon">🏌️</div>
@@ -672,12 +607,10 @@
 <!-- PRESENTATIONS -->
 <div class="section">
   <div class="section-header">
-    <div class="section-title">🖥️ Online Presentations</div>
+    <div class="section-title">🎞️ Presentations</div>
     <div class="section-line"></div>
   </div>
   <div class="grid">
-
-    <div class="venture-group"><span class="venture-label">💪 SPS</span><div class="venture-line"></div></div>
 
     <a class="card sps" href="https://geopulse-ai-production.up.railway.app/9201-investor-deck-v0.1.html" target="_blank">
       <div class="card-top">
@@ -710,25 +643,6 @@
       <div class="card-url">geopulse-ai-production.up.railway.app</div>
     </a>
 
-    <div class="venture-group"><span class="venture-label">🚖 Flywheel</span><div class="venture-line"></div></div>
-
-    <a class="card flywheel" href="flywheel-all-hands-may-2026.html" target="_blank">
-      <div class="card-top">
-        <div class="card-icon">🚖</div>
-        <span class="badge badge-live">Live</span>
-      </div>
-      <div class="card-name">Flywheel All Hands — May 2026</div>
-      <div class="card-desc">Company-wide all-hands presentation. Mexico expansion, Uber integration, fleet metrics, team highlights.</div>
-      <div class="card-meta">
-        <span class="tag">Flywheel</span>
-        <span class="tag">All Hands</span>
-        <span class="tag">May 2026</span>
-      </div>
-      <div class="card-url">flywheel-all-hands-may-2026.html</div>
-    </a>
-
-    <div class="venture-group"><span class="venture-label">🍵 Domo Cafe</span><div class="venture-line"></div></div>
-
     <a class="card domo" href="https://izzy-spsi.github.io/jarvis-dashboard/domo-employee-presentation.html" target="_blank">
       <div class="card-top">
         <div class="card-icon">👥</div>
@@ -755,8 +669,6 @@
   </div>
   <div class="grid">
 
-    <div class="venture-group"><span class="venture-label">🚖 Flywheel</span><div class="venture-line"></div></div>
-
     <a class="card flywheel" href="https://drive.google.com/file/d/1TFdjwaBNXHyO7Wl_WIMKJ4mBDDonaLcm/view" target="_blank">
       <div class="card-top">
         <div class="card-icon">📊</div>
@@ -770,8 +682,6 @@
       </div>
       <div class="card-url">drive.google.com</div>
     </a>
-
-    <div class="venture-group"><span class="venture-label">🚤 Blue Highway</span><div class="venture-line"></div></div>
 
     <a class="card bh" href="https://docs.google.com/document/d/19vCTFHX4Q3AeoP381Dz7wxquThPogzu3b8Isuj3WNQ8/edit" target="_blank">
       <div class="card-top">
@@ -788,8 +698,6 @@
       <div class="card-url">docs.google.com</div>
     </a>
 
-    <div class="venture-group"><span class="venture-label">⛳ 24 Hour Golf</span><div class="venture-line"></div></div>
-
     <a class="card golf" href="https://www.notion.so/24-Hour-Golf-36356f432b4d810598e8c0742e2e26d4" target="_blank">
       <div class="card-top">
         <div class="card-icon">⛳</div>
@@ -804,8 +712,6 @@
       </div>
       <div class="card-url">notion.so — 24 Hour Golf</div>
     </a>
-
-    <div class="venture-group"><span class="venture-label">💪 SPS</span><div class="venture-line"></div></div>
 
     <a class="card sps" href="https://docs.google.com/document/d/19d7QAkFkJDYTCnVNPFCFaXBEZg3ybbq-fnJB2E-VnOM/edit" target="_blank">
       <div class="card-top">
@@ -914,7 +820,7 @@
   updateClock();
   setInterval(updateClock, 60000);
 
-  document.getElementById('build-date').textContent = 'Last updated: June 2, 2026';
+  document.getElementById('build-date').textContent = 'Last updated: May 19, 2026';
 </script>
 
 </body>
