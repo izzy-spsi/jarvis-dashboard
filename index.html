@@ -266,6 +266,161 @@
     .section-header.collapsed .section-chevron { transform: rotate(-90deg); }
     .section-body.collapsed { display: none; }
 
+    /* ─── SEARCH ─── */
+    .search-wrap {
+      position: relative;
+      flex: 1;
+      max-width: 340px;
+    }
+    .search-input {
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 14px 8px 34px;
+      color: var(--text);
+      font-size: 13px;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .search-input:focus { border-color: var(--accent); background: rgba(124,106,248,0.06); }
+    .search-input::placeholder { color: var(--muted); }
+    .search-icon {
+      position: absolute;
+      left: 10px; top: 50%; transform: translateY(-50%);
+      font-size: 13px; opacity: 0.35; pointer-events: none;
+    }
+    .search-hint {
+      position: absolute;
+      right: 10px; top: 50%; transform: translateY(-50%);
+      font-size: 10px; color: var(--muted); opacity: 0.4;
+      pointer-events: none;
+    }
+
+    /* ─── FILTER BAR ─── */
+    .filter-bar {
+      max-width: 1200px;
+      margin: -16px auto 32px;
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .filter-tab {
+      padding: 5px 13px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .filter-tab:hover { border-color: var(--border-hover); color: var(--text); }
+    .filter-tab.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .view-controls {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .view-btn {
+      width: 30px; height: 30px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      font-size: 15px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.15s;
+    }
+    .view-btn:hover { border-color: var(--border-hover); color: var(--text); }
+    .view-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+    /* ─── COMPACT MODE ─── */
+    body.compact .card-desc { display: none; }
+    body.compact .card-meta { display: none; }
+    body.compact .card { padding: 12px 16px; gap: 6px; }
+    body.compact .card-icon { width: 30px; height: 30px; font-size: 15px; border-radius: 7px; }
+    body.compact .card-name { font-size: 13px; }
+    body.compact .card-url { font-size: 11px; }
+    body.compact .grid { grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+    body.compact .stack-chip { display: none; }
+
+    /* ─── PIN ─── */
+    .pin-btn {
+      position: absolute;
+      top: 10px; right: 10px;
+      width: 26px; height: 26px;
+      border-radius: 7px;
+      border: none;
+      background: transparent;
+      color: rgba(255,255,255,0.18);
+      font-size: 12px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.15s;
+      z-index: 3;
+      opacity: 0;
+    }
+    .card:hover .pin-btn { opacity: 1; }
+    .pin-btn:hover { color: #eab308; background: rgba(234,179,8,0.12); }
+    .card.pinned .pin-btn { color: #eab308; opacity: 1; }
+
+    /* ─── COPY URL ─── */
+    .copy-url-btn {
+      font-size: 10px;
+      padding: 1px 7px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.15s;
+      opacity: 0;
+      flex-shrink: 0;
+    }
+    .card:hover .copy-url-btn { opacity: 1; }
+    .copy-url-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .copy-url-btn.copied { color: var(--green); border-color: var(--green); }
+
+    /* ─── PINNED SECTION ─── */
+    #pinned-section {
+      max-width: 1200px;
+      margin: 0 auto 24px;
+      padding: 0 40px;
+      display: none;
+    }
+    #pinned-section.has-pins { display: block; }
+    .pinned-header {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
+    }
+    .pinned-title {
+      font-size: 12px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; color: #eab308; opacity: 0.85; white-space: nowrap;
+    }
+    .pinned-line { flex: 1; height: 1px; background: rgba(234,179,8,0.18); }
+    #pinned-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 14px;
+    }
+
+    /* ─── FILTER HELPERS ─── */
+    .card.hidden { display: none !important; }
+    .venture-group.vg-hidden { display: none !important; }
+    .venture-cards.vc-hidden { display: none !important; }
+    .section.sec-hidden { display: none !important; }
+    #no-results { display: none; text-align: center; padding: 80px 40px; color: var(--muted); font-size: 15px; }
+    #no-results.visible { display: block; }
+
     /* ─── VENTURE COLORS ─── */
     .flywheel .card-icon { background: rgba(204,26,26,0.15); }
     .domo .card-icon { background: rgba(139,69,19,0.15); }
@@ -355,6 +510,11 @@
       <div class="logo-sub">Izzy Aala · Command Center</div>
     </div>
   </div>
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input class="search-input" id="searchInput" type="text" placeholder="Search projects..." autocomplete="off" />
+    <span class="search-hint" id="searchHint">/</span>
+  </div>
   <div style="display:flex;align-items:center;gap:20px;">
     <a href="labs.html" style="font-size:13px;font-weight:600;color:#a78bfa;text-decoration:none;display:flex;align-items:center;gap:6px;">⚗️ Labs <span style="background:linear-gradient(135deg,#7c6af8,#a78bfa);color:white;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;">NEW</span></a>
     <div class="header-time" id="clock"></div>
@@ -392,6 +552,32 @@
     </div>
   </div>
 </div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <button class="filter-tab active" data-filter="all">All</button>
+  <button class="filter-tab" data-filter="domo">🍵 Domo</button>
+  <button class="filter-tab" data-filter="flywheel">🚖 Flywheel</button>
+  <button class="filter-tab" data-filter="sps">💪 SPS</button>
+  <button class="filter-tab" data-filter="golf">⛳ Golf</button>
+  <button class="filter-tab" data-filter="bh">🚤 Blue Hwy</button>
+  <button class="filter-tab" data-filter="personal">🌏 Personal</button>
+  <div class="view-controls">
+    <button class="view-btn active" id="cardViewBtn" title="Card view">⊞</button>
+    <button class="view-btn" id="compactViewBtn" title="Compact view">☰</button>
+  </div>
+</div>
+
+<!-- PINNED -->
+<div id="pinned-section">
+  <div class="pinned-header">
+    <div class="pinned-title">⭐ Pinned</div>
+    <div class="pinned-line"></div>
+  </div>
+  <div id="pinned-grid"></div>
+</div>
+
+<div id="no-results">No projects match your search.</div>
 
 <!-- LIVE APPS -->
 <div class="section">
@@ -981,6 +1167,203 @@
   setInterval(updateClock, 60000);
 
   document.getElementById('build-date').textContent = 'Last updated: June 5, 2026';
+
+  // Dynamic stats
+  function updateStats() {
+    var statDivs = document.querySelectorAll('.stat .stat-num');
+    var live = document.querySelectorAll('.section .card .badge-live').length;
+    var building = document.querySelectorAll('.section .card .badge-building').length;
+    if (statDivs[0]) statDivs[0].textContent = live;
+    if (statDivs[1]) statDivs[1].textContent = building;
+  }
+  setTimeout(updateStats, 200);
+
+  // ─── SEARCH ───
+  var searchInput = document.getElementById('searchInput');
+  var searchHint = document.getElementById('searchHint');
+  var activeVenture = 'all';
+
+  searchInput.addEventListener('input', function() {
+    var q = this.value.trim();
+    searchHint.style.display = q ? 'none' : '';
+    applyFilters();
+  });
+  searchInput.addEventListener('focus', function() { searchHint.style.display = 'none'; });
+  searchInput.addEventListener('blur', function() { if (!this.value) searchHint.style.display = ''; });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === '/' && document.activeElement !== searchInput && document.activeElement.tagName !== 'INPUT') {
+      e.preventDefault();
+      searchInput.focus();
+      searchInput.select();
+    }
+    if (e.key === 'Escape' && document.activeElement === searchInput) {
+      searchInput.value = '';
+      searchHint.style.display = '';
+      applyFilters();
+      searchInput.blur();
+    }
+  });
+
+  // ─── VENTURE FILTER TABS ───
+  document.querySelectorAll('.filter-tab').forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('.filter-tab').forEach(function(t) { t.classList.remove('active'); });
+      this.classList.add('active');
+      activeVenture = this.dataset.filter;
+      applyFilters();
+    });
+  });
+
+  // ─── CORE FILTER ───
+  function applyFilters() {
+    var query = searchInput.value.toLowerCase().trim();
+    var anyVisible = false;
+
+    document.querySelectorAll('.section .card').forEach(function(card) {
+      var name = card.querySelector('.card-name') ? card.querySelector('.card-name').textContent.toLowerCase() : '';
+      var desc = card.querySelector('.card-desc') ? card.querySelector('.card-desc').textContent.toLowerCase() : '';
+      var url  = card.querySelector('.card-url')  ? card.querySelector('.card-url').textContent.toLowerCase()  : '';
+      var text = name + ' ' + desc + ' ' + url;
+      var matchQ = !query || text.includes(query);
+      var matchV = activeVenture === 'all' || card.classList.contains(activeVenture);
+      if (matchQ && matchV) { card.classList.remove('hidden'); anyVisible = true; }
+      else { card.classList.add('hidden'); }
+    });
+
+    // Hide venture-cards wrappers with no visible cards
+    document.querySelectorAll('.venture-cards').forEach(function(vc) {
+      var vis = Array.from(vc.querySelectorAll('.card')).some(function(c) { return !c.classList.contains('hidden'); });
+      vc.classList.toggle('vc-hidden', !vis);
+    });
+    // Hide venture-groups whose cards are all hidden
+    document.querySelectorAll('.venture-group').forEach(function(vg) {
+      var nx = vg.nextElementSibling;
+      var hidden = nx && nx.classList.contains('venture-cards') && nx.classList.contains('vc-hidden');
+      vg.classList.toggle('vg-hidden', !!hidden);
+    });
+    // Hide whole sections if nothing visible
+    document.querySelectorAll('.section').forEach(function(sec) {
+      var vis = Array.from(sec.querySelectorAll('.card')).some(function(c) { return !c.classList.contains('hidden'); });
+      sec.classList.toggle('sec-hidden', !vis);
+    });
+
+    document.getElementById('no-results').classList.toggle('visible', !anyVisible);
+  }
+
+  // ─── COMPACT / CARD TOGGLE ───
+  if (localStorage.getItem('jhq_view') === 'compact') {
+    document.body.classList.add('compact');
+    document.getElementById('compactViewBtn').classList.add('active');
+    document.getElementById('cardViewBtn').classList.remove('active');
+  }
+  document.getElementById('cardViewBtn').addEventListener('click', function() {
+    document.body.classList.remove('compact');
+    document.getElementById('cardViewBtn').classList.add('active');
+    document.getElementById('compactViewBtn').classList.remove('active');
+    localStorage.setItem('jhq_view', 'card');
+  });
+  document.getElementById('compactViewBtn').addEventListener('click', function() {
+    document.body.classList.add('compact');
+    document.getElementById('compactViewBtn').classList.add('active');
+    document.getElementById('cardViewBtn').classList.remove('active');
+    localStorage.setItem('jhq_view', 'compact');
+  });
+
+  // ─── PIN + COPY ───
+  var pinnedIds = JSON.parse(localStorage.getItem('jhq_pins') || '[]');
+
+  function getCardId(card) {
+    var name = card.querySelector('.card-name');
+    return card.href ? card.href : (name ? name.textContent.trim() : '');
+  }
+
+  function savePins() { localStorage.setItem('jhq_pins', JSON.stringify(pinnedIds)); }
+
+  function addPinClone(card) {
+    var clone = card.cloneNode(true);
+    var id = getCardId(card);
+    clone.dataset.cloneFor = id;
+    clone.classList.add('pinned');
+    // Remove pin/copy buttons from clone to avoid duplication
+    var pb = clone.querySelector('.pin-btn'); if(pb) pb.remove();
+    var cb = clone.querySelector('.copy-url-btn'); if(cb) cb.remove();
+    // Unpin from clone
+    clone.addEventListener('click', function(e) {
+      if (e.target.classList.contains('unpin-clone')) {
+        e.preventDefault(); e.stopPropagation();
+        togglePin(card);
+      }
+    });
+    document.getElementById('pinned-grid').appendChild(clone);
+    document.getElementById('pinned-section').classList.add('has-pins');
+  }
+
+  function removePinClone(id) {
+    var clone = document.querySelector('#pinned-grid [data-clone-for]');
+    document.querySelectorAll('#pinned-grid [data-clone-for]').forEach(function(el) {
+      if (el.dataset.cloneFor === id) el.remove();
+    });
+    if (!document.querySelector('#pinned-grid > *')) {
+      document.getElementById('pinned-section').classList.remove('has-pins');
+    }
+  }
+
+  function togglePin(card) {
+    var id = getCardId(card);
+    var idx = pinnedIds.indexOf(id);
+    if (idx === -1) {
+      pinnedIds.push(id);
+      card.classList.add('pinned');
+      addPinClone(card);
+    } else {
+      pinnedIds.splice(idx, 1);
+      card.classList.remove('pinned');
+      removePinClone(id);
+    }
+    savePins();
+  }
+
+  // Init pins and copy on all cards
+  document.querySelectorAll('.section .card').forEach(function(card) {
+    var id = getCardId(card);
+
+    // Pin button
+    var pinBtn = document.createElement('button');
+    pinBtn.className = 'pin-btn';
+    pinBtn.textContent = '⭐';
+    pinBtn.title = 'Pin to top';
+    pinBtn.addEventListener('click', function(e) { e.preventDefault(); e.stopPropagation(); togglePin(card); });
+    card.appendChild(pinBtn);
+
+    // Copy URL button
+    if (card.href && card.href !== window.location.href) {
+      var urlEl = card.querySelector('.card-url');
+      if (urlEl) {
+        var copyBtn = document.createElement('button');
+        copyBtn.className = 'copy-url-btn';
+        copyBtn.textContent = 'copy';
+        copyBtn.addEventListener('click', function(e) {
+          e.preventDefault(); e.stopPropagation();
+          navigator.clipboard.writeText(card.href).then(function() {
+            copyBtn.textContent = '✓';
+            copyBtn.classList.add('copied');
+            setTimeout(function() { copyBtn.textContent = 'copy'; copyBtn.classList.remove('copied'); }, 2000);
+          });
+        });
+        urlEl.style.display = 'flex';
+        urlEl.style.alignItems = 'center';
+        urlEl.style.gap = '6px';
+        urlEl.appendChild(copyBtn);
+      }
+    }
+
+    // Restore pinned state
+    if (pinnedIds.indexOf(id) !== -1) {
+      card.classList.add('pinned');
+      addPinClone(card);
+    }
+  });
 
   // ─── COLLAPSIBLE SECTIONS ───
   (function() {
