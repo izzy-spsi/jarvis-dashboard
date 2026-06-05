@@ -231,6 +231,41 @@
     }
     .stack-chip:hover { color: rgba(255,255,255,0.7); }
 
+    /* ─── COLLAPSIBLE ─── */
+    .venture-group {
+      cursor: pointer;
+      user-select: none;
+    }
+    .venture-group:hover .venture-label { opacity: 1; color: #e8eaf0; }
+    .venture-chevron {
+      font-size: 10px;
+      color: var(--muted);
+      opacity: 0.5;
+      transition: transform 0.2s;
+      flex-shrink: 0;
+    }
+    .venture-group.collapsed .venture-chevron { transform: rotate(-90deg); }
+    .venture-cards {
+      display: contents;
+    }
+    .venture-cards.collapsed {
+      display: none;
+    }
+    .section-header {
+      cursor: pointer;
+      user-select: none;
+    }
+    .section-header:hover .section-title { color: #e8eaf0; }
+    .section-chevron {
+      font-size: 13px;
+      color: var(--muted);
+      opacity: 0.5;
+      transition: transform 0.2s;
+      margin-left: 4px;
+    }
+    .section-header.collapsed .section-chevron { transform: rotate(-90deg); }
+    .section-body.collapsed { display: none; }
+
     /* ─── VENTURE COLORS ─── */
     .flywheel .card-icon { background: rgba(204,26,26,0.15); }
     .domo .card-icon { background: rgba(139,69,19,0.15); }
@@ -255,6 +290,7 @@
       color: var(--muted);
       white-space: nowrap;
       opacity: 0.75;
+      transition: color 0.15s, opacity 0.15s;
     }
     .venture-line {
       flex: 1;
@@ -944,7 +980,91 @@
   updateClock();
   setInterval(updateClock, 60000);
 
-  document.getElementById('build-date').textContent = 'Last updated: June 2, 2026';
+  document.getElementById('build-date').textContent = 'Last updated: June 5, 2026';
+
+  // ─── COLLAPSIBLE SECTIONS ───
+  (function() {
+    // Make top-level sections collapsible
+    document.querySelectorAll('.section').forEach(function(section) {
+      var header = section.querySelector('.section-header');
+      var grid = section.querySelector('.grid');
+      if (!header || !grid) return;
+
+      // Wrap grid in section-body
+      var body = document.createElement('div');
+      body.className = 'section-body';
+      section.insertBefore(body, grid);
+      body.appendChild(grid);
+
+      // Add chevron to header
+      var chevron = document.createElement('span');
+      chevron.className = 'section-chevron';
+      chevron.textContent = '▾';
+      header.appendChild(chevron);
+
+      // Restore state
+      var sKey = 'jhq_sec_' + header.querySelector('.section-title').textContent.trim().replace(/\s+/g,'_');
+      if (localStorage.getItem(sKey) === 'collapsed') {
+        header.classList.add('collapsed');
+        body.classList.add('collapsed');
+      }
+
+      header.addEventListener('click', function() {
+        var isCollapsed = body.classList.toggle('collapsed');
+        header.classList.toggle('collapsed', isCollapsed);
+        localStorage.setItem(sKey, isCollapsed ? 'collapsed' : 'open');
+      });
+    });
+
+    // Make venture groups collapsible
+    document.querySelectorAll('.grid').forEach(function(grid) {
+      var children = Array.from(grid.children);
+      var i = 0;
+      while (i < children.length) {
+        var el = children[i];
+        if (el.classList.contains('venture-group')) {
+          // Add chevron
+          var chevron = document.createElement('span');
+          chevron.className = 'venture-chevron';
+          chevron.textContent = '▾';
+          el.appendChild(chevron);
+
+          // Collect following cards until next venture-group
+          var cards = document.createElement('div');
+          cards.className = 'venture-cards';
+          var j = i + 1;
+          while (j < children.length && !children[j].classList.contains('venture-group')) {
+            cards.appendChild(children[j]);
+            j++;
+          }
+          el.after(cards);
+          // Refresh children after DOM change
+          children = Array.from(grid.children);
+
+          // Restore state
+          var label = el.querySelector('.venture-label').textContent.trim().replace(/\s+/g,'_');
+          var vKey = 'jhq_vg_' + label;
+          if (localStorage.getItem(vKey) === 'collapsed') {
+            el.classList.add('collapsed');
+            cards.classList.add('collapsed');
+          }
+
+          el.addEventListener('click', function(vg, vc, key) {
+            return function(e) {
+              var isCollapsed = vc.classList.toggle('collapsed');
+              vg.classList.toggle('collapsed', isCollapsed);
+              localStorage.setItem(key, isCollapsed ? 'collapsed' : 'open');
+            };
+          }(el, cards, vKey));
+
+          i = Array.from(grid.children).indexOf(cards) + 1;
+          children = Array.from(grid.children);
+        } else {
+          i++;
+        }
+      }
+    });
+  })();
 </script>
 
 </body>
