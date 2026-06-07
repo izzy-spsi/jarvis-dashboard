@@ -750,6 +750,28 @@
 </script>
 <script>
 // ─── DECK EDIT FEATURE ───────────────────────────────────────────────────────
+const _EDIT_HASH = '08d2ccb2e858548c639f7fa890c5ccbf5d62be0be17183d8aabe5b406d288d42';
+async function _hashStr(s) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+function requireEditAuth(onSuccess) {
+  if (sessionStorage.getItem('deck-edit-auth')==='1') { onSuccess(); return; }
+  const ov=document.createElement('div');
+  ov.style.cssText='position:fixed;inset:0;z-index:9500;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px)';
+  ov.innerHTML=`<div style="background:#1A1A18;border:1px solid rgba(201,160,82,0.3);border-radius:16px;padding:40px;max-width:360px;width:90%;text-align:center;"><div style="font-size:32px;margin-bottom:16px;">🔒</div><div style="font-family:sans-serif;font-size:18px;font-weight:700;color:#F0EDE8;margin-bottom:6px;">Edit Access Required</div><div style="font-size:12px;color:#A0A098;margin-bottom:24px;">Contact Jarvis to receive the edit password.</div><input id="_ePwI" type="password" placeholder="Enter password" style="width:100%;padding:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:#F0EDE8;font-size:14px;outline:none;font-family:monospace;margin-bottom:10px;"/><div id="_ePwE" style="color:#ef4444;font-size:12px;min-height:16px;margin-bottom:10px;"></div><button id="_ePwB" style="width:100%;padding:13px;background:linear-gradient(135deg,#C9A052,#e8c07a);border:none;border-radius:8px;color:#0C0C0C;font-size:14px;font-weight:700;cursor:pointer;">Unlock</button><button id="_ePwC" style="width:100%;margin-top:10px;padding:10px;background:transparent;border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#A0A098;font-size:13px;cursor:pointer;">Cancel</button></div>`;
+  document.body.appendChild(ov);
+  const inp=document.getElementById('_ePwI');
+  inp.focus();
+  const go=async()=>{
+    const h=await _hashStr(inp.value);
+    if(h===_EDIT_HASH){sessionStorage.setItem('deck-edit-auth','1');ov.remove();onSuccess();}
+    else{document.getElementById('_ePwE').textContent='Incorrect password. Contact Jarvis.';inp.value='';inp.focus();}
+  };
+  document.getElementById('_ePwB').onclick=go;
+  document.getElementById('_ePwC').onclick=()=>ov.remove();
+  inp.addEventListener('keydown',e=>{if(e.key==='Enter')go();});
+}
 const _DECK_KEY = 'domo-employee-edits';
 let _origContent = {};
 function _captureOrig() {
@@ -811,7 +833,7 @@ function _deactivateEdit() {
 }
 function toggleEdit() {
   const btn = document.getElementById('_editToggleBtn');
-  if(!btn||btn.dataset.on!=='1') _showEditInstructions(_activateEdit);
+  if(!btn||btn.dataset.on!=='1') requireEditAuth(() => _showEditInstructions(_activateEdit));
   else _deactivateEdit();
 }
 function _showEditToast(msg) {
