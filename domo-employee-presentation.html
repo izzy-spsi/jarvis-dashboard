@@ -490,6 +490,12 @@
 </head>
 <body>
 
+<div style="position:fixed;top:16px;right:16px;z-index:500;display:flex;gap:8px;">
+  <button id="_editToggleBtn" onclick="toggleEdit()" data-on="0" style="background:transparent;border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.6);padding:6px 14px;border-radius:6px;cursor:pointer;font-size:11px;letter-spacing:1px;font-family:monospace;">✏ Edit</button>
+  <button onclick="saveEdits()" style="background:transparent;border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.6);padding:6px 14px;border-radius:6px;cursor:pointer;font-size:11px;letter-spacing:1px;font-family:monospace;">💾 Save</button>
+  <button onclick="restoreEdits()" style="background:transparent;border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.6);padding:6px 14px;border-radius:6px;cursor:pointer;font-size:11px;letter-spacing:1px;font-family:monospace;">↺ Restore</button>
+</div>
+
 <div class="stage">
   <div class="slide-wrapper" id="wrapper">
 
@@ -741,6 +747,81 @@
   window.addEventListener('resize', scale);
   scale();
   show(0);
+</script>
+<script>
+// ─── DECK EDIT FEATURE ───────────────────────────────────────────────────────
+const _DECK_KEY = 'domo-employee-edits';
+let _origContent = {};
+function _captureOrig() {
+  document.querySelectorAll('.slide').forEach((el,i) => { _origContent[i] = el.innerHTML; });
+}
+function _loadSaved() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(_DECK_KEY) || '{}');
+    document.querySelectorAll('.slide').forEach((el,i) => { if(saved[i]) el.innerHTML = saved[i]; });
+  } catch(e){}
+}
+function saveEdits() {
+  const d = {};
+  document.querySelectorAll('.slide').forEach((el,i) => { d[i] = el.innerHTML; });
+  localStorage.setItem(_DECK_KEY, JSON.stringify(d));
+  _showEditToast('✓ Saved');
+}
+function restoreEdits() {
+  if (!confirm('Restore to original? All saved edits will be cleared.')) return;
+  localStorage.removeItem(_DECK_KEY);
+  document.querySelectorAll('.slide').forEach((el,i) => { if(_origContent[i]) el.innerHTML = _origContent[i]; });
+  const btn = document.getElementById('_editToggleBtn');
+  if (btn && btn.dataset.on==='1') _deactivateEdit();
+  _showEditToast('↺ Restored');
+}
+function _showEditInstructions(onConfirm) {
+  if (localStorage.getItem(_DECK_KEY+'-tip')) { onConfirm(); return; }
+  const ov = document.createElement('div');
+  ov.style.cssText = 'position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,0.72);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)';
+  ov.innerHTML = `<div style="background:#1A1A18;border:1px solid rgba(201,160,82,0.3);border-radius:16px;padding:36px 40px;max-width:420px;width:90%;text-align:left;">
+    <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#C9A052;margin-bottom:16px;font-weight:700;">Edit Mode</div>
+    <div style="font-size:18px;font-weight:700;color:#F0EDE8;margin-bottom:20px;">How to edit this deck</div>
+    <div style="font-size:13px;color:#A0A098;line-height:1.9;">
+      <div style="margin-bottom:6px;">✏️ &nbsp;Click <strong style="color:#F0EDE8;">✏ Edit</strong> to make all slide text editable</div>
+      <div style="margin-bottom:6px;">🖊 &nbsp;Click any text on a slide and type to change it</div>
+      <div style="margin-bottom:6px;">↵ &nbsp;Press <strong style="color:#F0EDE8;">Enter</strong> or click away to confirm</div>
+      <div style="margin-bottom:6px;">💾 &nbsp;Click <strong style="color:#F0EDE8;">Save</strong> — persists across sessions</div>
+      <div style="margin-bottom:6px;">↺ &nbsp;Click <strong style="color:#F0EDE8;">Restore</strong> to reset to original</div>
+      <div>✓ &nbsp;Click <strong style="color:#F0EDE8;">✓ Done</strong> to exit edit mode</div>
+    </div>
+    <div style="margin-top:10px;"><label style="display:flex;align-items:center;gap:8px;font-size:12px;color:#A0A098;cursor:pointer;"><input type="checkbox" id="_eTipChk" style="accent-color:#C9A052"> Don't show again</label></div>
+    <button id="_eTipOk" style="margin-top:24px;width:100%;padding:13px;background:linear-gradient(135deg,#C9A052,#e8c07a);border:none;border-radius:8px;color:#0C0C0C;font-size:14px;font-weight:700;cursor:pointer;">Got it — let's edit</button>
+  </div>`;
+  document.body.appendChild(ov);
+  document.getElementById('_eTipOk').onclick = () => {
+    if(document.getElementById('_eTipChk').checked) localStorage.setItem(_DECK_KEY+'-tip','1');
+    ov.remove(); onConfirm();
+  };
+}
+function _activateEdit() {
+  document.querySelectorAll('.slide').forEach(el => el.setAttribute('contenteditable','true'));
+  const btn = document.getElementById('_editToggleBtn');
+  if(btn){btn.textContent='✓ Done';btn.style.color='#C9A052';btn.style.borderColor='#C9A052';btn.dataset.on='1';}
+}
+function _deactivateEdit() {
+  document.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
+  const btn = document.getElementById('_editToggleBtn');
+  if(btn){btn.textContent='✏ Edit';btn.style.color='';btn.style.borderColor='';btn.dataset.on='0';}
+}
+function toggleEdit() {
+  const btn = document.getElementById('_editToggleBtn');
+  if(!btn||btn.dataset.on!=='1') _showEditInstructions(_activateEdit);
+  else _deactivateEdit();
+}
+function _showEditToast(msg) {
+  let t = document.getElementById('_editToast');
+  if(!t){t=document.createElement('div');t.id='_editToast';t.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(201,160,82,0.95);color:#0C0C0C;font-family:monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:10px 24px;border-radius:20px;opacity:0;transition:opacity 0.25s,transform 0.25s;z-index:9999;pointer-events:none';document.body.appendChild(t);}
+  t.textContent=msg;
+  requestAnimationFrame(()=>{t.style.opacity='1';t.style.transform='translateX(-50%) translateY(0)';});
+  clearTimeout(t._t);t._t=setTimeout(()=>{t.style.opacity='0';t.style.transform='translateX(-50%) translateY(20px)';},2000);
+}
+_captureOrig(); _loadSaved();
 </script>
 </body>
 </html>
