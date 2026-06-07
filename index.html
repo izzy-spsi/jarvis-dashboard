@@ -586,7 +586,7 @@
   })();
   function checkAuth(){
     var user = document.getElementById('authUser').value.trim().toLowerCase();
-    var pass = document.getElementById('authInput').value;
+    var pass = document.getElementById('authInput').value.trim().toLowerCase();
     if(user==='izzy@spsi.ai' && pass==='izzy@2026'){
       localStorage.setItem('jhq_auth','ok');
       document.getElementById('authGate').style.display='none';
