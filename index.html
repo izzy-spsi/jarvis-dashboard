@@ -428,6 +428,7 @@
     .bh .card-icon { background: rgba(59,130,246,0.15); }
     .golf .card-icon { background: rgba(0,200,83,0.12); }
     .personal .card-icon { background: rgba(255,255,255,0.06); }
+    .ezliving .card-icon { background: rgba(0,180,140,0.15); }
     /* VENTURE SUB-GROUPS */
     .venture-group {
       grid-column: 1 / -1;
@@ -645,6 +646,7 @@
   <button class="filter-tab" data-filter="sps">💪 SPS</button>
   <button class="filter-tab" data-filter="golf">⛳ Golf</button>
   <button class="filter-tab" data-filter="bh">🚤 Blue Hwy</button>
+  <button class="filter-tab" data-filter="ezliving">🏙️ EZLiving</button>
   <button class="filter-tab" data-filter="personal">🌏 Personal</button>
   <div class="view-controls">
     <button class="view-btn active" id="cardViewBtn" title="Card view">⊞</button>
@@ -662,6 +664,84 @@
 </div>
 
 <div id="no-results">No projects match your search.</div>
+
+<!-- EZLIVING -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-title">🏙️ EZLiving</div>
+    <div class="section-line"></div>
+  </div>
+  <div class="grid">
+
+    <a class="card ezliving" href="https://geopulse-ai-production.up.railway.app" target="_blank">
+      <div class="card-top">
+        <div class="card-icon">🌍</div>
+        <span class="badge badge-live">Live v1.0.0</span>
+        <span class="stack-chip" onclick="event.stopPropagation();window.open('stack.html#geopulse','_blank')">⚙️ stack</span>
+      </div>
+      <div class="card-name">GeoPulse AI</div>
+      <div class="card-desc">AI-powered location intelligence platform — 5-dimension scoring (Family, Lifestyle, Mobility, Investment, Luxury) with real data from Census, FBI, OSM, NCES & Gemini AI summaries.</div>
+      <div class="card-meta">
+        <span class="tag">Next.js 14</span>
+        <span class="tag">TypeScript</span>
+        <span class="tag">Gemini AI</span>
+        <span class="tag">SPS × EZLiving</span>
+      </div>
+      <div class="card-url">geopulse-ai-production.up.railway.app</div>
+    </a>
+
+    <a class="card ezliving" href="https://cloud-closet-app-production.up.railway.app" target="_blank">
+      <div class="card-top">
+        <div class="card-icon">📦</div>
+        <span class="badge badge-live">Live</span>
+        <span class="stack-chip" onclick="event.stopPropagation();window.open('stack.html#cloud-closet','_blank')">⚙️ stack</span>
+      </div>
+      <div class="card-name">Cloud Closet</div>
+      <div class="card-desc">Full-service home storage platform — store items offsite, retrieve any single item on demand via app.</div>
+      <div class="card-meta">
+        <span class="tag">Next.js 16</span>
+        <span class="tag">Stripe</span>
+        <span class="tag">AI Vision</span>
+        <span class="tag">SPS</span>
+      </div>
+      <div class="card-url">cloud-closet-app-production.up.railway.app</div>
+    </a>
+
+    <a class="card ezliving" href="https://geopulse-ai-production.up.railway.app/9201-investor-deck-v0.2.html" target="_blank">
+      <div class="card-top">
+        <div class="card-icon">🏢</div>
+        <span class="badge badge-live">Live v0.4.0</span>
+      </div>
+      <div class="card-name">9201 4th Avenue — Investor Deck</div>
+      <div class="card-desc">16-slide investor presentation for 9201 4th Ave, Bay Ridge, Brooklyn. 105-unit mixed-use condo. $171.9M projected sell-out. GeoPulse location data integrated.</div>
+      <div class="card-meta">
+        <span class="tag">Real Estate</span>
+        <span class="tag">EZLiving × SPS</span>
+        <span class="tag">Light/Dark</span>
+        <span class="tag">PDF Export</span>
+        <span class="tag">Edit/Save/Restore</span>
+      </div>
+      <div class="card-url">geopulse-ai-production.up.railway.app</div>
+    </a>
+
+    <a class="card ezliving" href="https://geopulse-ai-production.up.railway.app/ezliving-storyboard-v0.1.2.html" target="_blank">
+      <div class="card-top">
+        <div class="card-icon">🏙️</div>
+        <span class="badge badge-live">Live v0.1.2</span>
+      </div>
+      <div class="card-name">EZLiving — GeoPulse Storyboard</div>
+      <div class="card-desc">14-slide visual storyboard for the GeoPulse AI × EZLiving pitch. Neighborhood intelligence platform for condo sales. Tim Ziss / Bay Ridge focus.</div>
+      <div class="card-meta">
+        <span class="tag">EZLiving × SPS</span>
+        <span class="tag">GeoPulse AI</span>
+        <span class="tag">Light/Dark</span>
+        <span class="tag">PDF Export</span>
+      </div>
+      <div class="card-url">geopulse-ai-production.up.railway.app/ezliving-storyboard-v0.1.2.html</div>
+    </a>
+
+  </div>
+</div>
 
 <!-- LIVE APPS -->
 <div class="section">
@@ -772,26 +852,6 @@
 
     </a>
 
-    <div class="venture-group"><span class="venture-label">💪 SPS</span><div class="venture-line"></div></div>
-
-    <a class="card sps" href="https://cloud-closet-app-production.up.railway.app" target="_blank">
-      <div class="card-top">
-        <div class="card-icon">📦</div>
-        <span class="badge badge-live">Live</span>
-        <span class="stack-chip" onclick="event.stopPropagation();window.open('stack.html#cloud-closet','_blank')">⚙️ stack</span>
-      </div>
-      <div class="card-name">Cloud Closet</div>
-      <div class="card-desc">Full-service home storage platform — store items offsite, retrieve any single item on demand via app.</div>
-      <div class="card-meta">
-        <span class="tag">Next.js 16</span>
-        <span class="tag">Stripe</span>
-        <span class="tag">AI Vision</span>
-        <span class="tag">SPS</span>
-      </div>
-      <div class="card-url">cloud-closet-app-production.up.railway.app</div>
-
-    </a>
-
     <div class="venture-group"><span class="venture-label">⛳ 24 Hour Golf</span><div class="venture-line"></div></div>
 
     <a class="card golf" href="https://24hourgolf-web-production.up.railway.app" target="_blank">
@@ -859,24 +919,6 @@
         <span class="tag">SPS</span>
       </div>
       <div class="card-url">sps-investor-portal-production.up.railway.app · Admin: /admin</div>
-    </a>
-
-    <a class="card sps" href="https://geopulse-ai-production.up.railway.app" target="_blank">
-      <div class="card-top">
-        <div class="card-icon">🌍</div>
-        <span class="badge badge-live">Live v1.0.0</span>
-        <span class="stack-chip" onclick="event.stopPropagation();window.open('stack.html#geopulse','_blank')">⚙️ stack</span>
-      </div>
-      <div class="card-name">GeoPulse AI</div>
-      <div class="card-desc">AI-powered location intelligence platform — 5-dimension scoring (Family, Lifestyle, Mobility, Investment, Luxury) with real data from Census, FBI, OSM, NCES & Gemini AI summaries. SPS Super Power.</div>
-      <div class="card-meta">
-        <span class="tag">Next.js 14</span>
-        <span class="tag">TypeScript</span>
-        <span class="tag">Gemini AI</span>
-        <span class="tag">SPS × EZLiving</span>
-      </div>
-      <div class="card-url">geopulse-ai-production.up.railway.app</div>
-
     </a>
 
     <div class="venture-group"><span class="venture-label">🌏 Personal</span><div class="venture-line"></div></div>
@@ -999,39 +1041,6 @@
   <div class="grid">
 
     <div class="venture-group"><span class="venture-label">💪 SPS</span><div class="venture-line"></div></div>
-
-    <a class="card sps" href="https://geopulse-ai-production.up.railway.app/9201-investor-deck-v0.2.html" target="_blank">
-      <div class="card-top">
-        <div class="card-icon">🏢</div>
-        <span class="badge badge-live">Live v0.4.0</span>
-      </div>
-      <div class="card-name">9201 4th Avenue — Investor Deck</div>
-      <div class="card-desc">16-slide investor presentation for 9201 4th Ave, Bay Ridge, Brooklyn. 105-unit mixed-use condo. $171.9M projected sell-out. GeoPulse location data integrated.</div>
-      <div class="card-meta">
-        <span class="tag">Real Estate</span>
-        <span class="tag">EZLiving × SPS</span>
-        <span class="tag">Light/Dark</span>
-        <span class="tag">PDF Export</span>
-        <span class="tag">Edit/Save/Restore</span>
-      </div>
-      <div class="card-url">geopulse-ai-production.up.railway.app</div>
-    </a>
-
-    <a class="card sps" href="https://geopulse-ai-production.up.railway.app/ezliving-storyboard-v0.1.2.html" target="_blank">
-      <div class="card-top">
-        <div class="card-icon">🏙️</div>
-        <span class="badge badge-live">Live v0.1.2</span>
-      </div>
-      <div class="card-name">EZLiving — GeoPulse Storyboard</div>
-      <div class="card-desc">14-slide visual storyboard for the GeoPulse AI × EZLiving pitch. Neighborhood intelligence platform for condo sales. Tim Ziss / Bay Ridge focus.</div>
-      <div class="card-meta">
-        <span class="tag">EZLiving × SPS</span>
-        <span class="tag">GeoPulse AI</span>
-        <span class="tag">Light/Dark</span>
-        <span class="tag">PDF Export</span>
-      </div>
-      <div class="card-url">geopulse-ai-production.up.railway.app/ezliving-storyboard-v0.1.2.html</div>
-    </a>
 
     <a class="card sps" href="https://geopulse-ai-production.up.railway.app/sps-methodology-flow.html" target="_blank">
       <div class="card-top">
