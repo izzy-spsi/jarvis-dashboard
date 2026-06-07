@@ -567,10 +567,11 @@
   <div style="background:#0e1117;border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:48px 40px;width:100%;max-width:380px;text-align:center;">
     <div style="font-size:36px;margin-bottom:16px;">⚙️</div>
     <div style="font-size:22px;font-weight:800;color:#e8eaf0;margin-bottom:6px;">Jarvis HQ</div>
-    <div style="font-size:13px;color:#8891a4;margin-bottom:32px;">Enter your password to continue</div>
+    <div style="font-size:13px;color:#8891a4;margin-bottom:32px;">Sign in to continue</div>
+    <input id="authUser" type="email" placeholder="Email" onkeydown="if(event.key==='Enter')document.getElementById('authInput').focus()" style="width:100%;padding:12px 16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:#e8eaf0;font-size:15px;outline:none;font-family:Inter,sans-serif;margin-bottom:10px;" />
     <input id="authInput" type="password" placeholder="Password" onkeydown="if(event.key==='Enter')checkAuth()" style="width:100%;padding:12px 16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:#e8eaf0;font-size:15px;outline:none;font-family:Inter,sans-serif;margin-bottom:12px;" />
     <div id="authError" style="color:#ef4444;font-size:12px;margin-bottom:12px;min-height:16px;"></div>
-    <button onclick="checkAuth()" style="width:100%;padding:13px;background:linear-gradient(135deg,#7c6af8,#a78bfa);border:none;border-radius:10px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;">Enter</button>
+    <button onclick="checkAuth()" style="width:100%;padding:13px;background:linear-gradient(135deg,#7c6af8,#a78bfa);border:none;border-radius:10px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;">Sign In</button>
   </div>
 </div>
 <script>
@@ -578,12 +579,19 @@
     var gate = document.getElementById('authGate');
     if(localStorage.getItem('jhq_auth')==='ok'){gate.style.display='none';return;}
     gate.style.display='flex';
-    document.getElementById('authInput').focus();
+    document.getElementById('authUser').focus();
   })();
   function checkAuth(){
-    var val = document.getElementById('authInput').value;
-    if(val==='Izzy@2025'){localStorage.setItem('jhq_auth','ok');document.getElementById('authGate').style.display='none';}
-    else{document.getElementById('authError').textContent='Incorrect password';document.getElementById('authInput').value='';}
+    var user = document.getElementById('authUser').value.trim().toLowerCase();
+    var pass = document.getElementById('authInput').value;
+    if(user==='izzy@spsi.ai' && pass==='izzy@2026'){
+      localStorage.setItem('jhq_auth','ok');
+      document.getElementById('authGate').style.display='none';
+    } else {
+      document.getElementById('authError').textContent='Incorrect email or password';
+      document.getElementById('authInput').value='';
+      document.getElementById('authInput').focus();
+    }
   }
 </script>
 
