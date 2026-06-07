@@ -610,6 +610,7 @@
   </div>
   <div style="display:flex;align-items:center;gap:20px;">
     <a href="labs.html" style="font-size:13px;font-weight:600;color:#a78bfa;text-decoration:none;display:flex;align-items:center;gap:6px;">⚗️ Labs <span style="background:linear-gradient(135deg,#7c6af8,#a78bfa);color:white;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;">NEW</span></a>
+    <button id="editModeBtn" onclick="toggleEditMode()" style="font-size:12px;font-weight:600;padding:6px 14px;border-radius:8px;border:1px solid rgba(255,255,255,0.12);background:transparent;color:#8891a4;cursor:pointer;font-family:Inter,sans-serif;transition:all 0.15s;display:flex;align-items:center;gap:6px;">&#9998; Edit</button>
     <div class="header-time" id="clock"></div>
   </div>
 </header>
@@ -1530,6 +1531,99 @@
       addPinClone(card);
     }
   });
+
+  // ─── EDIT MODE ───
+  var EDIT_KEY = 'jhq_title_overrides';
+  var editActive = false;
+
+  function loadTitleOverrides() {
+    try { return JSON.parse(localStorage.getItem(EDIT_KEY) || '{}'); } catch(e) { return {}; }
+  }
+
+  function saveTitleOverride(id, val) {
+    var map = loadTitleOverrides();
+    if (val) map[id] = val; else delete map[id];
+    localStorage.setItem(EDIT_KEY, JSON.stringify(map));
+  }
+
+  function applyTitleOverrides() {
+    var map = loadTitleOverrides();
+    document.querySelectorAll('.card-name[data-title-id]').forEach(function(el) {
+      var id = el.getAttribute('data-title-id');
+      if (map[id]) el.textContent = map[id];
+    });
+  }
+
+  // Assign stable IDs to all card-names based on their href
+  (function assignTitleIds() {
+    document.querySelectorAll('.card').forEach(function(card) {
+      var nameEl = card.querySelector('.card-name');
+      if (!nameEl) return;
+      var id = (card.getAttribute('href') || card.querySelector('[href]') && card.querySelector('[href]').getAttribute('href') || nameEl.textContent.trim()).replace(/[^a-z0-9]/gi,'_').toLowerCase();
+      nameEl.setAttribute('data-title-id', id);
+    });
+    applyTitleOverrides();
+  })();
+
+  function toggleEditMode() {
+    editActive = !editActive;
+    var btn = document.getElementById('editModeBtn');
+    var names = document.querySelectorAll('.card-name[data-title-id]');
+    if (editActive) {
+      btn.style.background = 'rgba(124,106,248,0.18)';
+      btn.style.color = '#a78bfa';
+      btn.style.borderColor = '#7c6af8';
+      btn.innerHTML = '&#10003; Done';
+      names.forEach(function(el) {
+        el.contentEditable = 'true';
+        el.style.outline = '1px dashed rgba(124,106,248,0.5)';
+        el.style.borderRadius = '4px';
+        el.style.padding = '2px 6px';
+        el.style.cursor = 'text';
+        el.addEventListener('blur', onTitleBlur);
+        el.addEventListener('keydown', onTitleKeydown);
+      });
+      // Prevent card clicks from navigating while editing
+      document.querySelectorAll('.card').forEach(function(c) {
+        c._origHref = c.getAttribute('href');
+        c.removeAttribute('href');
+      });
+    } else {
+      btn.style.background = 'transparent';
+      btn.style.color = '#8891a4';
+      btn.style.borderColor = 'rgba(255,255,255,0.12)';
+      btn.innerHTML = '&#9998; Edit';
+      names.forEach(function(el) {
+        el.contentEditable = 'false';
+        el.style.outline = '';
+        el.style.borderRadius = '';
+        el.style.padding = '';
+        el.style.cursor = '';
+        el.removeEventListener('blur', onTitleBlur);
+        el.removeEventListener('keydown', onTitleKeydown);
+      });
+      document.querySelectorAll('.card').forEach(function(c) {
+        if (c._origHref) { c.setAttribute('href', c._origHref); delete c._origHref; }
+      });
+    }
+  }
+
+  function onTitleBlur(e) {
+    var el = e.target;
+    var id = el.getAttribute('data-title-id');
+    var val = el.textContent.trim();
+    saveTitleOverride(id, val);
+  }
+
+  function onTitleKeydown(e) {
+    if (e.key === 'Enter') { e.preventDefault(); e.target.blur(); }
+    if (e.key === 'Escape') {
+      var map = loadTitleOverrides();
+      var id = e.target.getAttribute('data-title-id');
+      e.target.textContent = map[id] || e.target.getAttribute('data-original') || e.target.textContent;
+      e.target.blur();
+    }
+  }
 
   // ─── COLLAPSIBLE SECTIONS ───
   (function() {
