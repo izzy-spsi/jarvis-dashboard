@@ -589,6 +589,7 @@
     var pass = document.getElementById('authInput').value.trim().toLowerCase();
     if(user==='izzy@spsi.ai' && pass==='izzy@2026'){
       localStorage.setItem('jhq_auth','ok');
+      localStorage.setItem('j_sso','JARVIS_SSO_2026');
       document.getElementById('authGate').style.display='none';
     } else {
       document.getElementById('authError').textContent='Incorrect email or password';
