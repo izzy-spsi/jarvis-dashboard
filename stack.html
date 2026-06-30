@@ -586,6 +586,132 @@
     </div>
   </div>
 
+  <!-- EZLIVING -->
+  <div class="section">
+    <div class="section-label">🏙️ EZLiving</div>
+
+    <!-- EZLiving Investor Portal -->
+    <div class="project" id="ezliving-portal">
+      <div class="project-header">
+        <div>
+          <div class="project-title-row">
+            <span class="project-icon">🔐</span>
+            <div>
+              <div class="project-name">EZLiving — Investor Portal</div>
+              <div class="project-desc">Full investor onboarding portal. Contact → Disclaimer → DocuSeal NDA → Admin issues access code → Investor unlocks token-gated storyboard + 3 property decks.</div>
+            </div>
+          </div>
+        </div>
+        <span class="badge badge-live">Live v1.0.0</span>
+      </div>
+      <div class="stack-grid">
+        <div class="stack-item">
+          <div class="stack-label">Runtime</div>
+          <div class="stack-val"><span class="chip">Node.js</span><span class="chip">Express 4</span></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Templating</div>
+          <div class="stack-val"><span class="chip">EJS</span></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Database</div>
+          <div class="stack-val"><span class="chip blue">SQLite</span> via better-sqlite3 · mounted at <code>/data/ezliving.db</code></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Auth / Sessions</div>
+          <div class="stack-val"><span class="chip">express-session</span> · Access codes (admin-issued) · Admin bypass link</div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">NDA / Signing</div>
+          <div class="stack-val"><span class="chip purple">DocuSeal Pro</span> · Template ID: 4655954 · Role: Investor · Embedded form (no redirect)</div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Email</div>
+          <div class="stack-val"><span class="chip">Nodemailer</span> + Gmail SMTP · izzy@spsi.ai · Admin alert on NDA completion</div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Token Security</div>
+          <div class="stack-val">DECK_TOKEN (<code>EZL2026DECK</code>) injected into deck URLs via portal · checked via localStorage · no valid token = redirect to portal</div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Investor Flow</div>
+          <div class="stack-val">/contact → /signing (Disclaimer + DocuSeal) → /confirmation → /access (code entry) → /materials (storyboard + decks)</div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Admin</div>
+          <div class="stack-val">/admin (pw: ezliving2026) · /bypass?key=ezl-admin-a1638f8ee07bb0d19d47b8fc · issues access codes, views leads</div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Hosting</div>
+          <div class="stack-val"><span class="chip green">Railway ✅</span> · ezliving-portal service · <a href="https://ezliving-portal-production.up.railway.app" target="_blank" style="color:#FF5E1A">ezliving-portal-production.up.railway.app</a> → ezliving.com</div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">GitHub Repo</div>
+          <div class="stack-val"><a href="https://github.com/izzy-spsi/ezliving-portal" target="_blank" style="color:#FF5E1A">izzy-spsi/ezliving-portal</a> (private)</div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Local Copy</div>
+          <div class="stack-val"><code style="font-size:11px">~/Documents/ezliving-portal</code></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EZLiving Storyboard + Decks -->
+    <div class="project" id="ezliving-decks">
+      <div class="project-header">
+        <div>
+          <div class="project-title-row">
+            <span class="project-icon">🏙️</span>
+            <div>
+              <div class="project-name">EZLiving — Storyboard + Property Decks</div>
+              <div class="project-desc">22-slide investor storyboard + 3 standalone property decks (P-01 9201, P-02 7614, P-03 1901). All token-gated. Self-contained HTML — no build step, no framework.</div>
+            </div>
+          </div>
+        </div>
+        <span class="badge badge-live">Live</span>
+      </div>
+      <div class="stack-grid">
+        <div class="stack-item">
+          <div class="stack-label">Format</div>
+          <div class="stack-val">Self-contained HTML (CSS + JS inline) · no build step · deploy = copy file</div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Features</div>
+          <div class="stack-val">Light/Dark mode toggle · Print to PDF · Slide nav (← →) · Edit/Save mode (localStorage) · SPS S-mark</div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Token Gate</div>
+          <div class="stack-val">Checks <code>localStorage.ezliving_access_code</code> on load · no valid token = redirect to /access</div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Storyboard</div>
+          <div class="stack-val"><a href="https://sps-production-7dbc.up.railway.app/ezliving-storyboard-v0.4.0.html" target="_blank" style="color:#FF5E1A">v0.4.0 · 22 slides</a></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">P-01 · 9201</div>
+          <div class="stack-val"><a href="https://geopulse-ai-production.up.railway.app/9201-investor-deck-v0.2.html" target="_blank" style="color:#FF5E1A">v0.2 · Bay Ridge · $171.9M sell-out</a></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">P-02 · 7614</div>
+          <div class="stack-val"><a href="https://sps-production-7dbc.up.railway.app/7614-investor-deck-v0.1.0.html" target="_blank" style="color:#FF5E1A">v0.1.0 · Bay Ridge · $70M sell-out</a></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">P-03 · 1901</div>
+          <div class="stack-val"><a href="https://sps-production-7dbc.up.railway.app/1901-investor-deck-v0.1.0.html" target="_blank" style="color:#FF5E1A">v0.1.0 · NE Alberta · TBD raise</a></div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Hosting</div>
+          <div class="stack-val"><span class="chip green">sps-static (Railway)</span> · sps-production-7dbc.up.railway.app · Local: ~/Documents/sps-static/public/</div>
+        </div>
+        <div class="stack-item">
+          <div class="stack-label">Deck Standards</div>
+          <div class="stack-val">Space Grotesk (headings) · DM Sans (body) · JetBrains Mono (numbers) · Gold #C9A052 accent · TBD fields in Signal Orange</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
   <!-- BLUE HIGHWAY -->
   <div class="section">
     <div class="section-label">🌊 Blue Highway</div>
