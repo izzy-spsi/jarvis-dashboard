@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Domo Toast Data Ingestion — PRD v1.0</title>
+<style>
+  :root {
+    bg: #0b0c10;
+    panel: #141519;
+    border: #23252b;
+    text: #e8e8ec;
+    muted: #a0a4ae;
+    accent: #FF5E1A;
+    accent2: #C9A052;
+    ok: #2dd36f;
+    warn: #ffaa00;
+    err: #ff4d4d;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 14px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  a { color: #8ab4ff; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 40px 24px; }
+  header { margin-bottom: 24px; }
+  h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.3px; }
+  .meta { color: var(--muted); font-size: 12px; margin-top: 6px; }
+  .badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    background: #1f2130;
+    border: 1px solid #2c2f3d;
+    color: #cfd1dc;
+  }
+  .badge.accent { background: #2a1a12; border-color: #5a3018; color: #ff9f6c; }
+  .badge.ok { background: #132219; border-color: #1f5c36; color: #6ee7a0; }
+  .badge.warn { background: #241e12; border-color: #5a4a1f; color: #ffd166; }
+  .badge.err { background: #261313; border-color: #5a1f1f; color: #ff7b7b; }
+  section { margin-top: 28px; }
+  h2 { font-size: 18px; margin: 0 0 10px; }
+  h3 { font-size: 14px; margin: 16px 0 6px; color: var(--text); }
+  p { color: #cdd0da; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+  th { color: var(--muted); font-weight: 600; background: #181a22; }
+  tr:last-child td { border-bottom: none; }
+  code, pre {
+    background: #111216;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 12.5px;
+    color: #e6e6f0;
+    overflow-x: auto;
+    white-space: pre;
+  }
+  .callout {
+    border-left: 3px solid var(--accent);
+    background: #181a22;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    padding: 12px 14px;
+    border-radius: 10px;
+    color: #d6d8e0;
+  }
+  .callout.ok { border-left-color: var(--ok); }
+  .callout.warn { border-left-color: var(--warn); }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 780px) { .two { grid-template-columns: 1fr; } }
+  .rule { height: 1px; background: var(--border); margin: 18px 0; }
+  .num { color: var(--accent2); font-weight: 700; }
+  ul { padding-left: 18px; }
+  li { margin: 6px 0; color: #cdd0da; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="meta"><span class="badge">PRD</span> <span class="badge accent">Domo Ops</span> <span class="badge">v1.0</span></div>
+  <h1>Domo Toast Data Ingestion + Shared DB ACP</h1>
+  <div class="meta">Owner: Hermes · Stakeholders: JarvisDomo, OpenClaw, Staff OS v3.1, Future Agents · Status: Draft</div>
+</header>
+
+<section>
+  <h2>1 · Problem</h2>
+  <p>
+  Multiple apps — OpenClaw, Hermes, Staff OS — need live Toast data. Right now they either:
+  read from a shared cache, call Toast independently, or show local seed data. That creates
+  rate-limit contention, stale reads, schema drift, and credential sprawl. We need one
+  canonical ingestion layer and a shared Postgres schema designed for analytics, not just CRUD.
+  We also need an Agent Control Protocol so future Hermes/OpenClaw agents can read/write
+  safely without stepping on each other.
+  </p>
+  <div class="callout warn">
+    <strong>Hard constraint:</strong> Zero fake/demo data in production. If live Toast is unavailable,
+    the UI must show the ingestion status + last successful sync time, not invented numbers.
+  </div>
+</section>
+
+<section>
+  <h2>2 · Goals</h2>
+  <ul>
+    <li><span class="num">G1</span> <strong>Single writer:</strong> Hermes becomes the sole Toast ingestion agent. All other apps read from shared Postgres.</li>
+    <li><span class="num">G2</span> <strong>Analytics-first schema:</strong> Store Toast Standard + Analytics payloads in a schema optimized for reporting, reconciliation, and downstream apps.</li>
+    <li><span class="num">G3</span> <strong>ACP:</strong> Agents access data through scoped API routes + row-level intent, not direct DB credentials.</li>
+    <li><span class="num">G4</span> <strong>Multi-source ready:</strong> Schema accommodates Toast, future POS, labor, and guest data sources as first-class citizens.</li>
+    <li><span class="num">G5</span> <strong>Reconciliation:</strong> Daily sales snapshots can be reconciled against Orders API, Analytics API, and daily email totals.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>3 · Non-Goals</h2>
+  <ul>
+    <li>Replacing the existing Domo Ops UI/app — this is a backend/data layer PRD only.</li>
+    <li>Building real-time streaming — 15-minute sync cadence is sufficient for operations.</li>
+    <li>Building a new auth system — reuse existing Domo Ops NextAuth/JWT layer.</li>
+    <li>Merging OpenClaw and Hermes codebases — ACP lets them coexist without merging.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>4 · Toast API Landscape</h2>
+  <p>Toast exposes two relevant surfaces:</p>
+  <table>
+    <tr><th>API</th><th>Purpose</th><th>Auth</th><th>Key endpoints</th><th>Limits</th></tr>
+    <tr>
+      <td><strong>Standard</strong></td>
+      <td>Orders, checks, payments, menu items, employees</td>
+      <td>Standard API key</td>
+      <td>GET /orders, /checks, /payments, /menu-items, /employees</td>
+      <td>Global rate limits</td>
+    </tr>
+    <tr>
+      <td><strong>Analytics</strong></td>
+      <td>Aggregated sales, labor, menu, payout, guest, restaurant info</td>
+      <td>Separate Analytics API key (<em>requires RMS Pro</em>)</td>
+      <td>POST/GET /era/v1/metrics/{timeRange}, /era/v1/labor/{timeRange}, /era/v1/menu/{timeRange}</td>
+      <td>Day/week: 10 req/min, 60 req/hr · month/year: 10 req/hr</td>
+    </tr>
+  </table>
+  <p class="meta">Source: <a href="https://doc.toasttab.com/doc/devguide/apiAnalyticsOverview.html">Toast Analytics API overview</a>, <a href="https://doc.toasttab.com/doc/devguide/apiAnalyticsRateLimiting.html">rate limits</a>, <a href="https://doc.toasttab.com/doc/devguide/apiAnalyticsMetricsReportingDataUnderstandingData.html">metrics data dictionary</a></p>
+
+  <h3>4.1 Metrics payload fields we care about</h3>
+  <p>From <code>/era/v1/metrics</code> aggregated sales:</p>
+  <table>
+    <tr><th>Field</th><th>Meaning</th><th>Use</th></tr>
+    <tr><td><code>restaurantGuid</code></td><td>Restaurant UUID</td><td>Partition key</td></tr>
+    <tr><td><code>businessDate</code></td><td>YYYYMMDD</td><td>Daily grain</td></tr>
+    <tr><td><code>guestCount</code></td><td>Covers/guests</td><td>Ops + pro forma</td></tr>
+    <tr><td><code>ordersCount</code></td><td>Non-void orders</td><td>Ops</td></tr>
+    <tr><td><code>netSalesAmount</code></td><td>Sales excl. tax/tip/discount/void/refund</td><td>Revenue authoritative</td></tr>
+    <tr><td><code>grossSalesAmount</code></td><td>Including discounts/refunds</td><td>Reconciliation</td></tr>
+    <tr><td><code>discountAmount</code></td><td>Total discounts</td><td>Unit economics</td></tr>
+    <tr><td><code>voidOrdersAmount</code></td><td>Voided order value</td><td>Loss tracking</td></tr>
+    <tr><td><code>refundAmount</code></td><td>Refunds</td><td>Reconciliation</td></tr>
+    <tr><td><code>avgOrderValue</code></td><td>AOV</td><td>Benchmarking</td></tr>
+    <tr><td><code>revenueCenter</code></td><td>Dining Room, Bar, etc.</td><td>Menu engineering</td></tr>
+    <tr><td><code>diningOption</code></td><td>Dine-in, Takeout, etc.</td><td>Channel mix</td></tr>
+    <tr><td><code>orderSource</code></td><td>Online, POS, etc.</td><td>Channel mix</td></tr>
+    <tr><td><code>hourlyJobTotalHours</code></td><td>Hourly labor hours</td><td>Labor</td></tr>
+    <tr><td><code>hourlyJobTotalPay</code></td><td>Hourly labor cost</td><td>Labor</td></tr>
+    <tr><td><code>hourlyJobSalesPerLaborHour</code></td><td>Sales/labor-hour</td><td>Labor efficiency</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>5 · Smart Shared DB Schema</h2>
+  <p>Design principle: store raw external payloads as immutable snapshots, then derive operator-facing views from them. This preserves auditability and lets multiple agents read safely.</p>
+
+  <h3>5.1 Core models</h3>
+  <table>
+    <tr><th>Model</th><th>Purpose</th><th>Key fields</th><th>Source</th></tr>
+    <tr>
+      <td><strong>ExternalSource</strong></td>
+      <td>Registry of trusted data providers</td>
+      <td><code>id, name, type, authRef, configJson, isActive, lastSyncAt</code></td>
+      <td>Admin config</td>
+    </tr>
+    <tr>
+      <td><strong>ExternalDataJob</strong></td>
+      <td>Tracks every ingestion run</td>
+      <td><code>id, sourceId, startedAt, finishedAt, status, records, error, payloadRef</code></td>
+      <td>Hermes runner</td>
+    </tr>
+    <tr>
+      <td><strong>ExternalDataRow</strong></td>
+      <td>Raw normalized row from any source</td>
+      <td><code>id, jobId, sourceId, businessDate, category, entityType, payload, createdAt</code></td>
+      <td>Ingestion pipeline</td>
+    </tr>
+    <tr>
+      <td><strong>ToastDailyMetric</strong></td>
+      <td>Derived daily sales row from Analytics + Standard reconciliation</td>
+      <td><code>id, businessDate, restaurantGuid, netSales, grossSales, tax, tips, discounts, voids, refunds, checks, covers, avgOrderValue, revenueCenter, diningOption, orderSource, hourlyLaborHours, hourlyLaborCost, salesPerLaborHour, rawAnalyticsJson, rawStandardJson, reconciledAt, syncJobId</code></td>
+      <td>Hermes backfill</td>
+    </tr>
+    <tr>
+      <td><strong>ToastHourlyMetric</strong></td>
+      <td>Same as daily, but hourly grain</td>
+      <td><code>id, businessDate, businessHour, restaurantGuid, ...</code></td>
+      <td>Hermes backfill</td>
+    </tr>
+    <tr>
+      <td><strong>ToastMenuItem</strong></td>
+      <td>Menu master from Analytics + Standard</td>
+      <td><code>id, externalId, name, category, price, revenueCenter, lastSyncedAt</code></td>
+      <td>Hermes backfill</td>
+    </tr>
+    <tr>
+      <td><strong>ToastEmployee</strong></td>
+      <td>Employee roster from Standard + labor analytics</td>
+      <td><code>id, toastGuid, firstName, lastName, email, phone, jobTitle, hourlyRate, lastSyncedAt</code></td>
+      <td>Hermes backfill</td>
+    </tr>
+    <tr>
+      <td><strong>ToastPayout</strong></td>
+      <td>Payout/deposit reporting</td>
+      <td><code>id, payoutId, settledDate, salesDate, amount, fees, net, method, restaurantGuid, rawJson</code></td>
+      <td>Hermes backfill</td>
+    </tr>
+    <tr>
+      <td><strong>ToastGuestPayment</strong></td>
+      <td>Guest/payment reporting</td>
+      <td><code>id, paymentId, businessDate, lastFour, amount, type, restaurantGuid, rawJson</code></td>
+      <td>Hermes backfill</td>
+    </tr>
+    <tr>
+      <td><strong>AgentAccessGrant</strong></td>
+      <td>ACP: which agents can read which tables/rows</td>
+      <td><code>id, agentId, sourceId, tables, filtersJson, issuedAt, expiresAt, revokedAt, issuedBy</code></td>
+      <td>Admin / Hermes cert</td>
+    </tr>
+  </table>
+
+  <h3>5.2 Schema rules</h3>
+  <ul>
+    <li><strong>Raw payloads are immutable.</strong> Never update or delete <code>ExternalDataRow.payload</code>, <code>ToastDailyMetric.rawAnalyticsJson</code>, or <code>ToastDailyMetric.rawStandardJson</code> after insert.</li>
+    <li><strong>Derived tables are idempotent.</strong> Re-running the same Hermes sync for the same date/restaurant must upsert, not duplicate.</li>
+    <li><strong>Source isolation.</strong> Every derived row points to <code>syncJobId</code> so we can trace it back to a run.</li>
+    <li><strong>Future-proofing.</strong> Adding a new source (e.g., QuickBooks, Fishbowl) means adding a new <code>ExternalSource.type</code> and optional derived models — no schema migration required.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>6 · Agent Control Protocol (ACP)</h2>
+  <p>
+  Future agents need data access without receiving raw DB credentials. ACP defines a
+  token-scoped, route-level contract between agents and the shared DB. Hermes issues
+  short-lived grants; the API enforces them.
+  </p>
+
+  <h3>6.1 Participants</h3>
+  <ul>
+    <li><strong>ACP Issuer:</strong> Hermes agent. Owns creation/revocation of grants.</li>
+    <li><strong>ACP Gateway:</strong> Shared app API layer (`/api/acp/**`). Enforces grants.</li>
+    <li><strong>ACP Consumer:</strong> Any agent needing data: OpenClaw, JarvisDomo, future analytics/marketing agents.</li>
+  </ul>
+
+  <h3>6.2 Grant model</h3>
+  <table>
+    <tr><th>Field</th><th>Meaning</th></tr>
+    <tr><td><code>agentId</code></td><td>Opaque caller identity, e.g. <code>openclaw:main</code>, <code>hermes:domo</code></td></tr>
+    <tr><td><code>tables</code></td><td>Allowed models, e.g. <code>["ToastDailyMetric","ToastHourlyMetric"]</code></td></tr>
+    <tr><td><code>filtersJson</code></td><td>Row-level filter, e.g. <code>{"restaurantGuid":"<domo-guid>"}</code></td></tr>
+    <tr><td><code>expiresAt</code></td><td>TTL. Default 24h for interactive, 1h for batch.</td></tr>
+  </table>
+
+  <h3>6.3 ACP routes</h3>
+  <table>
+    <tr><th>Route</th><th>Method</th><th>Auth</th><th>Behavior</th></tr>
+    <tr><td><code>/api/acp/query</code></td><td>POST</td><td>ACP token + HMAC sig</td><td>Read-only SELECT against allowed tables with enforced filter</td></tr>
+    <tr><td><code>/api/acp/ingest</code></td><td>POST</td><td>ACP token + Hermes cert</td><td>Write normalized rows to ExternalDataRow + derived tables</td></tr>
+    <tr><td><code>/api/acp/status</code></td><td>GET</td><td>ACP token</td><td>Return last sync per source + record counts</td></tr>
+    <tr><td><code>/api/acp/grants</code></td><td>POST/GET/DELETE</td><td>Issuer key only</td><td>Create/list/revoke grants</td></tr>
+  </table>
+
+  <div class="callout ok">
+    <strong>Principle:</strong> If an agent cannot present a valid ACP grant, it gets <code>401</code> with no details. It should not learn table names.
+  </div>
+</section>
+
+<section>
+  <h2>7 · Hermes Ingestion Runner Design</h2>
+  <p>Hermes owns a single, scheduled runner that:</p>
+  <ol>
+    <li>Authenticates to Toast Standard + Analytics APIs using separate credentials stored outside the app.</li>
+    <li>Requests Analytics for <code>day</code> time range per restaurant GUID.</li>
+    <li>Polls <code>/era/v1/metrics/{reportRequestGuid}</code> with backoff.</li>
+    <li>Normalizes payload into <code>ExternalDataRow</code>, then upserts <code>ToastDailyMetric</code>.</li>
+    <li>Emits <code>ToastSyncLog</code> with run metadata.</li>
+    <li>Exposes <code>/api/acp/status</code> so other apps know whether data is live or stale.</li>
+  </ol>
+
+  <h3>7.1 Rate-limit strategy</h3>
+  <ul>
+    <li>Use <code>/era/v1/metrics/day</code> for daily grand opening backfill.</li>
+    <li>Respect Analytics limits: 10 req/min for day/week.</li>
+    <li>Reuse Standard API reads for menu/employees/payouts — separate quota.</li>
+    <li>Cache <code>restaurant-info</code> for 24h.</li>
+  </ul>
+
+  <h3>7.2 Credential model</h3>
+  <table>
+    <tr><th>Credential</th><th>Store</th><th>Used by</th></tr>
+    <tr><td>Toast Standard API key</td><td>Hermes secure store / Railway env</td><td>Hermes runner only</td></tr>
+    <tr><td>Toast Analytics API key</td><td>Hermes secure store / Railway env</td><td>Hermes runner only</td></tr>
+    <tr><td>ACP Issuer key</td><td>Hermes env</td><td>Hermes grant issuance</td></tr>
+    <tr><td>ACP Consumer token</td><td>Issued per agent via <code>/api/acp/grants</code></td><td>Consumer agents</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>8 · Consumer Agent Contracts</h2>
+  <p>Other apps never call Toast directly. They consume through ACP:</p>
+  <table>
+    <tr><th>Agent</th><th>Needs</th><th>ACP grant</th><th>Use case</th></tr>
+    <tr><td>OpenClaw</td><td>Daily sales, labor, payouts</td><td>Read <code>ToastDailyMetric</code>, <code>ToastPayout</code></td><td>Pro forma, investor reporting</td></tr>
+    <tr><td>Staff OS</td><td>Schedule labor efficiency, menu mix</td><td>Read <code>ToastDailyMetric</code>, <code>ToastHourlyMetric</code>, <code>ToastMenuItem</code></td><td>Ops dashboard</td></tr>
+    <tr><td>Domo Ops</td><td>Daily snapshot, alerts</td><td>Read <code>ToastDailyMetric</code></td><td>Ops dashboard, Jarvis status</td></tr>
+    <tr><td>Future analytics agent</td><td>Menu engineering, guest data</td><td>Read <code>ToastMenuItem</code>, <code>ToastGuestPayment</code></td><td>Marketing, menu optimization</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>9 · Build Order</h2>
+  <ol>
+    <li><span class="num">1</span> Add new models to <code>prisma/schema.prisma</code> in the existing Domo Ops app.</li>
+    <li><span class="num">2</span> Build <code>/api/acp</code> route group with query/ingest/status/grants.</li>
+    <li><span class="num">3</span> Build Hermes Toast runner: auth, metrics request, poll, normalize, upsert.</li>
+    <li><span class="num">4</span> Backfill June 13, 2026 Grand Opening day via Analytics <code>day</code> endpoint.</li>
+    <li><span class="num">5</span> Wire Staff OS v3.1 preview routes to read from <code>/api/acp/query</code> instead of local seed data.</li>
+    <li><span class="num">6</span> Add <code>ExternalSource</code> registry UI for admin to see sync status.</li>
+  </ol>
+
+  <div class="callout">
+    <strong>Pre-req:</strong> Toast RMS Pro subscription must be fully provisioned and Analytics API credentials generated in Toast Web before step 3 can run live.
+  </div>
+</section>
+
+<section>
+  <h2>10 · Verification</h2>
+  <ul>
+    <li><code>/api/acp/status</code> returns last sync time + record counts per source.</li>
+    <li>Hermes runner logs one <code>ExternalDataJob</code> per run with <code>records &gt; 0</code>.</li>
+    <li><code>ToastDailyMetric</code> daily totals match Toast daily email within tolerance.</li>
+    <li>Consumer agents can query through ACP but fail with <code>401</code> if grant revoked.</li>
+    <li>Re-running the same backfill date does not duplicate rows (<code>@@unique([businessDate, restaurantGuid, revenueCenter, diningOption, orderSource])</code>).</li>
+  </ul>
+</section>
+
+<section>
+  <h2>11 · Risks + Mitigations</h2>
+  <table>
+    <tr><th>Risk</th><th>Mitigation</th></tr>
+    <tr><td>Analytics API not yet provisioned</td><td>Grace period using Standard API + daily email reconciliation until RMS Pro activates</td></tr>
+    <tr><td>Multiple apps bypass ACP and call Toast directly</td><td>ACP enforced at route level; monitor for direct Toast host calls in app logs</td></tr>
+    <tr><td>Rate limits during backfill</td><td>Stagger requests, cache restaurant info, use day/week granularity appropriately</td></tr>
+    <tr><td>Schema drift across apps</strong></td><td>Single Prisma schema, single app owns DB; consumers only see API contracts</td></tr>
+    <tr><td>Credential leakage</td><td>Toast keys stored in Hermes secure store / Railway env, never in code or shared config</td></tr>
+  </table>
+</section>
+
+<div class="rule"></div>
+<div class="meta">Published to: <code>/Users/izzyaala/Documents/workspace/storage/domo-toast-ingestion-prd-v1.0.html</code> · Jarvis HQ route pending</div>
+
+</div>
+</body>
+</html>
