@@ -633,7 +633,7 @@
     <div class="logo-icon">⚙️</div>
     <div>
       <div class="logo-text">Jarvis HQ</div>
-      <div class="logo-sub">Izzy Aala · Command Center · <span style="color:var(--accent);font-weight:600;">v1.1.1</span></div>
+      <div class="logo-sub">Izzy Aala · Command Center · <span style="color:var(--accent);font-weight:600;">v1.1.2</span></div>
     </div>
   </a>
   <div class="search-wrap">
@@ -2378,11 +2378,16 @@
     document.getElementById('no-results').classList.toggle('visible', !anyVisible);
   }
 
-  // ─── COMPACT / CARD TOGGLE ───
+  // ─── COMPACT / CARD TOGGLE (defaults to Card view unless explicitly set to Compact) ───
   if (localStorage.getItem('jhq_view') === 'compact') {
     document.body.classList.add('compact');
     document.getElementById('compactViewBtn').classList.add('active');
     document.getElementById('cardViewBtn').classList.remove('active');
+  } else {
+    document.body.classList.remove('compact');
+    document.getElementById('cardViewBtn').classList.add('active');
+    document.getElementById('compactViewBtn').classList.remove('active');
+    localStorage.setItem('jhq_view', 'card');
   }
   document.getElementById('cardViewBtn').addEventListener('click', function() {
     document.body.classList.remove('compact');
