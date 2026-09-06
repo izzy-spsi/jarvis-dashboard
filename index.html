@@ -186,6 +186,28 @@
     .badge-filed { background: rgba(168,85,247,0.15); color: #c084fc; }
     .badge-doc { background: rgba(255,255,255,0.08); color: var(--muted); }
 
+    .badge-grok { background: rgba(34,211,238,0.15); color: #22d3ee; }
+    .badge-prototype { background: rgba(34,211,238,0.12); color: #67e8f9; }
+    .agent-chip {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 10px; font-weight: 700; letter-spacing: 0.3px;
+      padding: 2px 8px; border-radius: 999px;
+      border: 1px solid transparent; white-space: nowrap;
+    }
+    .agent-chip.agent-grok {
+      background: rgba(34,211,238,0.12);
+      color: #22d3ee;
+      border-color: rgba(34,211,238,0.35);
+    }
+    .card.grok {
+      border-left: 3px solid #22d3ee;
+      box-shadow: 0 0 0 1px rgba(34,211,238,0.08);
+    }
+    .card.grok:hover {
+      box-shadow: 0 8px 28px rgba(34,211,238,0.12), 0 0 0 1px rgba(34,211,238,0.2);
+    }
+
+
     .card-name {
       font-size: 17px;
       font-weight: 700;
@@ -658,13 +680,13 @@
 <div class="stats">
   <div class="stat">
     <div>
-      <div class="stat-num" style="color:#22c55e">6</div>
+      <div class="stat-num" style="color:#22c55e">8</div>
       <div class="stat-label">Live Apps</div>
     </div>
   </div>
   <div class="stat">
     <div>
-      <div class="stat-num" style="color:#eab308">3</div>
+      <div class="stat-num" style="color:#eab308">5</div>
       <div class="stat-label">In Progress</div>
     </div>
   </div>
@@ -686,6 +708,7 @@
 <div class="filter-bar">
   <button class="filter-tab active" data-filter="all">All</button>
   <button class="filter-tab" data-filter="domo">🍵 Domo</button>
+  <button class="filter-tab" data-filter="grok" style="border-color:rgba(34,211,238,0.35);color:#22d3ee;">🤖 Grok</button>
   <button class="filter-tab" data-filter="flywheel">🚖 Flywheel</button>
   <button class="filter-tab" data-filter="sps">💪 SPS</button>
   <button class="filter-tab" data-filter="golf">⛳ Golf</button>
@@ -1135,6 +1158,142 @@
 
     <div class="venture-group"><span class="venture-label">🍵 Domo Cafe</span><div class="venture-line"></div></div>
 
+    <!-- GROK / REGGIE — active Domo workstream (Sep 2026) -->
+    <a class="card domo grok" href="https://web-production-876e2.up.railway.app" target="_blank">
+      <div class="card-top">
+        <div class="card-icon">🦴</div>
+        <span class="badge badge-live">Live · Phase W</span>
+        <span class="agent-chip agent-grok">🤖 Grok</span>
+      </div>
+      <div class="card-name">CHOMPS Web MVP — Phase W</div>
+      <div class="card-desc">ManualEarn-first recognition platform. Purchase + receipt as primary uncapped earn path; goodwill capped 3/day. Recognition-only tiers (First Bite → Legendary); Regular@500 status-only, no perk promises. Toast earn parked until after Tuesday meeting.</div>
+      <div class="card-meta">
+        <span class="tag">Next.js</span>
+        <span class="tag">Railway</span>
+        <span class="tag">ManualEarn</span>
+        <span class="tag">Recognition-only</span>
+        <span class="tag">GFC BP LLC</span>
+      </div>
+      <div class="card-url">web-production-876e2.up.railway.app</div>
+    </a>
+
+    <a class="card domo grok" href="https://domokuncafe-staging-staging.up.railway.app" target="_blank">
+      <div class="card-top">
+        <div class="card-icon">🌐</div>
+        <span class="badge badge-building">Staging</span>
+        <span class="agent-chip agent-grok">🤖 Grok</span>
+      </div>
+      <div class="card-name">Domo Cafe Website — Staging Refresh</div>
+      <div class="card-desc">Owned static stack rebuild (Sydney = design inspiration only) + CHOMPS band. Footer: Built with AI by Super Power Studios; quieter Design inspired by Sydney. Weekends 10am–9pm · (415) 360-3666 · birthday packages 8+ · DoorDash Order Now · Stay Updated RSVP restored. PR #1 open.</div>
+      <div class="card-meta">
+        <span class="tag">HTML/CSS/JS</span>
+        <span class="tag">Railway Staging</span>
+        <span class="tag">CHOMPS band</span>
+        <span class="tag">PR #1</span>
+      </div>
+      <div class="card-url">domokuncafe-staging-staging.up.railway.app · github.com/izzy-spsi/domokuncafe-website/pull/1</div>
+    </a>
+
+    <a class="card domo grok" href="https://domokuncafe-staging-staging.up.railway.app/community.html" target="_blank">
+      <div class="card-top">
+        <div class="card-icon">🤝</div>
+        <span class="badge badge-prototype">Prototype</span>
+        <span class="agent-chip agent-grok">🤖 Grok</span>
+      </div>
+      <div class="card-name">Domo Community — Hub Mock</div>
+      <div class="card-desc">Clickable Community hub — voice “Domo Shows Up for Buena Park.” Prototype Tuesday calendar, how-it-works (code/QR → ~15% attributed qualifying F&amp;B), apply form (mailto draft).</div>
+      <div class="card-meta">
+        <span class="tag">Community Tuesdays</span>
+        <span class="tag">Buena Park</span>
+        <span class="tag">15% attributed F&amp;B</span>
+      </div>
+      <div class="card-url">…/community.html</div>
+    </a>
+
+    <a class="card domo grok" href="https://domokuncafe-staging-staging.up.railway.app/community-bphs-tennis.html" target="_blank">
+      <div class="card-top">
+        <div class="card-icon">🎾</div>
+        <span class="badge badge-prototype">Prototype</span>
+        <span class="agent-chip agent-grok">🤖 Grok</span>
+      </div>
+      <div class="card-name">Domo Community — BPHS Tennis Night</div>
+      <div class="card-desc">Sample organization event page for the Community Tuesday prototype — progress, support CTA, Domo Shows Up voice.</div>
+      <div class="card-meta">
+        <span class="tag">Org profile</span>
+        <span class="tag">Prototype</span>
+        <span class="tag">Buena Park</span>
+      </div>
+      <div class="card-url">…/community-bphs-tennis.html</div>
+    </a>
+
+    <a class="card domo grok" href="https://tranquil-magic-production-4aee.up.railway.app" target="_blank">
+      <div class="card-top">
+        <div class="card-icon">📬</div>
+        <span class="badge badge-live">Live</span>
+        <span class="agent-chip agent-grok">🤖 Grok</span>
+      </div>
+      <div class="card-name">Domo Guest RSVPs (~200) — Preserved</div>
+      <div class="card-desc">Existing Railway signup API + admin dashboard kept live; Stay Updated form restored on the new homepage so the guest list isn’t orphaned.</div>
+      <div class="card-meta">
+        <span class="tag">RSVP</span>
+        <span class="tag">Railway API</span>
+        <span class="tag">~200 guests</span>
+      </div>
+      <div class="card-url">tranquil-magic-production-4aee.up.railway.app</div>
+    </a>
+
+    <div class="card domo grok" style="cursor:default;">
+      <div class="card-top">
+        <div class="card-icon">📋</div>
+        <span class="badge badge-planning">Locked</span>
+        <span class="agent-chip agent-grok">🤖 Grok</span>
+      </div>
+      <div class="card-name">Domo Community — PRD v1</div>
+      <div class="card-desc">Hyperlocal community platform per Domo Cafe (Buena Park prototype). Org pages + calendar + applications; Community Tuesdays; MVP = first 4 Tuesdays with manual-assist blocks. Economics: ~15% of attributed qualifying F&amp;B only (not whole-store Tuesday); merch out of 15% base. Not a coupon/Yelp/directory site.</div>
+      <div class="card-meta">
+        <span class="tag">PRD</span>
+        <span class="tag">Mission Control</span>
+        <span class="tag">Buena Park</span>
+        <span class="tag">Locked</span>
+      </div>
+      <div class="card-url">Internal — PRD-Domo-Community-v1.md</div>
+    </div>
+
+    <div class="card domo grok" style="cursor:default;">
+      <div class="card-top">
+        <div class="card-icon">🔒</div>
+        <span class="badge badge-planning">Locked</span>
+        <span class="agent-chip agent-grok">🤖 Grok</span>
+      </div>
+      <div class="card-name">Domo Web — Platform Lock (Sep 2026)</div>
+      <div class="card-desc">Sydney (sqdni/website) = design inspiration only. Official domokuncafe.com stays on Domo-owned stack; evolve toward owned CMS; mobile app with deep CHOMPS integration (shared identity/ledger). WhoRiddle = later play layer, not primary loyalty.</div>
+      <div class="card-meta">
+        <span class="tag">Platform Lock</span>
+        <span class="tag">CHOMPS</span>
+        <span class="tag">Owned stack</span>
+      </div>
+      <div class="card-url">Internal — Domo-web-platform-lock-2026-09-06.md</div>
+    </div>
+
+    <div class="card domo grok" style="cursor:default;">
+      <div class="card-top">
+        <div class="card-icon">🕹️</div>
+        <span class="badge badge-building">Active</span>
+        <span class="agent-chip agent-grok">🤖 Grok · Reggie</span>
+      </div>
+      <div class="card-name">CHOMPS Mission Control — Reggie + Atlas/Pilot/Forge/Nova</div>
+      <div class="card-desc">Reggie (Grok) orchestrates Mission Control locks: ManualEarn-first Phase W, tier set A, Domo Community economics, web→mobile path. Toast meeting Tuesday; Toast earn parked.</div>
+      <div class="card-meta">
+        <span class="tag">Mission Control</span>
+        <span class="tag">Atlas</span>
+        <span class="tag">Pilot</span>
+        <span class="tag">Forge</span>
+        <span class="tag">Nova</span>
+      </div>
+      <div class="card-url">Grok Bot · Mission Control group</div>
+    </div>
+
+
     <a class="card domo" href="https://tranquil-magic-production-4aee.up.railway.app" target="_blank">
       <div class="card-top">
         <div class="card-icon">🍵</div>
@@ -1190,7 +1349,7 @@
         <span class="stack-chip" onclick="event.stopPropagation();window.open('stack.html#domocafe-web','_blank')">⚙️ stack</span>
       </div>
       <div class="card-name">Domo Cafe Website</div>
-      <div class="card-desc">v1.8.0 LIVE — Grand Opening Sign Up form + Admin Dashboard. Track guest interest. Soft opening June 6, Grand Opening June 13 at 10am.</div>
+      <div class="card-desc">v1.8.0 LIVE — Grand Opening Sign Up form + Admin Dashboard. Track guest interest. Soft opening June 6, Grand Opening June 13 at 10am. Staging refresh (Sydney visuals + CHOMPS band) in progress under 🤖 Grok — see Staging Refresh card.</div>
       <div class="card-meta">
         <span class="tag">HTML/CSS/JS</span>
         <span class="tag">GitHub Pages</span>
