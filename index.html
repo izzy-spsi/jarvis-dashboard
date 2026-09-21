@@ -365,6 +365,16 @@
     }
     .filter-tab:hover { border-color: var(--border-hover); color: var(--text); }
     .filter-tab.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+    a.filter-tab {
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+    }
+    a.filter-tab.filter-jump {
+      border-color: rgba(167,139,250,0.35);
+      color: #c4b5fd;
+    }
+    a.filter-tab.filter-jump:hover { color: #fff; border-color: rgba(167,139,250,0.7); }
     .view-controls {
       margin-left: auto;
       display: flex;
@@ -664,6 +674,7 @@
     <span class="search-hint" id="searchHint">/</span>
   </div>
   <div style="display:flex;align-items:center;gap:20px;">
+    <a href="marketing.html" style="font-size:13px;font-weight:600;color:#c4b5fd;text-decoration:none;display:flex;align-items:center;gap:6px;">📣 Marketing</a>
     <a href="labs.html" style="font-size:13px;font-weight:600;color:#a78bfa;text-decoration:none;display:flex;align-items:center;gap:6px;">⚗️ Labs <span style="background:linear-gradient(135deg,#7c6af8,#a78bfa);color:white;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;">NEW</span></a>
     <button onclick="doLogout()" style="font-size:12px;font-weight:600;padding:6px 14px;border-radius:8px;border:1px solid rgba(255,255,255,0.12);background:transparent;color:#8891a4;cursor:pointer;font-family:Inter,sans-serif;transition:all 0.15s;">⎋ Logout</button>
     <button id="editModeBtn" onclick="toggleEditMode()" style="font-size:12px;font-weight:600;padding:6px 14px;border-radius:8px;border:1px solid rgba(255,255,255,0.12);background:transparent;color:#8891a4;cursor:pointer;font-family:Inter,sans-serif;transition:all 0.15s;display:flex;align-items:center;gap:6px;">&#9998; Edit</button>
@@ -717,7 +728,7 @@
   <button class="filter-tab" data-filter="ezliving">🏙️ EZLiving</button>
   <button class="filter-tab" data-filter="personal">🌏 Personal</button>
   <button class="filter-tab" data-filter="merch">🛒 Merch</button>
-  <button class="filter-tab" data-filter="marketing">📣 Marketing</button>
+  <a class="filter-tab filter-jump" href="marketing.html">📣 Marketing</a>
   <button class="filter-tab" data-filter="toolbox">🧰 Toolbox</button>
   <div class="view-controls">
     <button class="view-btn active" id="cardViewBtn" title="Card view">⊞</button>
@@ -771,19 +782,31 @@
   </div>
   <div class="grid">
 
+    <a class="card marketing" href="marketing.html">
+      <div class="card-top">
+        <div class="card-icon">📣</div>
+        <span class="badge badge-live">Board</span>
+      </div>
+      <div class="card-name">Marketing board</div>
+      <div class="card-desc">Campaign tracking moved off this ops board. Slique offboarding, Reach pilot, LACC, Halloween, Muse → CHOMPS, Community Tuesday, website + GA, creator policy, merch sell-through, and Grubhub go-live live on the Marketing page.</div>
+      <div class="card-meta">
+        <span class="tag">10 projects</span>
+        <span class="tag">See Marketing</span>
+      </div>
+      <div class="card-url">marketing.html</div>
+    </a>
+
     <a class="card marketing" href="https://geopulse-ai-production.up.railway.app/marketing-prd-v0.1.html" target="_blank">
       <div class="card-top">
         <div class="card-icon">📝</div>
         <span class="badge badge-building">PRD v0.1</span>
       </div>
       <div class="card-name">Marketing Portal — PRD</div>
-      <div class="card-desc">Full product requirements for the Marketing Portal. Covers brand management, campaign lifecycle, content calendar, multi-channel publishing, analytics, influencer tracking, and AI copy assistant.</div>
+      <div class="card-desc">Product spec stays on ops. Brand management, campaign lifecycle, content calendar, multi-channel publishing, analytics, influencer tracking, and AI copy assistant. Active campaign status is on the Marketing board.</div>
       <div class="card-meta">
-        <span class="tag">Campaigns</span>
+        <span class="tag">Product spec</span>
         <span class="tag">Content Calendar</span>
-        <span class="tag">IG / TikTok</span>
-        <span class="tag">Email / SMS</span>
-        <span class="tag">Domo Cafe</span>
+        <span class="tag">See Marketing</span>
       </div>
       <div class="card-url">geopulse-ai-production.up.railway.app/marketing-prd-v0.1.html</div>
     </a>
@@ -1201,7 +1224,7 @@
         <span class="agent-chip agent-grok">🤖 Grok</span>
       </div>
       <div class="card-name">Domo Community — Hub Mock</div>
-      <div class="card-desc">Clickable Community hub — voice “Domo Shows Up for Buena Park.” Prototype Tuesday calendar, how-it-works (code/QR → ~15% attributed qualifying F&amp;B), apply form. Public nav link hidden for publish; page still live at /community. Olympic sports lineart identified for org outreach kits.</div>
+      <div class="card-desc">Clickable Community hub — voice “Domo Shows Up for Buena Park.” Prototype Tuesday calendar, how-it-works (code/QR → ~15% attributed qualifying F&amp;B), apply form. Public nav link hidden for publish; page still live at /community. Olympic sports lineart identified for org outreach kits. Guest-facing promo kit is tracked on the Marketing board.</div>
       <div class="card-meta">
         <span class="tag">Community Tuesdays</span>
         <span class="tag">Nav hidden</span>
@@ -1552,7 +1575,7 @@
         <span class="badge badge-live">Live v1.0</span>
       </div>
       <div class="card-name">Domo Cafe — Marketing Portal PRD</div>
-      <div class="card-desc">Full PRD for Marketing Portal. Content calendar, campaigns, asset library, influencer management, email marketing, loyalty (Chomps), events, subscription box, PR, and analytics.</div>
+      <div class="card-desc">Full PRD for Marketing Portal. Content calendar, campaigns, asset library, influencer management, email marketing, loyalty (Chomps), events, subscription box, PR, and analytics. Active campaign tracking is on the Marketing board.</div>
       <div class="card-meta">
         <span class="tag">PRD</span>
         <span class="tag">Railway</span>
@@ -2590,6 +2613,7 @@
 
   // ─── VENTURE FILTER TABS ───
   document.querySelectorAll('.filter-tab').forEach(function(tab) {
+    if (!tab.dataset.filter) return;
     tab.addEventListener('click', function() {
       document.querySelectorAll('.filter-tab').forEach(function(t) { t.classList.remove('active'); });
       this.classList.add('active');
