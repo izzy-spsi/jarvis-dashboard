@@ -19,7 +19,7 @@ const corners=[[-5,7,5],[5,7,5],[5,7,-5],[-5,7,-5]], uvsets=[[[193,815],[723,815
 for(let i=0;i<4;i++){const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute([...corners[i],...corners[(i+1)%4],0,10.3,0],3));g.setAttribute('uv',new THREE.Float32BufferAttribute(uvsets[i].flatMap(([x,y])=>[x/947,1-y/923]),2));g.computeVertexNormals();const m=new THREE.Mesh(g,new THREE.MeshStandardMaterial({map:topArt,side:THREE.DoubleSide}));m.castShadow=true;roof.add(m);}
 for(const z of [-5,5])box(10,1.12,.035,0,6.55,z,red,roof);for(const x of [-5,5])box(.035,1.12,10,x,6.55,0,red,roof);
 // Printed half walls and neutral mesh above, using supplied artwork intact.
-for(const x of [-4.94,4.94]){panel(9.8,3.14,x,1.57,0,sideArt,x<0?Math.PI/2:-Math.PI/2,walls);const mesh=box(.015,3.65,9.8,x,4.97,0,mat(0xbbc0be,{transparent:true,opacity:.17}),walls);}
+for(const x of [-4.94,4.94]){panel(9.8,3.14,x,1.57,0,sideArt,x<0?-Math.PI/2:Math.PI/2,walls);const mesh=box(.015,3.65,9.8,x,4.97,0,mat(0xbbc0be,{transparent:true,opacity:.17}),walls);}
 // No rear artwork supplied: use a neutral rear wall.
 box(9.8,3.15,.02,0,1.575,-4.94,mat(0xe0e2dc),walls);box(9.8,3.65,.015,0,4.97,-4.94,mat(0xbbc0be,{transparent:true,opacity:.17}),walls);
 panel(9.8,3.1,0,1.55,4.97,frontArt,0,walls);
