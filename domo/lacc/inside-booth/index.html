@@ -1,9 +1,9 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Domo Cafe · LA Comic Con 2026 Inside Booth · v4</title>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Domo Cafe · LA Comic Con 2026 Inside Booth · v5</title>
 <style>body{margin:0;font-family:system-ui,Arial,sans-serif;background:#111;color:#eee}header{display:flex;align-items:center;gap:12px;padding:10px 16px;flex-wrap:wrap}h1{font-size:18px;margin:0}
 .grok{background:#00e5ff;color:#001a1f;font-weight:700;font-size:12px;padding:4px 10px;border-radius:999px;box-shadow:0 0 12px #00e5ff99}
 .viz-controls{display:flex;gap:6px;flex-wrap:wrap;padding:8px 16px;align-items:center}.btn{background:#2a2a2a;color:#fff;border:1px solid #444;border-radius:8px;padding:6px 12px;cursor:pointer}.btn:hover{border-color:#00e5ff}
 #booth-stage{height:calc(100vh - 170px)!important;min-height:420px}.text-small{font-size:13px;padding:6px 16px;color:#aaa}label{font-size:14px}</style></head><body>
-<header><h1>Domo Cafe · LA Comic Con 2026 · Inside Booth</h1><span class="grok" id="grok-label">🤖 v4 · Built by Grok</span><span style="font-size:13px;color:#aaa">Black foam board + black gridwall interior</span></header>
+<header><h1>Domo Cafe · LA Comic Con 2026 · Inside Booth</h1><span class="grok" id="grok-label">🤖 v5 · Built by Grok</span><span style="font-size:13px;color:#aaa">Black foam board + black gridwall interior</span></header>
 <div id="domo-booth">
  <div class="viz-controls"><button class="btn" data-view="exterior">Exterior</button><button class="btn" data-view="overhead">Overhead</button><button class="btn" data-view="walk">Walk inside</button><label class="form-check"><input class="form-check-input" type="checkbox" id="cutaway"><span class="form-check-label">Hide walls</span></label></div>
  <div id="booth-stage" style="width:100%;height:540px;touch-action:none;position:relative" role="img" aria-label="Interactive 3D model of the Domo Cafe booth"></div>
@@ -42,24 +42,38 @@ for(const t of [north,south]){t.repeat.set(.8,1);t.offset.set(.1,0);}panel(16,8,
 for(let k=-6;k<7;k+=4){box(.05,8,.06,k,4,-10.15,0xa7a7a7,walls);box(.06,8,.05,-10.15,4,k,0xa7a7a7,walls);box(.06,8,.05,10.15,4,k,0xa7a7a7,walls);}
 box(2,8,.2,-9,4,6,white,walls);box(2,8,.2,9,4,6,white,walls);box(8,8,.2,0,4,6,white,walls);
 // 4 ft openings at x=-6 and x=6.
-for(let x=-9.5;x<10;x+=1){box(1,.55,1.3,x,8.05,6,Math.floor(x+10)%2?red:white,walls);const val=box(.98,.65,.12,x,7.7,6.66,Math.floor(x+10)%2?red:white,walls);}
+{// v5: simple flat awnings (thin slanted printed panels, no layering)
+const ac=document.createElement('canvas');ac.width=1024;ac.height=64;const ax=ac.getContext('2d');for(let i=0;i<20;i++){ax.fillStyle=i%2?'#faf8f4':'#d7192d';ax.fillRect(i*51.2,0,51.2,64);}const aT=tex(ac);
+const awM=new THREE.MeshStandardMaterial({map:aT,side:THREE.DoubleSide,roughness:.8});
+const fa=new THREE.Mesh(new THREE.BoxGeometry(20,.03,1.4),awM);fa.position.set(0,7.75,6.75);fa.rotation.x=.32;fa.castShadow=true;walls.add(fa);
+const sc2=document.createElement('canvas');sc2.width=1024;sc2.height=64;const sx=sc2.getContext('2d');for(let i=0;i<16;i++){sx.fillStyle=i%2?'#faf8f4':'#d7192d';sx.fillRect(i*64,0,64,64);}const sT=tex(sc2);const sM=new THREE.MeshStandardMaterial({map:sT,side:THREE.DoubleSide,roughness:.8});
+for(const sd of [-1,1]){const g=new THREE.Mesh(new THREE.BoxGeometry(16,.03,1.2),sM);g.rotation.order='YXZ';g.rotation.y=Math.PI/2;g.rotation.x=.32;g.position.set(sd*10.75,7.4,-2);g.rotation.z=0;walls.add(g);}
+}
 panel(5.2,1.9,0,8,6.76,logoTex(820,300),0,walls);
 panel(2.8,.45,-6,7.1,6.15,label('ENTRANCE',512,100,'#fffaf4','#805034'),0,walls);panel(2.8,.45,6,7.1,6.15,label('EXIT',512,100,'#fffaf4','#805034'),0,walls);
 function domo(x,y,z,s=1,parent=scene){const g=new THREE.Group();g.position.set(x,y,z);parent.add(g);box(1.8*s,2.05*s,.85*s,0,1.25*s,0,brown,g);ball(.13*s,-.5*s,1.8*s,.46*s,0x17110c,g);ball(.13*s,.5*s,1.8*s,.46*s,0x17110c,g);box(1.15*s,.85*s,.04*s,0,1.03*s,.45*s,0x24140d,g);box(1.02*s,.72*s,.05*s,0,1.03*s,.48*s,red,g);
 for(let i=0;i<4;i++)for(let top of [true,false]){const shape=new THREE.Shape();shape.moveTo(-.12*s,0);shape.lineTo(.12*s,0);shape.lineTo(0,(top?-.19:.19)*s);shape.closePath();const tooth=new THREE.Mesh(new THREE.ShapeGeometry(shape),mat(white));tooth.position.set((i-1.5)*.25*s,(top?1.37:.69)*s,.52*s);g.add(tooth);}
 box(.5*s,.45*s,.65*s,-.49*s,.1*s,.02*s,brown,g);box(.5*s,.45*s,.65*s,.49*s,.1*s,.02*s,brown,g);ball(.34*s,-1.03*s,1*s,0,brown,g);ball(.34*s,1.03*s,1*s,0,brown,g);return g;}
 // Rounded entrance head and resting hands, matching the supplied reference.
-const head=new THREE.Group();head.position.set(-6,7.95,6.1);walls.add(head);
-function headShape(inset=0){const sh=new THREE.Shape();sh.moveTo(-2.55+inset,0);sh.lineTo(-2.55+inset,1.8);sh.quadraticCurveTo(-2.55+inset,4.15-inset,-.7,4.15-inset);sh.lineTo(.7,4.15-inset);sh.quadraticCurveTo(2.55-inset,4.15-inset,2.55-inset,1.8);sh.lineTo(2.55-inset,0);sh.closePath();return sh;}
-const outline=new THREE.Mesh(new THREE.ExtrudeGeometry(headShape(),{depth:.48,bevelEnabled:false,curveSegments:30}),mat(0x100b08));head.add(outline);
-const face=new THREE.Mesh(new THREE.ExtrudeGeometry(headShape(.09),{depth:.5,bevelEnabled:false,curveSegments:30}),mat(brown));face.position.z=.02;head.add(face);
-for(let x of [-1.45,1.45]){const eye=ball(.28,x,3.05,.57,0x080604,head);eye.scale.z=.22;const arm=ball(.85,x*1.75,.12,.54,0x120b07,head);arm.scale.set(1,.48,.55);const hand=ball(.75,x*1.75,.14,.63,brown,head);hand.scale.set(1,.47,.5);}
-box(3.18,1.9,.08,0,.93,.57,0x100b08,head);box(2.94,1.72,.08,0,.86,.63,red,head);
-for(let i=0;i<4;i++){const sh=new THREE.Shape();sh.moveTo(-.33,0);sh.lineTo(.33,0);sh.lineTo(0,-.35);sh.closePath();const tooth=new THREE.Mesh(new THREE.ShapeGeometry(sh),mat(white));tooth.position.set((i-1.5)*.7,1.67,.69);head.add(tooth);}
+const head=new THREE.Group();head.position.set(-6,7.95,6.12);walls.add(head);
+// v5: FLAT die-cut foam-board Domo, 1 in thick, printed front, brown back.
+function headShape(){const sh=new THREE.Shape();sh.moveTo(-3.3,-.3);sh.quadraticCurveTo(-3.4,.55,-2.55,.6);sh.lineTo(-2.55,1.8);sh.quadraticCurveTo(-2.55,4.15,-.7,4.15);sh.lineTo(.7,4.15);sh.quadraticCurveTo(2.55,4.15,2.55,1.8);sh.lineTo(2.55,.6);sh.quadraticCurveTo(3.4,.55,3.3,-.3);sh.closePath();return sh;}
+{const T1=1/12;const slab=new THREE.Mesh(new THREE.ExtrudeGeometry(headShape(),{depth:T1,bevelEnabled:false,curveSegments:30}),mat(0x6b4128));slab.castShadow=true;head.add(slab);
+const dc=document.createElement('canvas');dc.width=1024;dc.height=720;const d=dc.getContext('2d');const X=u=>(u+3.4)/6.8*1024,Y=v=>(4.2-v)/4.5*720;
+d.fillStyle='#805034';d.fillRect(0,0,1024,720);d.fillStyle='#100b08';d.fillRect(X(-3.4),Y(.6),1024,720);
+d.fillStyle='#805034';for(const x of[-1.75,1.75]){d.beginPath();d.ellipse(X(x*1.75/1.75*1.75/1.75*1),Y(.12),.72/6.8*1024*1.1,.36/4.5*720,0,0,7);d.fill();}
+d.fillStyle='#100b08';for(const x of[-1.45,1.45]){d.beginPath();d.arc(X(x),Y(3.05),.28/6.8*1024,0,7);d.fill();}
+d.fillRect(X(-1.59),Y(1.88),3.18/6.8*1024,1.9/4.5*720);d.fillStyle='#d7192d';d.fillRect(X(-1.47),Y(1.72),2.94/6.8*1024,1.72/4.5*720);
+d.fillStyle='#fff';for(let i=0;i<4;i++){const cx=(i-1.5)*.7;d.beginPath();d.moveTo(X(cx-.33),Y(1.72));d.lineTo(X(cx+.33),Y(1.72));d.lineTo(X(cx),Y(1.37));d.fill();}
+for(let i=0;i<4;i++){const cx=(i-1.5)*.7;d.beginPath();d.moveTo(X(cx-.33),Y(0));d.lineTo(X(cx+.33),Y(0));d.lineTo(X(cx),Y(.35));d.fill();}
+d.strokeStyle='#100b08';d.lineWidth=10;d.strokeRect(5,5,1014,710);
+const fg=new THREE.ShapeGeometry(headShape(),30);const uv=fg.attributes.uv,p=fg.attributes.position;for(let i=0;i<uv.count;i++)uv.setXY(i,(p.getX(i)+3.4)/6.8,(p.getY(i)+.3)/4.5);
+const front=new THREE.Mesh(fg,new THREE.MeshStandardMaterial({map:tex(dc),roughness:.7}));front.position.z=T1+.003;head.add(front);}
 
-box(3.4,3.8,.08,0,4.25,6.17,0xb99567,walls);box(3.1,3.5,.09,0,4.25,6.23,0xc8e9f4,walls);box(.1,3.5,.12,0,4.25,6.3,0xb99567,walls);box(3.1,.1,.12,0,4.25,6.3,0xb99567,walls);
-for(let x of [-1.3,1.3]){box(.55,3.8,.14,x,4.25,6.35,0xf2dfb9,walls);}
-
+{// v5: window + trim are PRINTED on the flat foam-board front wall (no relief)
+const wc=document.createElement('canvas');wc.width=512;wc.height=572;const w=wc.getContext('2d');w.fillStyle='#b99567';w.fillRect(0,0,512,572);const g=w.createLinearGradient(0,0,512,572);g.addColorStop(0,'#d9f1fa');g.addColorStop(1,'#a9d4e6');w.fillStyle=g;w.fillRect(23,23,466,526);
+w.fillStyle='rgba(255,255,255,.35)';w.beginPath();w.moveTo(60,60);w.lineTo(180,60);w.lineTo(60,220);w.fill();w.fillStyle='#b99567';w.fillRect(248,23,16,526);w.fillRect(23,278,466,16);w.fillStyle='#f2dfb9';w.fillRect(0,0,30,572);w.fillRect(482,0,30,572);
+panel(3.4,3.8,0,4.25,6.105,tex(wc),0,walls);panel(.55,3.8,-1.3,4.25,6.106,label('',16,16,'#f2dfb9','#f2dfb9'),0,walls);panel(.55,3.8,1.3,4.25,6.106,label('',16,16,'#f2dfb9','#f2dfb9'),0,walls);}
 // Checkout and backstock at the inside front.
 box(5,3,1.8,0,1.5,1.2,red);box(5.3,.15,2,0,3.08,1.2,0x322920);panel(3.6,1.3,0,1.8,2.12,logoTex(720,260));
 box(1,.12,.7,1.1,3.25,1.1,0x202020);box(.65,.65,.1,1.1,3.65,.9,0x252525);
