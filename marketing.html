@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Marketing — Jarvis HQ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0f;
+      --surface: #111118;
+      --surface2: #16161f;
+      --border: rgba(255,255,255,0.07);
+      --border-hover: rgba(255,255,255,0.15);
+      --text: #f0f0f5;
+      --muted: #888899;
+      --accent: #7c6af8;
+      --green: #22c55e;
+      --yellow: #eab308;
+      --red: #ef4444;
+      --blue: #3b82f6;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 0 0 80px;
+    }
+
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 24px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      background: rgba(10,10,15,0.92);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+      flex-shrink: 0;
+    }
+    .logo-icon {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, #7c6af8, #a78bfa);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    .logo-text { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; }
+    .logo-sub { font-size: 12px; color: var(--muted); font-weight: 400; margin-top: 1px; }
+
+    .search-wrap { position: relative; flex: 1; max-width: 340px; }
+    .search-input {
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 14px 8px 34px;
+      color: var(--text);
+      font-size: 13px;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .search-input:focus { border-color: var(--accent); background: rgba(124,106,248,0.06); }
+    .search-input::placeholder { color: var(--muted); }
+    .search-icon {
+      position: absolute;
+      left: 10px; top: 50%; transform: translateY(-50%);
+      font-size: 13px; opacity: 0.35; pointer-events: none;
+    }
+    .search-hint {
+      position: absolute;
+      right: 10px; top: 50%; transform: translateY(-50%);
+      font-size: 10px; color: var(--muted); opacity: 0.4;
+      pointer-events: none;
+    }
+
+    .header-actions { display: flex; align-items: center; gap: 16px; }
+    .board-nav { display: flex; gap: 6px; align-items: center; }
+    .board-nav a {
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 5px 13px;
+      white-space: nowrap;
+      transition: all 0.15s;
+    }
+    .board-nav a:hover { color: var(--text); border-color: var(--border-hover); }
+    .board-nav a.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .header-time { font-size: 13px; color: var(--muted); white-space: nowrap; }
+
+    .hero {
+      padding: 60px 40px 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .hero h1 {
+      font-size: 42px;
+      font-weight: 900;
+      letter-spacing: -1.5px;
+      line-height: 1.1;
+      background: linear-gradient(135deg, #fff 30%, #888);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero p {
+      font-size: 16px;
+      color: var(--muted);
+      margin-top: 12px;
+      max-width: 680px;
+      line-height: 1.5;
+    }
+
+    .stats {
+      max-width: 1200px;
+      margin: 0 auto 48px;
+      padding: 0 40px;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .stat {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .stat-num { font-size: 22px; font-weight: 800; }
+    .stat-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+
+    .filter-bar {
+      max-width: 1200px;
+      margin: -16px auto 32px;
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .filter-tab {
+      padding: 5px 13px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .filter-tab:hover { border-color: var(--border-hover); color: var(--text); }
+    .filter-tab.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .filter-tab.grok-tab { border-color: rgba(34,211,238,0.35); color: #22d3ee; }
+    .filter-tab.grok-tab.active { background: rgba(34,211,238,0.16); border-color: #22d3ee; color: #22d3ee; }
+
+    .section {
+      max-width: 1200px;
+      margin: 0 auto 48px;
+      padding: 0 40px;
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .section-title {
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+    }
+    .section-line { flex: 1; height: 1px; background: var(--border); }
+    .section-note {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 16px;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.02), transparent);
+      pointer-events: none;
+    }
+    .card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+    }
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .card-icon {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+    .marketing .card-icon { background: rgba(99,102,241,0.15); }
+    .badge-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+    .badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .badge-live { background: rgba(34,197,94,0.15); color: #22c55e; }
+    .badge-building { background: rgba(234,179,8,0.15); color: #eab308; }
+    .badge-planning { background: rgba(59,130,246,0.15); color: #60a5fa; }
+    .agent-chip {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 10px; font-weight: 700; letter-spacing: 0.3px;
+      padding: 2px 8px; border-radius: 999px;
+      border: 1px solid transparent; white-space: nowrap;
+    }
+    .agent-chip.agent-grok {
+      background: rgba(34,211,238,0.12);
+      color: #22d3ee;
+      border-color: rgba(34,211,238,0.35);
+    }
+    .card.grok {
+      border-left: 3px solid #22d3ee;
+      box-shadow: 0 0 0 1px rgba(34,211,238,0.08);
+    }
+    .card.grok:hover {
+      box-shadow: 0 8px 28px rgba(34,211,238,0.12), 0 0 0 1px rgba(34,211,238,0.2);
+    }
+    .card-name { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; }
+    .card-desc { font-size: 13px; color: var(--muted); line-height: 1.5; overflow-wrap: anywhere; }
+    .card-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .card-list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+    .card-list li.is-done { color: #4ade80; }
+    .card-list li.is-open { color: #facc15; }
+    .card-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+    .tag {
+      font-size: 11px;
+      color: var(--muted);
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+    .card-url {
+      font-size: 12px;
+      color: var(--accent);
+      margin-top: auto;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 4px;
+      opacity: 0.8;
+      overflow-wrap: anywhere;
+    }
+    .card-url a { color: var(--accent); text-decoration: none; }
+    .card-url a:hover { text-decoration: underline; }
+    a.card .card-url::after { content: '↗'; font-size: 11px; }
+    .card:not([href]) { cursor: default; }
+    .card:not([href]):hover { transform: none; box-shadow: none; }
+    .card.grok:not([href]):hover { box-shadow: 0 0 0 1px rgba(34,211,238,0.08); }
+
+    .card-logo-banner {
+      background: #fff;
+      border-radius: 12px;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 88px;
+      position: relative;
+      z-index: 1;
+    }
+    .card-logo-banner img {
+      height: 44px;
+      width: auto;
+      max-width: 100%;
+      display: block;
+    }
+
+    .card.hidden { display: none !important; }
+    #no-results { display: none; text-align: center; padding: 80px 40px; color: var(--muted); font-size: 15px; }
+    #no-results.visible { display: block; }
+
+    .pin-btn {
+      position: absolute;
+      top: 10px; right: 10px;
+      width: 26px; height: 26px;
+      border-radius: 7px;
+      border: none;
+      background: transparent;
+      color: rgba(255,255,255,0.18);
+      font-size: 12px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.15s;
+      z-index: 3;
+      opacity: 0;
+    }
+    .card:hover .pin-btn { opacity: 1; }
+    .pin-btn:hover { color: #eab308; background: rgba(234,179,8,0.12); }
+    .card.pinned .pin-btn { color: #eab308; opacity: 1; }
+    .card.has-logo .pin-btn { color: rgba(255,255,255,0.55); background: rgba(10,10,15,0.55); }
+    .card.has-logo.pinned .pin-btn,
+    .card.has-logo .pin-btn:hover { color: #eab308; background: rgba(10,10,15,0.72); }
+
+    #pinned-section {
+      max-width: 1200px;
+      margin: 0 auto 24px;
+      padding: 0 40px;
+      display: none;
+    }
+    #pinned-section.has-pins { display: block; }
+    .pinned-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+    .pinned-title {
+      font-size: 12px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; color: #eab308; opacity: 0.85; white-space: nowrap;
+    }
+    .pinned-line { flex: 1; height: 1px; background: rgba(234,179,8,0.18); }
+    #pinned-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 14px;
+    }
+
+    .content-note {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+    .content-note div {
+      background: rgba(124,106,248,0.06);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 10px 10px 0;
+      padding: 14px 16px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+    .content-note strong { color: var(--text); font-weight: 600; }
+
+    footer {
+      max-width: 1200px;
+      margin: 60px auto 0;
+      padding: 24px 40px 0;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    footer p { font-size: 12px; color: var(--muted); }
+    footer a { color: #c4b5fd; text-decoration: none; font-weight: 600; }
+    footer a:hover { color: #fff; }
+
+    @media (max-width: 768px) {
+      header { padding: 12px 16px; flex-wrap: wrap; gap: 10px; }
+      .logo-sub { display: none; }
+      .logo-text { font-size: 16px; }
+      .logo-icon { width: 30px; height: 30px; font-size: 15px; }
+      .search-wrap { order: 3; max-width: 100%; width: 100%; flex: none; }
+      .search-hint { display: none !important; }
+      .header-time { display: none; }
+      .hero { padding: 28px 16px 20px; }
+      .hero h1 { font-size: 26px; letter-spacing: -0.8px; }
+      .hero p { font-size: 14px; }
+      .stats {
+        padding: 0 16px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-bottom: 24px;
+      }
+      .stat { padding: 12px 16px; }
+      .stat-num { font-size: 20px; }
+      .filter-bar {
+        padding: 0 16px;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        scrollbar-width: none;
+        margin-bottom: 20px;
+      }
+      .filter-bar::-webkit-scrollbar { display: none; }
+      .filter-tab { flex-shrink: 0; }
+      #pinned-section, .section, .content-note { padding-left: 16px; padding-right: 16px; }
+      #pinned-grid, .grid { grid-template-columns: 1fr; }
+      .card { padding: 16px; border-radius: 12px; }
+      footer { padding: 20px 16px 0; flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">
+    <div class="logo-icon">⚙️</div>
+    <div>
+      <div class="logo-text">Jarvis HQ</div>
+      <div class="logo-sub">Marketing · Izzy Aala</div>
+    </div>
+  </a>
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input class="search-input" id="searchInput" type="text" placeholder="Search marketing projects..." autocomplete="off" />
+    <span class="search-hint" id="searchHint">/</span>
+  </div>
+  <div class="header-actions">
+    <nav class="board-nav" aria-label="Boards">
+      <a href="index.html">Main</a>
+      <a href="marketing.html" class="active" aria-current="page">Marketing</a>
+      <a href="labs.html">Labs</a>
+    </nav>
+    <div class="header-time" id="clock"></div>
+  </div>
+</header>
+
+<div class="hero">
+  <h1>Marketing</h1>
+  <p>Domo Cafe campaigns, promo, and measurement. Ops, hiring, Toast ACP, legal, and product builds stay on the main board.</p>
+</div>
+
+<div class="stats">
+  <div class="stat">
+    <div>
+      <div class="stat-num" id="stat-projects" style="color:#fff">10</div>
+      <div class="stat-label">Projects</div>
+    </div>
+  </div>
+  <div class="stat">
+    <div>
+      <div class="stat-num" id="stat-grok" style="color:#22d3ee">8</div>
+      <div class="stat-label">Grok follow-through</div>
+    </div>
+  </div>
+  <div class="stat">
+    <div>
+      <div class="stat-num" id="stat-motion" style="color:#eab308">6</div>
+      <div class="stat-label">In motion</div>
+    </div>
+  </div>
+  <div class="stat">
+    <div>
+      <div class="stat-num" id="stat-needs" style="color:#60a5fa">4</div>
+      <div class="stat-label">Needs input</div>
+    </div>
+  </div>
+</div>
+
+<div class="filter-bar">
+  <button class="filter-tab active" data-filter="all">All</button>
+  <button class="filter-tab grok-tab" data-filter="grok">🤖 Grok</button>
+  <button class="filter-tab" data-filter="status-motion">In motion</button>
+  <button class="filter-tab" data-filter="status-needs">Needs input</button>
+</div>
+
+<div id="pinned-section">
+  <div class="pinned-header">
+    <div class="pinned-title">⭐ Pinned</div>
+    <div class="pinned-line"></div>
+  </div>
+  <div id="pinned-grid"></div>
+</div>
+
+<div id="no-results">No marketing projects match your search.</div>
+
+<div class="section" id="campaigns">
+  <div class="section-header">
+    <div class="section-title">📣 Campaigns</div>
+    <div class="section-line"></div>
+  </div>
+  <p class="section-note">Add the next project as another card in this grid. Grok chip means Reggie owns follow-through.</p>
+  <div class="grid">
+
+    <div class="card marketing grok status-motion" id="slique">
+      <div class="card-top">
+        <div class="card-icon">📣</div>
+        <div class="badge-row">
+          <span class="badge badge-building">Offboarding</span>
+          <span class="agent-chip agent-grok">🤖 Grok</span>
+        </div>
+      </div>
+      <div class="card-name">Slique offboarding</div>
+      <div class="card-desc">Notice given. Alyssa confirmed full October strategy, calendar, and community management through Oct 30, 2026. Prior retainer was about $895/mo. Outcome: a clean handoff and no dark social gap.</div>
+      <div class="card-meta">
+        <span class="tag">Izzy + Reggie</span>
+        <span class="tag">Through Oct 30, 2026</span>
+        <span class="tag">~$895/mo prior</span>
+      </div>
+    </div>
+
+    <a class="card marketing grok status-needs" id="reach" href="https://reachmediala.com" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-icon">📡</div>
+        <div class="badge-row">
+          <span class="badge badge-planning">Needs SOW</span>
+          <span class="agent-chip agent-grok">🤖 Grok</span>
+        </div>
+      </div>
+      <div class="card-name">Reach Media 90-day pilot</div>
+      <div class="card-desc">Izzy is open to the pilot as the Slique replacement. Need a written SOW: base price, deliverables, Toast KPIs, footage ownership, and kill terms. Align the start with Slique’s last day. Contact: Alex Lin, alexlin@reachmediala.com.</div>
+      <div class="card-meta">
+        <span class="tag">Izzy decision</span>
+        <span class="tag">Reggie draft / track</span>
+        <span class="tag">Start ~Oct 30</span>
+      </div>
+      <div class="card-url">reachmediala.com</div>
+    </a>
+
+    <div class="card marketing grok status-motion" id="lacc">
+      <div class="card-top">
+        <div class="card-icon">🎪</div>
+        <div class="badge-row">
+          <span class="badge badge-building">In flight</span>
+          <span class="agent-chip agent-grok">🤖 Grok</span>
+        </div>
+      </div>
+      <div class="card-name">LACC awareness / booth promo</div>
+      <div class="card-desc">Food booth secured via Otaku/Johnny. Exhibitor application received. Show is Oct 31. Promo and the mascot (Chimera/Matt package) are in flight.</div>
+      <div class="card-meta">
+        <span class="tag">Hailey + Izzy</span>
+        <span class="tag">Reggie support</span>
+        <span class="tag">Oct 31</span>
+      </div>
+    </div>
+
+    <div class="card marketing status-motion" id="halloween">
+      <div class="card-top">
+        <div class="card-icon">🎃</div>
+        <div class="badge-row">
+          <span class="badge badge-building">Open tasks</span>
+        </div>
+      </div>
+      <div class="card-name">Halloween cafe marketing</div>
+      <div class="card-desc">Deco and shirt tasks are still open. The Chimera mascot call is tied to the Oct 31 show and cafe Halloween.</div>
+      <div class="card-meta">
+        <span class="tag">Managers + Izzy</span>
+        <span class="tag">Oct 31</span>
+      </div>
+    </div>
+
+    <a class="card marketing grok status-motion" id="muse" href="https://web-production-876e2.up.railway.app" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-icon">🦴</div>
+        <div class="badge-row">
+          <span class="badge badge-live">Locked v1</span>
+          <span class="agent-chip agent-grok">🤖 Grok</span>
+        </div>
+      </div>
+      <div class="card-name">Muse → CHOMPS social earn</div>
+      <div class="card-desc">Locked v1: 50 CHOMPS for an approved #domokuncafe post. Izzy and managers approve. Staging is live. Candidates come in on POST /api/muse/candidates.</div>
+      <div class="card-meta">
+        <span class="tag">Reggie + Muse (Meta)</span>
+        <span class="tag">50 CHOMPS</span>
+        <span class="tag">#domokuncafe</span>
+      </div>
+      <div class="card-url">web-production-876e2.up.railway.app</div>
+    </a>
+
+    <div class="card marketing grok status-needs" id="community-tuesday">
+      <div class="card-top">
+        <div class="card-icon">🤝</div>
+        <div class="badge-row">
+          <span class="badge badge-planning">Needs assets</span>
+          <span class="agent-chip agent-grok">🤖 Grok</span>
+        </div>
+      </div>
+      <div class="card-name">Community Tuesday marketing kit</div>
+      <div class="card-desc">Fundraiser program and request flow are built. Still need the guest-facing promo assets, QR, and share pack.</div>
+      <div class="card-meta">
+        <span class="tag">Reggie / Community</span>
+        <span class="tag">QR + share pack</span>
+      </div>
+    </div>
+
+    <a class="card marketing grok status-motion" id="ga" href="https://www.domokuncafe.com" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-icon">📊</div>
+        <div class="badge-row">
+          <span class="badge badge-live">GA4 live</span>
+          <span class="agent-chip agent-grok">🤖 Grok</span>
+        </div>
+      </div>
+      <div class="card-name">Website + GA</div>
+      <div class="card-desc">www.domokuncafe.com is live with the CHOMPS refresh. Google Analytics 4 measurement ID G-MYQJZDB2MR is on the live site via /ga4.js (basic page views). Apex HTTPS still needs a durable fix.</div>
+      <div class="card-meta">
+        <span class="tag">Google Analytics 4</span>
+        <span class="tag">G-MYQJZDB2MR</span>
+        <span class="tag">/ga4.js</span>
+        <span class="tag">Apex HTTPS open</span>
+        <span class="tag">Reggie + OpenClaw Jarvis</span>
+      </div>
+      <div class="card-url">www.domokuncafe.com</div>
+    </a>
+
+    <div class="card marketing grok status-needs" id="creator-policy">
+      <div class="card-top">
+        <div class="card-icon">✍️</div>
+        <div class="badge-row">
+          <span class="badge badge-planning">Needs brief</span>
+          <span class="agent-chip agent-grok">🤖 Grok</span>
+        </div>
+      </div>
+      <div class="card-name">Creator / collab policy</div>
+      <div class="card-desc">Needed so marketing@ is not all ignore. A short yes/no brief that covers paid versus meal.</div>
+      <div class="card-meta">
+        <span class="tag">Izzy lock</span>
+        <span class="tag">Reggie draft</span>
+        <span class="tag">Paid vs meal</span>
+      </div>
+    </div>
+
+    <div class="card marketing status-needs" id="merch">
+      <div class="card-top">
+        <div class="card-icon">🛍️</div>
+        <div class="badge-row">
+          <span class="badge badge-planning">Planned</span>
+        </div>
+      </div>
+      <div class="card-name">Merch / WMYH + LACC sell-through</div>
+      <div class="card-desc">Catalog and first-buy mix are planned (about $1.8k in Domo pins and charms). Account path runs through Amy / Eddison.</div>
+      <div class="card-meta">
+        <span class="tag">Amy + Izzy</span>
+        <span class="tag">~$1.8k first buy</span>
+        <span class="tag">WMYH + LACC</span>
+      </div>
+    </div>
+
+    <div class="card marketing grok status-motion has-logo" id="grubhub">
+      <div class="card-logo-banner">
+        <img src="https://media-cdn.grubhub.com/grubhub-assets/image/upload/v1744684421/wonderful/grubhub/GH_Logotype_Rebrand_Orange_RGB.svg" alt="Grubhub" width="209" height="44" />
+      </div>
+      <div class="card-top">
+        <div class="badge-row" style="justify-content:flex-start;">
+          <span class="badge badge-building">Signed · Onboarding</span>
+          <span class="agent-chip agent-grok">🤖 Grok</span>
+        </div>
+      </div>
+      <div class="card-name">Grubhub — Domo Cafe go-live</div>
+      <div class="card-desc">Signed / onboarding — not live yet. CID / store id 15664952. W-9 and direct deposit are done (2026-09-21). Still open: Toast POS integration, then a test order and go-live. Create user fails (“failed / try again later”) for this CID. Merchant Care email sent 2026-09-21 from izzy@ to restaurants@grubhub.com. Waiting on a Grubhub reply. Marketplace Agreement signed 2026-09-18. Fulfillment: Grubhub Delivery. Pickup: yes. POS: Toast. Free trial: 30 days from activation. Delivery commission 30%. Pickup commission 20%. Processing: 3.05% + $0.30 per transaction. Either party can cancel with 3 days written notice. Confirm with Lori: 30-day 0% commission trial and $1k promo credit from an earlier sales thread.</div>
+      <div>
+        <div class="card-label">Go-live checklist</div>
+        <ol class="card-list">
+          <li class="is-open">Create user — fails (“failed / try again later”) for CID 15664952. Merchant Care email sent 2026-09-21 from izzy@ to restaurants@grubhub.com. Waiting on Grubhub reply.</li>
+          <li>Merchant Portal — username is the signup email; Reset Password on a computer</li>
+          <li class="is-done">W-9 + payment / direct deposit — done 2026-09-21</li>
+          <li>Store hours</li>
+          <li class="is-open">Toast POS integration — still open (Emiliano)</li>
+          <li>Test order → go live, after Toast</li>
+        </ol>
+      </div>
+      <div class="card-desc">Lori Walker (813) 605-7311 x1523. Activations: activations@grubhub.com / 883-997-5197. Merchant Care: 877-799-0790. More orders: moreorders@grubhub.com / 1-877-805-5081. POS help: pos-help@grubhub.com. Menus: menus@grubhub.com.</div>
+      <div class="card-meta">
+        <span class="tag">CID 15664952</span>
+        <span class="tag">Emiliano (Toast)</span>
+        <span class="tag">Izzy</span>
+        <span class="tag">Lori Walker (GH)</span>
+        <span class="tag">W-9 done</span>
+        <span class="tag">Toast POS open</span>
+        <span class="tag">Waiting on Grubhub</span>
+      </div>
+      <div class="card-url">
+        <a href="https://restaurant.grubhub.com" target="_blank" rel="noopener">restaurant.grubhub.com</a>
+        <span aria-hidden="true">·</span>
+        <a href="https://get.grubhub.com/legal/restaurant-terms" target="_blank" rel="noopener">Marketplace terms</a>
+      </div>
+    </div>
+
+    <!-- Next marketing card: copy a .card block into this grid. -->
+
+  </div>
+</div>
+
+<div class="content-note">
+  <div>
+    <strong>Still thin — Reggie / Izzy.</strong>
+    Reach still needs the written SOW. LACC promo and the Chimera/Matt package need creative detail. Halloween deco and shirt tasks are not itemized. Community Tuesday still needs the QR and share pack. The creator yes/no brief is not drafted. Merch still needs the catalog and first-buy mix spelled out. Grubhub W-9 and direct deposit are done (CID 15664952). Create user fails (“failed / try again later”); Merchant Care email went to restaurants@grubhub.com on 2026-09-21 and the reply is still open. Toast POS integration is still open, then a test order and go-live. The 0% trial and $1k promo credit are not confirmed with Lori. Slique handoff files are not attached here.
+  </div>
+</div>
+
+<footer>
+  <p>⚙️ Jarvis HQ — Marketing board · <a href="index.html">Back to main</a></p>
+  <p id="build-date">Updated Sep 21, 2026</p>
+</footer>
+
+<script>
+  function updateClock() {
+    var now = new Date();
+    var clock = document.getElementById('clock');
+    if (!clock) return;
+    clock.textContent = now.toLocaleString('en-US', {
+      weekday: 'short', month: 'short', day: 'numeric',
+      hour: 'numeric', minute: '2-digit', timeZoneName: 'short',
+      timeZone: 'America/Los_Angeles'
+    });
+  }
+  updateClock();
+  setInterval(updateClock, 60000);
+
+  (function updateStats() {
+    var cards = document.querySelectorAll('#campaigns .card');
+    document.getElementById('stat-projects').textContent = cards.length;
+    document.getElementById('stat-grok').textContent = document.querySelectorAll('#campaigns .card.grok').length;
+    document.getElementById('stat-motion').textContent = document.querySelectorAll('#campaigns .card.status-motion').length;
+    document.getElementById('stat-needs').textContent = document.querySelectorAll('#campaigns .card.status-needs').length;
+  })();
+
+  var searchInput = document.getElementById('searchInput');
+  var searchHint = document.getElementById('searchHint');
+  var activeFilter = 'all';
+
+  searchInput.addEventListener('input', function() {
+    searchHint.style.display = this.value.trim() ? 'none' : '';
+    applyFilters();
+  });
+  searchInput.addEventListener('focus', function() { searchHint.style.display = 'none'; });
+  searchInput.addEventListener('blur', function() { if (!this.value) searchHint.style.display = ''; });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === '/' && document.activeElement !== searchInput && document.activeElement.tagName !== 'INPUT') {
+      e.preventDefault();
+      searchInput.focus();
+      searchInput.select();
+    }
+    if (e.key === 'Escape' && document.activeElement === searchInput) {
+      searchInput.value = '';
+      searchHint.style.display = '';
+      applyFilters();
+      searchInput.blur();
+    }
+  });
+
+  document.querySelectorAll('.filter-tab').forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('.filter-tab').forEach(function(t) { t.classList.remove('active'); });
+      this.classList.add('active');
+      activeFilter = this.dataset.filter;
+      applyFilters();
+    });
+  });
+
+  function applyFilters() {
+    var query = searchInput.value.toLowerCase().trim();
+    var anyVisible = false;
+    document.querySelectorAll('#campaigns .card').forEach(function(card) {
+      var text = card.textContent.toLowerCase();
+      var matchQ = !query || text.indexOf(query) !== -1;
+      var matchF = activeFilter === 'all' || card.classList.contains(activeFilter);
+      if (matchQ && matchF) { card.classList.remove('hidden'); anyVisible = true; }
+      else card.classList.add('hidden');
+    });
+    document.getElementById('no-results').classList.toggle('visible', !anyVisible);
+  }
+
+  var pinnedIds = [];
+  try { pinnedIds = JSON.parse(localStorage.getItem('jhq_mkt_pins') || '[]'); } catch (e) { pinnedIds = []; }
+
+  function getCardId(card) {
+    return card.id || (card.querySelector('.card-name') ? card.querySelector('.card-name').textContent.trim() : '');
+  }
+  function savePins() { localStorage.setItem('jhq_mkt_pins', JSON.stringify(pinnedIds)); }
+
+  function addPinClone(card) {
+    var clone = card.cloneNode(true);
+    var id = getCardId(card);
+    clone.dataset.cloneFor = id;
+    clone.classList.add('pinned');
+    var pb = clone.querySelector('.pin-btn');
+    if (pb) pb.remove();
+    document.getElementById('pinned-grid').appendChild(clone);
+    document.getElementById('pinned-section').classList.add('has-pins');
+  }
+
+  function removePinClone(id) {
+    document.querySelectorAll('#pinned-grid [data-clone-for]').forEach(function(el) {
+      if (el.dataset.cloneFor === id) el.remove();
+    });
+    if (!document.querySelector('#pinned-grid > *')) {
+      document.getElementById('pinned-section').classList.remove('has-pins');
+    }
+  }
+
+  function togglePin(card) {
+    var id = getCardId(card);
+    var idx = pinnedIds.indexOf(id);
+    if (idx === -1) {
+      pinnedIds.push(id);
+      card.classList.add('pinned');
+      addPinClone(card);
+    } else {
+      pinnedIds.splice(idx, 1);
+      card.classList.remove('pinned');
+      removePinClone(id);
+    }
+    savePins();
+  }
+
+  document.querySelectorAll('#campaigns .card').forEach(function(card) {
+    var pinBtn = document.createElement('button');
+    pinBtn.className = 'pin-btn';
+    pinBtn.type = 'button';
+    pinBtn.textContent = '⭐';
+    pinBtn.title = 'Pin to top';
+    pinBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      togglePin(card);
+    });
+    card.appendChild(pinBtn);
+    if (pinnedIds.indexOf(getCardId(card)) !== -1) {
+      card.classList.add('pinned');
+      addPinClone(card);
+    }
+  });
+</script>
+
+</body>
+</html>
