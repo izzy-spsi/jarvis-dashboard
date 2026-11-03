@@ -212,11 +212,14 @@
       font-size: 17px;
       font-weight: 700;
       letter-spacing: -0.3px;
+      overflow-wrap: anywhere;
     }
     .card-desc {
       font-size: 13px;
       color: var(--muted);
       line-height: 1.5;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
     }
     .card-meta {
       display: flex;
@@ -261,6 +264,7 @@
       gap: 4px;
       opacity: 0.8;
     }
+    .card-url-text { min-width: 0; overflow-wrap: anywhere; }
     .card-url::after { content: '↗'; font-size: 11px; }
     .card:not([href]) { cursor: default; }
     .card:not([href]):hover { transform: none; }
@@ -388,6 +392,10 @@
     /* ─── COMPACT MODE ─── */
     body.compact .card-desc { display: none; }
     body.compact .card-meta { display: none; }
+    body.compact.editing .card-desc { display: block; }
+    body.compact.editing .card-meta { display: flex; }
+    body.compact .card-notes:not(.has-notes):not(.open) { display: none; }
+    body.compact.editing .card-notes { display: block; }
     body.compact .card { padding: 12px 16px; gap: 6px; }
     body.compact .card-icon { width: 30px; height: 30px; font-size: 15px; border-radius: 7px; }
     body.compact .card-name { font-size: 13px; }
@@ -456,6 +464,91 @@
     }
 
     /* ─── FILTER HELPERS ─── */
+    /* ─── EDIT + NOTES ─── */
+    .edit-hint-wrap {
+      max-width: 1200px;
+      margin: -8px auto 18px;
+      padding: 0 40px;
+    }
+    .edit-hint {
+      background: rgba(124,106,248,0.1);
+      border: 1px solid rgba(124,106,248,0.28);
+      color: #ddd8ff;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    body.editing .card { cursor: default; }
+    body.editing .card:hover { transform: none; }
+    body.editing .jhq-field {
+      box-shadow: inset 0 0 0 1px rgba(124,106,248,0.5);
+      border-radius: 4px;
+      cursor: text;
+    }
+    .jhq-field[contenteditable="true"]:focus {
+      box-shadow: inset 0 0 0 1px #7c6af8;
+      background: rgba(124,106,248,0.08);
+    }
+    .card-notes { margin-top: 2px; }
+    .card-notes [hidden] { display: none !important; }
+    .card-notes-toggle {
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 600;
+      line-height: 1.2;
+      padding: 6px 2px 2px;
+      cursor: pointer;
+      letter-spacing: 0.01em;
+    }
+    .card-notes-toggle:hover { color: #c4b5fd; }
+    .card-notes-editor { display: flex; flex-direction: column; gap: 4px; }
+    .card-notes-label {
+      display: block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #a78bfa;
+      margin-bottom: 3px;
+    }
+    .card-notes-preview {
+      font-size: 12px;
+      line-height: 1.45;
+      color: #d8d8e6;
+      background: rgba(124,106,248,0.07);
+      border: 1px solid rgba(124,106,248,0.22);
+      border-radius: 8px;
+      padding: 8px 10px;
+      cursor: text;
+      max-height: 7.2em;
+      overflow: auto;
+    }
+    .card-notes-preview:hover { border-color: rgba(124,106,248,0.5); }
+    .card-notes-text { white-space: pre-wrap; overflow-wrap: anywhere; }
+    .card-notes-input {
+      width: 100%;
+      min-height: 68px;
+      max-height: 200px;
+      resize: vertical;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(124,106,248,0.4);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 13px;
+      line-height: 1.45;
+      padding: 8px 10px;
+      outline: none;
+    }
+    .card-notes-input:focus { border-color: #7c6af8; background: rgba(124,106,248,0.06); }
+    .card-notes-status { font-size: 10px; color: var(--green); min-height: 0; }
+    body.compact .card-notes-preview { max-height: 3.2em; font-size: 11px; padding: 6px 8px; }
+    body.compact .card-notes-input { min-height: 52px; }
+
     .card.hidden { display: none !important; }
     .venture-group.vg-hidden { display: none !important; }
     .venture-cards.vc-hidden { display: none !important; }
@@ -583,6 +676,8 @@
       .pin-btn { opacity: 0.4; }
       .card.pinned .pin-btn { opacity: 1; }
       .copy-url-btn { opacity: 0.5; }
+      .edit-hint-wrap { padding: 0 16px; }
+      .card-notes-input { font-size: 16px; }
 
       /* Section headers: bigger tap targets */
       .section-header { padding: 6px 0; }
@@ -666,7 +761,7 @@
   <div style="display:flex;align-items:center;gap:20px;">
     <a href="labs.html" style="font-size:13px;font-weight:600;color:#a78bfa;text-decoration:none;display:flex;align-items:center;gap:6px;">⚗️ Labs <span style="background:linear-gradient(135deg,#7c6af8,#a78bfa);color:white;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;">NEW</span></a>
     <button onclick="doLogout()" style="font-size:12px;font-weight:600;padding:6px 14px;border-radius:8px;border:1px solid rgba(255,255,255,0.12);background:transparent;color:#8891a4;cursor:pointer;font-family:Inter,sans-serif;transition:all 0.15s;">⎋ Logout</button>
-    <button id="editModeBtn" onclick="toggleEditMode()" style="font-size:12px;font-weight:600;padding:6px 14px;border-radius:8px;border:1px solid rgba(255,255,255,0.12);background:transparent;color:#8891a4;cursor:pointer;font-family:Inter,sans-serif;transition:all 0.15s;display:flex;align-items:center;gap:6px;">&#9998; Edit</button>
+    <button type="button" id="editModeBtn" onclick="toggleEditMode()" title="Edit card text and notes" aria-pressed="false" style="font-size:12px;font-weight:600;padding:6px 14px;border-radius:8px;border:1px solid rgba(255,255,255,0.12);background:transparent;color:#8891a4;cursor:pointer;font-family:Inter,sans-serif;transition:all 0.15s;display:flex;align-items:center;gap:6px;">&#9998; Edit</button>
     <div class="header-time" id="clock"></div>
   </div>
 </header>
@@ -723,6 +818,10 @@
     <button class="view-btn active" id="cardViewBtn" title="Card view">⊞</button>
     <button class="view-btn" id="compactViewBtn" title="Compact view">☰</button>
   </div>
+</div>
+
+<div class="edit-hint-wrap" id="editHint" hidden>
+  <div class="edit-hint">Editing saves in this browser. Click a title, status, description, tag, or link label. Add a note at the bottom of a card. Card links pause until you press Done.</div>
 </div>
 
 <!-- PINNED -->
@@ -2704,7 +2803,8 @@
   searchInput.addEventListener('blur', function() { if (!this.value) searchHint.style.display = ''; });
 
   document.addEventListener('keydown', function(e) {
-    if (e.key === '/' && document.activeElement !== searchInput && document.activeElement.tagName !== 'INPUT') {
+    var typing = document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA' || document.activeElement.isContentEditable);
+    if (e.key === '/' && document.activeElement !== searchInput && !typing) {
       e.preventDefault();
       searchInput.focus();
       searchInput.select();
@@ -2731,12 +2831,17 @@
   function applyFilters() {
     var query = searchInput.value.toLowerCase().trim();
     var anyVisible = false;
+    var edits = loadEdits();
 
     document.querySelectorAll('.section .card').forEach(function(card) {
       var name = card.querySelector('.card-name') ? card.querySelector('.card-name').textContent.toLowerCase() : '';
       var desc = card.querySelector('.card-desc') ? card.querySelector('.card-desc').textContent.toLowerCase() : '';
-      var url  = card.querySelector('.card-url')  ? card.querySelector('.card-url').textContent.toLowerCase()  : '';
-      var text = name + ' ' + desc + ' ' + url;
+      var urlNodes = card.querySelectorAll('.card-url-text');
+      var url = urlNodes.length
+        ? Array.prototype.map.call(urlNodes, function(n) { return n.textContent; }).join(' ').toLowerCase()
+        : (card.querySelector('.card-url') ? card.querySelector('.card-url').textContent.toLowerCase() : '');
+      var note = (edits[card.dataset.cardId] && edits[card.dataset.cardId].notes) ? edits[card.dataset.cardId].notes.toLowerCase() : '';
+      var text = name + ' ' + desc + ' ' + url + ' ' + note;
       var matchQ = !query || text.includes(query);
       var matchV = activeVenture === 'all' || card.classList.contains(activeVenture);
       if (matchQ && matchV) { card.classList.remove('hidden'); anyVisible = true; }
@@ -2788,11 +2893,14 @@
   });
 
   // ─── PIN + COPY ───
+  initCardEditing();
   var pinnedIds = JSON.parse(localStorage.getItem('jhq_pins') || '[]');
 
   function getCardId(card) {
+    if (card.dataset.jhqHref || card.getAttribute('href')) return cardLink(card);
     var name = card.querySelector('.card-name');
-    return card.href ? card.href : (name ? name.textContent.trim() : '');
+    if (name && name.dataset.jhqOriginal) return name.dataset.jhqOriginal;
+    return name ? name.textContent.trim() : '';
   }
 
   function savePins() { localStorage.setItem('jhq_pins', JSON.stringify(pinnedIds)); }
@@ -2805,6 +2913,11 @@
     // Remove pin/copy buttons from clone to avoid duplication
     var pb = clone.querySelector('.pin-btn'); if(pb) pb.remove();
     var cb = clone.querySelector('.copy-url-btn'); if(cb) cb.remove();
+    var oldNotes = clone.querySelector('.card-notes'); if (oldNotes) oldNotes.remove();
+    clone.querySelectorAll('.jhq-field').forEach(function(el) {
+      delete el.dataset.jhqBound;
+      if (!editActive) el.contentEditable = 'false';
+    });
     // Unpin from clone
     clone.addEventListener('click', function(e) {
       if (e.target.classList.contains('unpin-clone')) {
@@ -2814,6 +2927,9 @@
     });
     document.getElementById('pinned-grid').appendChild(clone);
     document.getElementById('pinned-section').classList.add('has-pins');
+    mountNotes(clone);
+    if (editActive && clone.dataset.jhqHref) clone.removeAttribute('href');
+    if (editActive) clone.querySelectorAll('.jhq-field').forEach(bindField);
   }
 
   function removePinClone(id) {
@@ -2862,7 +2978,7 @@
         copyBtn.textContent = 'copy';
         copyBtn.addEventListener('click', function(e) {
           e.preventDefault(); e.stopPropagation();
-          navigator.clipboard.writeText(card.href).then(function() {
+          navigator.clipboard.writeText(cardLink(card)).then(function() {
             copyBtn.textContent = '✓';
             copyBtn.classList.add('copied');
             setTimeout(function() { copyBtn.textContent = 'copy'; copyBtn.classList.remove('copied'); }, 2000);
@@ -2882,9 +2998,13 @@
     }
   });
 
-  // ─── EDIT MODE ───
+  // ─── EDIT MODE + NOTES ───
+  // Titles still mirror jhq_title_overrides. Full card text and notes live in
+  // jhq_card_edits, keyed by the same card id (href slug, disambiguated when shared).
   var EDIT_KEY = 'jhq_title_overrides';
+  var CARD_KEY = 'jhq_card_edits';
   var editActive = false;
+  var saveFlash;
 
   function loadTitleOverrides() {
     try { return JSON.parse(localStorage.getItem(EDIT_KEY) || '{}'); } catch(e) { return {}; }
@@ -2893,87 +3013,500 @@
   function saveTitleOverride(id, val) {
     var map = loadTitleOverrides();
     if (val) map[id] = val; else delete map[id];
-    localStorage.setItem(EDIT_KEY, JSON.stringify(map));
+    try { localStorage.setItem(EDIT_KEY, JSON.stringify(map)); } catch (e) {}
   }
 
-  function applyTitleOverrides() {
-    var map = loadTitleOverrides();
-    document.querySelectorAll('.card-name[data-title-id]').forEach(function(el) {
-      var id = el.getAttribute('data-title-id');
-      if (map[id]) el.textContent = map[id];
+  function loadEdits() {
+    try { return JSON.parse(localStorage.getItem(CARD_KEY) || '{}') || {}; } catch(e) { return {}; }
+  }
+
+  function writeEdits(all) {
+    try { localStorage.setItem(CARD_KEY, JSON.stringify(all)); } catch (e) {}
+  }
+
+  function slugify(s) {
+    return String(s || '').replace(/[^a-z0-9]/gi, '_').toLowerCase();
+  }
+
+  function legacyCardId(card) {
+    var nameEl = card.querySelector('.card-name');
+    var href = card.getAttribute('href');
+    var nested = !href && card.querySelector('[href]');
+    var raw = href || (nested && nested.getAttribute('href')) || (nameEl ? nameEl.textContent.trim() : '') || 'card';
+    return slugify(raw);
+  }
+
+  function cardLink(card) {
+    var href = card.dataset.jhqHref || card.getAttribute('href') || '';
+    if (!href) return card.href || '';
+    try { return new URL(href, window.location.href).href; }
+    catch (e) { return href; }
+  }
+
+  function blockText(el) {
+    var out = '';
+    function walk(node) {
+      Array.prototype.forEach.call(node.childNodes, function(child) {
+        if (child.nodeType === 3) out += child.textContent;
+        else if (child.nodeName === 'BR') out += '\n';
+        else if (child.nodeType === 1) {
+          if (/^(DIV|P|LI)$/.test(child.nodeName) && out && out.charAt(out.length - 1) !== '\n') out += '\n';
+          walk(child);
+        }
+      });
+    }
+    walk(el);
+    return out;
+  }
+
+  function readField(el) {
+    var raw = el.dataset.jhqField === 'desc' ? blockText(el) : (el.textContent || '');
+    return raw.replace(/\u00a0/g, ' ').replace(/^\s+|\s+$/g, '');
+  }
+
+  function writeField(el, value) {
+    if (readField(el) === value) return;
+    el.textContent = value;
+  }
+
+  function markField(el, field, index) {
+    el.classList.add('jhq-field');
+    el.dataset.jhqField = field;
+    if (index != null) el.dataset.jhqIndex = String(index);
+    el.dataset.jhqOriginal = readField(el);
+  }
+
+  function prepareUrl(urlEl) {
+    Array.prototype.slice.call(urlEl.childNodes).forEach(function(node) {
+      if (node.nodeType !== 3) return;
+      var text = node.textContent.replace(/\u00a0/g, ' ').trim();
+      if (!text) return;
+      var span = document.createElement('span');
+      span.className = 'card-url-text';
+      span.textContent = text;
+      urlEl.insertBefore(span, node);
+      node.parentNode.removeChild(node);
+      markField(span, 'url', 0);
+    });
+    var i = 0;
+    urlEl.querySelectorAll('.card-url-text').forEach(function(span) {
+      span.dataset.jhqIndex = String(i++);
     });
   }
 
-  // Assign stable IDs to all card-names based on their href
-  (function assignTitleIds() {
+  function markCardFields(card) {
+    var name = card.querySelector('.card-name');
+    if (name) {
+      markField(name, 'name');
+      name.setAttribute('data-title-id', card.dataset.cardId);
+    }
+    var bi = 0;
+    card.querySelectorAll('.badge').forEach(function(badge) {
+      if (badge.classList.contains('agent-chip')) return;
+      markField(badge, 'badge', bi++);
+    });
+    var desc = card.querySelector('.card-desc');
+    if (desc) markField(desc, 'desc');
+    var ti = 0;
+    card.querySelectorAll('.tag').forEach(function(tag) { markField(tag, 'tag', ti++); });
+    var version = card.querySelector('.card-version');
+    if (version) markField(version, 'version');
+    var urlEl = card.querySelector('.card-url');
+    if (urlEl) prepareUrl(urlEl);
+  }
+
+  function initCardEditing() {
+    var cards = Array.prototype.slice.call(document.querySelectorAll('.section .card'));
+    var groups = {};
+    cards.forEach(function(card) {
+      var base = legacyCardId(card);
+      (groups[base] = groups[base] || []).push(card);
+    });
+    Object.keys(groups).forEach(function(base) {
+      var list = groups[base];
+      var keeper = list[0];
+      if (list.length > 1) {
+        var named = list.filter(function(c) { return c.querySelector('.card-name'); });
+        if (named.length) keeper = named[0];
+      }
+      var ordered = [keeper].concat(list.filter(function(c) { return c !== keeper; }));
+      ordered.forEach(function(card) {
+        var id = base;
+        if (card !== keeper) {
+          var nameEl = card.querySelector('.card-name');
+          var nameBit = slugify(nameEl ? nameEl.textContent.trim() : '') || 'card';
+          id = base + '__' + nameBit;
+          var n = 2;
+          while (document.querySelector('.card[data-card-id="' + id + '"]')) {
+            id = base + '__' + nameBit + '_' + n;
+            n++;
+          }
+        }
+        card.dataset.cardId = id;
+        var href = card.getAttribute('href');
+        if (href) card.dataset.jhqHref = href;
+        markCardFields(card);
+      });
+    });
+  }
+
+  function sameList(a, b) {
+    if (a.length !== b.length) return false;
+    for (var i = 0; i < a.length; i++) if (a[i] !== b[i]) return false;
+    return true;
+  }
+
+  function snapshot(card, useOriginal) {
+    var snap = { name: '', badges: [], desc: null, tags: [], version: null, urls: [] };
+    card.querySelectorAll('.jhq-field').forEach(function(el) {
+      var value = useOriginal ? (el.dataset.jhqOriginal || '') : readField(el);
+      var index = +(el.dataset.jhqIndex || 0);
+      var field = el.dataset.jhqField;
+      if (field === 'name') snap.name = value;
+      else if (field === 'badge') snap.badges[index] = value;
+      else if (field === 'desc') snap.desc = value;
+      else if (field === 'tag') snap.tags[index] = value;
+      else if (field === 'version') snap.version = value;
+      else if (field === 'url') snap.urls[index] = value;
+    });
+    return snap;
+  }
+
+  function valueFor(el, edits, titles, id) {
+    var field = el.dataset.jhqField;
+    var index = +(el.dataset.jhqIndex || 0);
+    var original = el.dataset.jhqOriginal || '';
+    if (field === 'name') {
+      if (edits.name != null) return edits.name;
+      if (titles[id]) return titles[id];
+      return original;
+    }
+    if (field === 'badge') return (edits.badges && edits.badges[index] != null) ? edits.badges[index] : original;
+    if (field === 'desc') return edits.desc != null ? edits.desc : original;
+    if (field === 'tag') return (edits.tags && edits.tags[index] != null) ? edits.tags[index] : original;
+    if (field === 'version') return edits.version != null ? edits.version : original;
+    if (field === 'url') return (edits.urls && edits.urls[index] != null) ? edits.urls[index] : original;
+    return original;
+  }
+
+  function applyEditsToId(id) {
+    var edits = loadEdits()[id] || {};
+    var titles = loadTitleOverrides();
     document.querySelectorAll('.card').forEach(function(card) {
-      var nameEl = card.querySelector('.card-name');
-      if (!nameEl) return;
-      var id = (card.getAttribute('href') || card.querySelector('[href]') && card.querySelector('[href]').getAttribute('href') || nameEl.textContent.trim()).replace(/[^a-z0-9]/gi,'_').toLowerCase();
-      nameEl.setAttribute('data-title-id', id);
+      if (card.dataset.cardId !== id) return;
+      card.querySelectorAll('.jhq-field').forEach(function(el) {
+        if (el === document.activeElement) return;
+        writeField(el, valueFor(el, edits, titles, id));
+      });
     });
-    applyTitleOverrides();
-  })();
+  }
+
+  function applyAllCardEdits() {
+    document.querySelectorAll('.section .card').forEach(function(card) {
+      if (card.dataset.cardId) applyEditsToId(card.dataset.cardId);
+    });
+  }
+
+  function saveCardFields(card) {
+    var id = card.dataset.cardId;
+    if (!id) return;
+    var cur = snapshot(card, false);
+    var orig = snapshot(card, true);
+    var all = loadEdits();
+    var prev = all[id] || {};
+    var next = {};
+    if (prev.notes) next.notes = prev.notes;
+    if (cur.name !== orig.name) next.name = cur.name;
+    if (!sameList(cur.badges, orig.badges)) next.badges = cur.badges;
+    if (cur.desc !== null && cur.desc !== orig.desc) next.desc = cur.desc;
+    if (!sameList(cur.tags, orig.tags)) next.tags = cur.tags;
+    if (cur.version !== null && cur.version !== orig.version) next.version = cur.version;
+    if (!sameList(cur.urls, orig.urls)) next.urls = cur.urls;
+    var before = JSON.stringify(all[id] || null);
+    if (Object.keys(next).length) all[id] = next; else delete all[id];
+    if (JSON.stringify(all[id] || null) === before) return;
+    writeEdits(all);
+    saveTitleOverride(id, next.name || '');
+    flashSaved();
+  }
+
+  function flashSaved() {
+    var btn = document.getElementById('editModeBtn');
+    if (!editActive || !btn) return;
+    btn.textContent = '✓ Saved';
+    clearTimeout(saveFlash);
+    saveFlash = setTimeout(function() {
+      if (editActive) btn.innerHTML = '&#10003; Done';
+    }, 900);
+  }
+
+  function caretEdge(el) {
+    var sel = window.getSelection();
+    if (!sel || !sel.rangeCount || !sel.isCollapsed) return null;
+    var range = sel.getRangeAt(0);
+    if (range.startContainer !== el && !el.contains(range.startContainer)) return null;
+    var pre = range.cloneRange();
+    pre.selectNodeContents(el);
+    pre.setEnd(range.startContainer, range.startOffset);
+    var atStart = pre.toString().length === 0;
+    var post = range.cloneRange();
+    post.selectNodeContents(el);
+    post.setStart(range.startContainer, range.startOffset);
+    return { atStart: atStart, atEnd: post.toString().length === 0 };
+  }
+
+  function onFieldBlur(e) {
+    var card = e.target.closest('.card');
+    if (!card) return;
+    saveCardFields(card);
+    applyEditsToId(card.dataset.cardId);
+  }
+
+  function revertField(el) {
+    var card = el.closest('.card');
+    if (!card) return;
+    var id = card.dataset.cardId;
+    writeField(el, valueFor(el, loadEdits()[id] || {}, loadTitleOverrides(), id));
+  }
+
+  function onFieldKeydown(e) {
+    var field = e.target.dataset.jhqField;
+    if ((e.key === 'Backspace' || e.key === 'Delete')) {
+      var edge = caretEdge(e.target);
+      if (edge && ((e.key === 'Backspace' && edge.atStart) || (e.key === 'Delete' && edge.atEnd))) e.preventDefault();
+    }
+    if (e.key === 'Enter' && field !== 'desc') { e.preventDefault(); e.target.blur(); }
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      e.stopPropagation();
+      revertField(e.target);
+      e.target.blur();
+    }
+  }
+
+  function onFieldBeforeInput(e) {
+    if (e.inputType !== 'deleteContentBackward' && e.inputType !== 'deleteContentForward') return;
+    var edge = caretEdge(e.target);
+    if (!edge) return;
+    if (e.inputType === 'deleteContentBackward' && edge.atStart) e.preventDefault();
+    if (e.inputType === 'deleteContentForward' && edge.atEnd) e.preventDefault();
+  }
+
+  function insertPlainText(text) {
+    var sel = window.getSelection();
+    if (!sel || !sel.rangeCount) return;
+    var range = sel.getRangeAt(0);
+    range.deleteContents();
+    var node = document.createTextNode(text);
+    range.insertNode(node);
+    range.setStartAfter(node);
+    range.collapse(true);
+    sel.removeAllRanges();
+    sel.addRange(range);
+  }
+
+  function onFieldPaste(e) {
+    e.preventDefault();
+    var text = (e.clipboardData || window.clipboardData).getData('text/plain') || '';
+    if (e.target.dataset.jhqField !== 'desc') text = text.replace(/\s+/g, ' ').trim();
+    if (!document.execCommand('insertText', false, text)) insertPlainText(text);
+  }
+
+  function onFieldClick(e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
+  function bindField(el) {
+    if (el.dataset.jhqBound === '1') return;
+    el.dataset.jhqBound = '1';
+    el.contentEditable = 'true';
+    el.spellcheck = el.dataset.jhqField === 'desc';
+    el.addEventListener('blur', onFieldBlur);
+    el.addEventListener('keydown', onFieldKeydown);
+    el.addEventListener('beforeinput', onFieldBeforeInput);
+    el.addEventListener('paste', onFieldPaste);
+    el.addEventListener('click', onFieldClick);
+  }
+
+  function unbindField(el) {
+    el.contentEditable = 'false';
+    el.removeEventListener('blur', onFieldBlur);
+    el.removeEventListener('keydown', onFieldKeydown);
+    el.removeEventListener('beforeinput', onFieldBeforeInput);
+    el.removeEventListener('paste', onFieldPaste);
+    el.removeEventListener('click', onFieldClick);
+    delete el.dataset.jhqBound;
+  }
 
   function toggleEditMode() {
     editActive = !editActive;
+    document.body.classList.toggle('editing', editActive);
     var btn = document.getElementById('editModeBtn');
-    var names = document.querySelectorAll('.card-name[data-title-id]');
+    var hint = document.getElementById('editHint');
     if (editActive) {
       btn.style.background = 'rgba(124,106,248,0.18)';
       btn.style.color = '#a78bfa';
       btn.style.borderColor = '#7c6af8';
       btn.innerHTML = '&#10003; Done';
-      names.forEach(function(el) {
-        el.contentEditable = 'true';
-        el.style.outline = '1px dashed rgba(124,106,248,0.5)';
-        el.style.borderRadius = '4px';
-        el.style.padding = '2px 6px';
-        el.style.cursor = 'text';
-        el.addEventListener('blur', onTitleBlur);
-        el.addEventListener('keydown', onTitleKeydown);
-      });
-      // Prevent card clicks from navigating while editing
+      btn.setAttribute('aria-pressed', 'true');
+      if (hint) hint.hidden = false;
+      document.querySelectorAll('.jhq-field').forEach(bindField);
       document.querySelectorAll('.card').forEach(function(c) {
-        c._origHref = c.getAttribute('href');
-        c.removeAttribute('href');
+        if (c.dataset.jhqHref) c.removeAttribute('href');
       });
     } else {
+      if (document.activeElement && document.activeElement.classList && document.activeElement.classList.contains('jhq-field')) {
+        document.activeElement.blur();
+      }
       btn.style.background = 'transparent';
       btn.style.color = '#8891a4';
       btn.style.borderColor = 'rgba(255,255,255,0.12)';
       btn.innerHTML = '&#9998; Edit';
-      names.forEach(function(el) {
-        el.contentEditable = 'false';
-        el.style.outline = '';
-        el.style.borderRadius = '';
-        el.style.padding = '';
-        el.style.cursor = '';
-        el.removeEventListener('blur', onTitleBlur);
-        el.removeEventListener('keydown', onTitleKeydown);
-      });
+      btn.setAttribute('aria-pressed', 'false');
+      if (hint) hint.hidden = true;
+      document.querySelectorAll('.jhq-field').forEach(unbindField);
       document.querySelectorAll('.card').forEach(function(c) {
-        if (c._origHref) { c.setAttribute('href', c._origHref); delete c._origHref; }
+        if (c.dataset.jhqHref) c.setAttribute('href', c.dataset.jhqHref);
       });
     }
   }
 
-  function onTitleBlur(e) {
-    var el = e.target;
-    var id = el.getAttribute('data-title-id');
-    var val = el.textContent.trim();
-    saveTitleOverride(id, val);
+  function fillPreview(preview, notes) {
+    preview.textContent = '';
+    var label = document.createElement('span');
+    label.className = 'card-notes-label';
+    label.textContent = 'Notes';
+    var body = document.createElement('div');
+    body.className = 'card-notes-text';
+    body.textContent = notes.trim();
+    preview.appendChild(label);
+    preview.appendChild(body);
+    preview.title = 'Edit note';
   }
 
-  function onTitleKeydown(e) {
-    if (e.key === 'Enter') { e.preventDefault(); e.target.blur(); }
-    if (e.key === 'Escape') {
-      var map = loadTitleOverrides();
-      var id = e.target.getAttribute('data-title-id');
-      e.target.textContent = map[id] || e.target.getAttribute('data-original') || e.target.textContent;
-      e.target.blur();
+  function renderNotes(id) {
+    var notes = (loadEdits()[id] && loadEdits()[id].notes) ? loadEdits()[id].notes : '';
+    document.querySelectorAll('.card').forEach(function(card) {
+      if (card.dataset.cardId !== id) return;
+      var wrap = card.querySelector('.card-notes');
+      if (!wrap) return;
+      var input = wrap.querySelector('.card-notes-input');
+      var preview = wrap.querySelector('.card-notes-preview');
+      var toggle = wrap.querySelector('.card-notes-toggle');
+      var editor = wrap.querySelector('.card-notes-editor');
+      var focused = document.activeElement === input;
+      if (!focused) input.value = notes;
+      var has = !!notes.trim();
+      wrap.classList.toggle('has-notes', has);
+      if (focused || wrap.classList.contains('open')) {
+        editor.hidden = false;
+        preview.hidden = true;
+        toggle.hidden = true;
+        return;
+      }
+      wrap.classList.remove('open');
+      if (has) {
+        fillPreview(preview, notes);
+        editor.hidden = true;
+        preview.hidden = false;
+        toggle.hidden = true;
+      } else {
+        editor.hidden = true;
+        preview.hidden = true;
+        toggle.hidden = false;
+      }
+    });
+  }
+
+  function persistNotes(id, value, statusEl) {
+    var all = loadEdits();
+    var prev = all[id] ? Object.assign({}, all[id]) : {};
+    var notes = String(value || '').replace(/\u00a0/g, ' ').replace(/^\s+|\s+$/g, '');
+    if (notes) prev.notes = notes; else delete prev.notes;
+    if (Object.keys(prev).length) all[id] = prev; else delete all[id];
+    writeEdits(all);
+    renderNotes(id);
+    if (statusEl) {
+      statusEl.textContent = notes ? 'Saved in this browser' : '';
+      clearTimeout(statusEl._t);
+      if (notes) statusEl._t = setTimeout(function() { statusEl.textContent = ''; }, 1400);
     }
   }
+
+  function mountNotes(card) {
+    if (!card || !card.dataset.cardId || card.querySelector('.card-notes')) return;
+    var wrap = document.createElement('div');
+    wrap.className = 'card-notes';
+    var toggle = document.createElement('button');
+    toggle.type = 'button';
+    toggle.className = 'card-notes-toggle';
+    toggle.textContent = '＋ Add note';
+    var editor = document.createElement('div');
+    editor.className = 'card-notes-editor';
+    editor.hidden = true;
+    var label = document.createElement('span');
+    label.className = 'card-notes-label';
+    label.textContent = 'Notes';
+    var input = document.createElement('textarea');
+    input.className = 'card-notes-input';
+    input.placeholder = 'Add a note…';
+    input.setAttribute('aria-label', 'Notes');
+    input.rows = 3;
+    var status = document.createElement('span');
+    status.className = 'card-notes-status';
+    editor.appendChild(label);
+    editor.appendChild(input);
+    var preview = document.createElement('div');
+    preview.className = 'card-notes-preview';
+    preview.hidden = true;
+    wrap.appendChild(toggle);
+    wrap.appendChild(editor);
+    wrap.appendChild(preview);
+    wrap.appendChild(status);
+    card.appendChild(wrap);
+
+    function stopNav(e) { e.preventDefault(); e.stopPropagation(); }
+    wrap.addEventListener('click', stopNav);
+    wrap.addEventListener('auxclick', stopNav);
+    wrap.addEventListener('mousedown', function(e) { e.stopPropagation(); });
+
+    function openEditor() {
+      wrap.classList.add('open');
+      editor.hidden = false;
+      preview.hidden = true;
+      toggle.hidden = true;
+      input.focus();
+      var end = input.value.length;
+      input.setSelectionRange(end, end);
+    }
+    toggle.addEventListener('click', function(e) { stopNav(e); openEditor(); });
+    preview.addEventListener('click', function(e) { stopNav(e); openEditor(); });
+
+    var timer;
+    input.addEventListener('input', function() {
+      status.textContent = '';
+      clearTimeout(timer);
+      timer = setTimeout(function() { persistNotes(card.dataset.cardId, input.value, status); }, 350);
+    });
+    input.addEventListener('blur', function() {
+      clearTimeout(timer);
+      wrap.classList.remove('open');
+      persistNotes(card.dataset.cardId, input.value, status);
+    });
+    input.addEventListener('keydown', function(e) {
+      e.stopPropagation();
+      if (e.key === 'Escape') { e.preventDefault(); input.blur(); }
+    });
+    renderNotes(card.dataset.cardId);
+  }
+
+  function mountAllNotes() {
+    document.querySelectorAll('.section .card, #pinned-grid .card').forEach(mountNotes);
+  }
+
+  applyAllCardEdits();
+  mountAllNotes();
 
   // ─── COLLAPSIBLE SECTIONS ───
   (function() {
